@@ -1,0 +1,142 @@
+
+/* Variables de Colores */
+:root {
+ --bg-color: #f7f9fc; /* Fondo claro */
+      --card-bg: white; /* Fondo de tarjetas claro */
+      --text-color: #333; /* Texto claro */
+      --border-color: #eaeaea; /* Borde claro */
+      --highlight-color: #3498db; /* Azul resaltado */
+      --alert-color: #e74c3c; /* Rojo alerta */
+
+/* Modo oscuro: sobrescribe todas las variables necesarias */
+.dark {
+  --bg-color: #121212;
+  --text-color: #fff;
+  --card-bg: #222;
+  --card-shadow: 0 8px 20px rgba(255, 255, 255, 0.08);
+  --border-color: #333;
+  --urgent-color: #ff5252;
+  --highlight-color: #5da6ff;
+}
+
+/* Detecta automáticamente el modo oscuro del sistema (solo como valor inicial) */
+@media (prefers-color-scheme: dark) {
+  /* Aplica modo oscuro por defecto si el usuario lo prefiere */
+  :root:not(.light) {
+    /* Si no se forzó el modo claro, aplica oscuro */
+    color-scheme: dark;
+  }
+
+  /* Aplica automáticamente el modo oscuro si no hay clase .light */
+  body:not(.light) {
+    /* Este bloque permite que el tema inicial sea oscuro */
+  }
+
+    /* Estilos generales */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--text-color);
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 50px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 26px -18px inset;
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 20px;
+    }
+
+    .welcome-title {
+      font-size: 2.8rem;
+      font-weight: 700;
+      margin: 40px 0 30px;
+      text-align: center;
+      letter-spacing: -0.5px;
+    }
+
+    .cards-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      justify-content: center;
+      margin-bottom: 60px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      width: 100%;
+      max-width: 350px;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 16px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    .card-content {
+      padding: 24px;
+    }
+
+    .card-title {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--text-color);
+      margin-bottom: 16px;
+      border-bottom: 2px solid var(--highlight-color);
+      padding-bottom: 8px;
+      display: flex;
+      align-items: center;
+    }
+
+    .card-title::before {
+      content: "";
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      background: var(--highlight-color);
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+
+    .card-para {
+      font-size: 1rem;
+      color: var(--text-color);
+      margin: 8px 0;
+      line-height: 1.5;
+    }
+
+    .chip {
+      background-color: var(--alert-color);
+      color: white;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+      margin-right: 10px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px 0;
+      font-size: 0.95rem;
+      margin-top: 30px;
+    }
+
+    @media (max-width: 768px) {
+      .welcome-title {
+        font-size: 2.2rem;
+      }
+      .cards-container {
+        gap: 16px;
+      }
+      .card {
+        max-width: 100%;
+      }
+    }
+

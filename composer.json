@@ -1,0 +1,11 @@
+{
+    "name": "uzcat/test_sistem",
+    "autoload": {
+        "psr-4": {
+            "Uzcat\\TestSistem\\": "src/"
+        }
+    },
+    "require": {
+        "phpmailer/phpmailer": "*"
+    }
+}

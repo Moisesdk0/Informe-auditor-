@@ -1,0 +1,11 @@
+
+        /* Estilo para el contenedor del reCAPTCHA */
+        .g-recaptcha {
+            display: flex;
+            justify-content: center; /* Centra el reCAPTCHA horizontalmente */
+            margin: 15px 0; /* Espacio arriba y abajo */
+            width: 100%;
+        }
+
+        @media (max-width: 480px) {
+            .g-recaptcha{

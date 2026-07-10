@@ -1,0 +1,1565 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auditoría de Seguridad — BuildSafe System</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f0f2f5;
+            color: #1a1a2e;
+            font-size: 13px;
+        }
+
+        /* ─── PORTADA ─── */
+        .cover {
+            background: linear-gradient(135deg, #0f3460 0%, #16213e 50%, #1a1a2e 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 60px 40px;
+            page-break-after: always;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cover::before {
+            content: '';
+            position: absolute;
+            top: -100px; left: -100px;
+            width: 400px; height: 400px;
+            background: rgba(229, 57, 53, 0.08);
+            border-radius: 50%;
+        }
+
+        .cover::after {
+            content: '';
+            position: absolute;
+            bottom: -80px; right: -80px;
+            width: 300px; height: 300px;
+            background: rgba(67, 97, 238, 0.1);
+            border-radius: 50%;
+        }
+
+        .cover-badge {
+            background: rgba(229, 57, 53, 0.2);
+            border: 1px solid rgba(229, 57, 53, 0.5);
+            color: #ef9a9a;
+            padding: 6px 20px;
+            border-radius: 20px;
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+        }
+
+        .cover h1 {
+            font-size: 42px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 10px;
+            line-height: 1.1;
+        }
+
+        .cover h1 span { color: #e53935; }
+
+        .cover h2 {
+            font-size: 20px;
+            font-weight: 300;
+            color: #90caf9;
+            margin-bottom: 40px;
+        }
+
+        .cover-divider {
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #e53935, #4361ee);
+            border-radius: 2px;
+            margin: 0 auto 40px;
+        }
+
+        .cover-meta {
+            display: flex;
+            gap: 60px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cover-meta-item { text-align: center; }
+        .cover-meta-item .label {
+            font-size: 10px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #90caf9;
+            margin-bottom: 6px;
+        }
+        .cover-meta-item .value {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .cover-logo {
+            margin-bottom: 40px;
+        }
+
+        .cover-logo .shield {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #e53935, #b71c1c);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 36px;
+            box-shadow: 0 10px 40px rgba(229, 57, 53, 0.4);
+        }
+
+        .cover-confidential {
+            position: absolute;
+            bottom: 30px;
+            font-size: 10px;
+            color: rgba(255,255,255,0.3);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* ─── CONTENIDO ─── */
+        .content {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 40px 30px;
+        }
+
+        /* ─── SECCIONES ─── */
+        .section {
+            margin-bottom: 40px;
+            page-break-inside: avoid;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #e8eaf6;
+        }
+
+        .section-number {
+            width: 36px; height: 36px;
+            background: linear-gradient(135deg, #0f3460, #16213e);
+            color: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #0f3460;
+        }
+
+        /* ─── RESUMEN EJECUTIVO CARDS ─── */
+        .exec-summary {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+
+        .exec-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            border-top: 4px solid;
+        }
+
+        .exec-card.critico { border-color: #e53935; }
+        .exec-card.alto    { border-color: #fb8c00; }
+        .exec-card.medio   { border-color: #f9a825; }
+        .exec-card.bajo    { border-color: #43a047; }
+
+        .exec-card .num {
+            font-size: 40px;
+            font-weight: 800;
+            line-height: 1;
+            margin-bottom: 6px;
+        }
+
+        .exec-card.critico .num { color: #e53935; }
+        .exec-card.alto    .num { color: #fb8c00; }
+        .exec-card.medio   .num { color: #f9a825; }
+        .exec-card.bajo    .num { color: #43a047; }
+
+        .exec-card .label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #666;
+            font-weight: 600;
+        }
+
+        /* ─── GRÁFICAS ─── */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .chart-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        }
+
+        .chart-card.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .chart-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #0f3460;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 220px;
+        }
+
+        .chart-container.tall {
+            height: 260px;
+        }
+
+        /* ─── HALLAZGOS ─── */
+        .finding {
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            overflow: hidden;
+            page-break-inside: avoid;
+        }
+
+        .finding-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px 20px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .severity-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            flex-shrink: 0;
+        }
+
+        .badge-critico { background: #fde8e8; color: #c62828; border: 1px solid #e57373; }
+        .badge-alto    { background: #fff3e0; color: #e65100; border: 1px solid #ffb74d; }
+        .badge-medio   { background: #fffde7; color: #f57f17; border: 1px solid #fff176; }
+        .badge-bajo    { background: #e8f5e9; color: #2e7d32; border: 1px solid #81c784; }
+
+        .finding-id {
+            font-size: 11px;
+            color: #999;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .finding-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1a1a2e;
+            flex: 1;
+        }
+
+        .finding-file {
+            font-size: 11px;
+            background: #f5f5f5;
+            color: #555;
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-family: monospace;
+            flex-shrink: 0;
+        }
+
+        .finding-body {
+            padding: 16px 20px;
+        }
+
+        .finding-desc {
+            color: #444;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .finding-code {
+            background: #1e1e2e;
+            color: #cdd6f4;
+            border-radius: 8px;
+            padding: 14px 16px;
+            font-family: 'Courier New', monospace;
+            font-size: 11.5px;
+            line-height: 1.5;
+            margin-bottom: 12px;
+            overflow-x: auto;
+        }
+
+        .finding-code .comment { color: #6c7086; }
+        .finding-code .keyword { color: #cba6f7; }
+        .finding-code .string  { color: #a6e3a1; }
+        .finding-code .var     { color: #89dceb; }
+        .finding-code .danger  { color: #f38ba8; background: rgba(243,139,168,0.15); border-radius: 3px; padding: 1px 3px; }
+
+        .finding-fix {
+            background: #e8f5e9;
+            border-left: 3px solid #43a047;
+            border-radius: 0 8px 8px 0;
+            padding: 12px 16px;
+        }
+
+        .finding-fix .fix-label {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #2e7d32;
+            margin-bottom: 6px;
+        }
+
+        .finding-fix .fix-code {
+            background: #1b5e20;
+            color: #a5d6a7;
+            border-radius: 6px;
+            padding: 10px 14px;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            line-height: 1.5;
+            margin-top: 8px;
+        }
+
+        .finding-fix p {
+            color: #33691e;
+            line-height: 1.5;
+            font-size: 12px;
+        }
+
+        /* ─── TABLA RESUMEN ─── */
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        }
+
+        .summary-table thead {
+            background: linear-gradient(135deg, #0f3460, #16213e);
+            color: white;
+        }
+
+        .summary-table th {
+            padding: 14px 16px;
+            text-align: left;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .summary-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #f5f5f5;
+            font-size: 12px;
+            vertical-align: middle;
+        }
+
+        .summary-table tr:last-child td { border-bottom: none; }
+        .summary-table tr:hover td { background: #fafafa; }
+
+        /* ─── INFO BOXES ─── */
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .info-box {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        }
+
+        .info-box h4 {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #0f3460;
+            margin-bottom: 14px;
+            font-weight: 700;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px solid #f5f5f5;
+            font-size: 12px;
+        }
+
+        .info-row:last-child { border-bottom: none; }
+        .info-row .key { color: #666; }
+        .info-row .val { font-weight: 600; color: #1a1a2e; }
+
+        /* ─── METODOLOGÍA ─── */
+        .methodology-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .method-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            text-align: center;
+        }
+
+        .method-icon {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .method-card h4 {
+            font-size: 12px;
+            font-weight: 700;
+            color: #0f3460;
+            margin-bottom: 6px;
+        }
+
+        .method-card p {
+            font-size: 11px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        /* ─── SEVERITY COLORS ─── */
+        .sev-dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 6px;
+        }
+        .dot-critico { background: #e53935; }
+        .dot-alto    { background: #fb8c00; }
+        .dot-medio   { background: #f9a825; }
+        .dot-bajo    { background: #43a047; }
+
+        /* ─── PAGE BREAK ─── */
+        .page-break { page-break-after: always; }
+
+        /* ─── FOOTER ─── */
+        .doc-footer {
+            text-align: center;
+            padding: 30px;
+            color: #aaa;
+            font-size: 11px;
+            border-top: 1px solid #e8eaf6;
+            margin-top: 40px;
+        }
+
+        /* ─── CONCLUSION ─── */
+        .conclusion-box {
+            background: linear-gradient(135deg, #0f3460, #16213e);
+            color: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+
+        .conclusion-box h3 {
+            font-size: 18px;
+            margin-bottom: 14px;
+            color: #90caf9;
+        }
+
+        .conclusion-box p {
+            line-height: 1.7;
+            color: #ccc;
+            font-size: 13px;
+        }
+
+        .conclusion-box ul {
+            margin-top: 14px;
+            padding-left: 20px;
+        }
+
+        .conclusion-box ul li {
+            color: #ccc;
+            margin-bottom: 6px;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        /* ─── RISK METER ─── */
+        .risk-meter {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .risk-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .risk-score {
+            font-size: 60px;
+            font-weight: 800;
+            color: #e53935;
+            line-height: 1;
+        }
+
+        .risk-score-label {
+            font-size: 18px;
+            font-weight: 700;
+            color: #e53935;
+            margin-bottom: 10px;
+        }
+
+        .risk-bar-container {
+            background: #f0f0f0;
+            border-radius: 10px;
+            height: 12px;
+            margin: 12px 0;
+            overflow: hidden;
+        }
+
+        .risk-bar {
+            height: 100%;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #43a047, #f9a825, #fb8c00, #e53935);
+            width: 73%;
+        }
+
+        .risk-scale {
+            display: flex;
+            justify-content: space-between;
+            font-size: 10px;
+            color: #aaa;
+        }
+
+        @media print {
+            body { background: white; }
+            .cover { min-height: 100vh; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!--  PORTADA                                                       -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div class="cover">
+    <div class="cover-logo">
+        <div class="shield">🛡️</div>
+    </div>
+    <div class="cover-badge">Documento Confidencial</div>
+    <h1>AUDITORÍA DE<br><span>SEGURIDAD</span></h1>
+    <h2>BuildSafe System — CONFALVI C.A.</h2>
+    <div class="cover-divider"></div>
+    <div class="cover-meta">
+        <div class="cover-meta-item">
+            <div class="label">Fecha</div>
+            <div class="value">Junio 2026</div>
+        </div>
+        <div class="cover-meta-item">
+            <div class="label">Tipo</div>
+            <div class="value">Revisión de Código</div>
+        </div>
+        <div class="cover-meta-item">
+            <div class="label">Tecnología</div>
+            <div class="value">PHP / MySQL</div>
+        </div>
+        <div class="cover-meta-item">
+            <div class="label">Versión</div>
+            <div class="value">1.0</div>
+        </div>
+    </div>
+    <div class="cover-confidential">Uso Interno — Clasificado</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!--  CONTENIDO PRINCIPAL                                          -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div class="content">
+
+    <!-- ── 1. INFORMACIÓN GENERAL ── -->
+    <div class="section">
+        <div class="section-header">
+            <div class="section-number">1</div>
+            <div class="section-title">Información General</div>
+        </div>
+
+        <div class="info-grid">
+            <div class="info-box">
+                <h4>Datos del Sistema Auditado</h4>
+                <div class="info-row"><span class="key">Sistema</span><span class="val">BuildSafe System</span></div>
+                <div class="info-row"><span class="key">Organización</span><span class="val">CONFALVI C.A.</span></div>
+                <div class="info-row"><span class="key">Tecnología Backend</span><span class="val">PHP 8.2</span></div>
+                <div class="info-row"><span class="key">Base de Datos</span><span class="val">MariaDB 10.4</span></div>
+                <div class="info-row"><span class="key">Servidor Web</span><span class="val">Apache / XAMPP</span></div>
+                <div class="info-row"><span class="key">Frontend</span><span class="val">Alpine.js + TailwindCSS</span></div>
+            </div>
+            <div class="info-box">
+                <h4>Datos de la Auditoría</h4>
+                <div class="info-row"><span class="key">Tipo de Auditoría</span><span class="val">Revisión de Código Estático</span></div>
+                <div class="info-row"><span class="key">Metodología</span><span class="val">OWASP Top 10</span></div>
+                <div class="info-row"><span class="key">Archivos Analizados</span><span class="val">27 archivos PHP</span></div>
+                <div class="info-row"><span class="key">Vulnerabilidades</span><span class="val">14 hallazgos</span></div>
+                <div class="info-row"><span class="key">Fecha de Análisis</span><span class="val">Junio 2026</span></div>
+                <div class="info-row"><span class="key">Estado</span><span class="val">⚠️ Requiere acción inmediata</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── 2. RESUMEN EJECUTIVO ── -->
+    <div class="section">
+        <div class="section-header">
+            <div class="section-number">2</div>
+            <div class="section-title">Resumen Ejecutivo</div>
+        </div>
+
+        <div class="exec-summary">
+            <div class="exec-card critico">
+                <div class="num">3</div>
+                <div class="label">Crítico</div>
+            </div>
+            <div class="exec-card alto">
+                <div class="num">4</div>
+                <div class="label">Alto</div>
+            </div>
+            <div class="exec-card medio">
+                <div class="num">5</div>
+                <div class="label">Medio</div>
+            </div>
+            <div class="exec-card bajo">
+                <div class="num">2</div>
+                <div class="label">Bajo</div>
+            </div>
+        </div>
+
+        <div class="risk-meter">
+            <div class="risk-label">Nivel de Riesgo Global del Sistema</div>
+            <div class="risk-score">7.3</div>
+            <div class="risk-score-label">ALTO</div>
+            <div class="risk-bar-container">
+                <div class="risk-bar"></div>
+            </div>
+            <div class="risk-scale">
+                <span>0 — Bajo</span>
+                <span>5 — Medio</span>
+                <span>7.3 ◄</span>
+                <span>10 — Crítico</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── 3. GRÁFICAS ── -->
+    <div class="section">
+        <div class="section-header">
+            <div class="section-number">3</div>
+            <div class="section-title">Análisis Gráfico</div>
+        </div>
+
+        <div class="charts-grid">
+            <!-- Gráfica 1: Distribución por severidad (Donut) -->
+            <div class="chart-card">
+                <div class="chart-title">Distribución por Severidad</div>
+                <div class="chart-container">
+                    <canvas id="chartSeveridad"></canvas>
+                </div>
+            </div>
+
+            <!-- Gráfica 2: Categorías OWASP (Radar) -->
+            <div class="chart-card">
+                <div class="chart-title">Categorías OWASP Top 10 Afectadas</div>
+                <div class="chart-container">
+                    <canvas id="chartOwasp"></canvas>
+                </div>
+            </div>
+
+            <!-- Gráfica 3: Hallazgos por archivo (Barras horizontal) -->
+            <div class="chart-card full-width">
+                <div class="chart-title">Hallazgos por Archivo del Sistema</div>
+                <div class="chart-container tall">
+                    <canvas id="chartArchivos"></canvas>
+                </div>
+            </div>
+
+            <!-- Gráfica 4: Impacto vs Probabilidad (Barra agrupada) -->
+            <div class="chart-card">
+                <div class="chart-title">Impacto vs Facilidad de Explotación</div>
+                <div class="chart-container">
+                    <canvas id="chartImpacto"></canvas>
+                </div>
+            </div>
+
+            <!-- Gráfica 5: Esfuerzo de remediación (Pie) -->
+            <div class="chart-card">
+                <div class="chart-title">Esfuerzo de Remediación</div>
+                <div class="chart-container">
+                    <canvas id="chartRemediacion"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── 4. METODOLOGÍA ── -->
+    <div class="section">
+        <div class="section-header">
+            <div class="section-number">4</div>
+            <div class="section-title">Metodología</div>
+        </div>
+
+        <div class="methodology-grid">
+            <div class="method-card">
+                <div class="method-icon">🔍</div>
+                <h4>Revisión de Código</h4>
+                <p>Análisis manual de los 27 archivos PHP buscando patrones de vulnerabilidades comunes.</p>
+            </div>
+            <div class="method-card">
+                <div class="method-icon">📋</div>
+                <h4>OWASP Top 10</h4>
+                <p>Cada hallazgo fue clasificado según las categorías del estándar OWASP 2021.</p>
+            </div>
+            <div class="method-card">
+                <div class="method-icon">⚖️</div>
+                <h4>Scoring CVSS</h4>
+                <p>Se evaluó el impacto y la probabilidad de explotación para cada vulnerabilidad.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── 5. HALLAZGOS CRÍTICOS ── -->
+    <div class="section page-break">
+        <div class="section-header">
+            <div class="section-number">5</div>
+            <div class="section-title">Hallazgos — Severidad Crítica</div>
+        </div>
+
+        <!-- Hallazgo C1 -->
+        <div class="finding">
+            <div class="finding-header">
+                <span class="severity-badge badge-critico">Crítico</span>
+                <span class="finding-id">C-01</span>
+                <span class="finding-title">Inyección SQL en verificación de duplicados de usuario</span>
+                <span class="finding-file">add_user.php:29</span>
+            </div>
+            <div class="finding-body">
+                <p class="finding-desc">
+                    La función <code>htmlspecialchars()</code> sin la bandera <code>ENT_QUOTES</code> no escapa comillas simples (<code>'</code>).
+                    Esto permite a un atacante inyectar SQL directamente en la consulta de verificación, pudiendo bypassear la lógica,
+                    extraer datos de la base de datos o modificar registros.
+                    <strong>Categoría OWASP: A03 — Injection.</strong>
+                </p>
+                <div class="finding-code">
+<span class="comment">// VULNERABLE: htmlspecialchars() no protege contra SQL Injection</span>
+$email = htmlspecialchars($_POST['email']);  <span class="comment">// ' no escapa</span>
+$user  = htmlspecialchars($_POST['user']);
+$check_user = mysqli_query($conn,
+    <span class="danger">"SELECT * FROM user WHERE name = '$user' OR gmail = '$email'"</span>
+);
+<span class="comment">// Payload malicioso: email = ' OR '1'='1</span>
+</div>
+                <div class="finding-fix">
+                    <div class="fix-label">✓ Corrección Recomendada</div>
+                    <p>Reemplazar con Prepared Statements que separan los datos del SQL:</p>
+                    <div class="fix-code">$check_stmt = $conn->prepare("SELECT user_id FROM user WHERE name = ? OR gmail = ?");
+$check_stmt->bind_param("ss", $user, $email);
+$check_stmt->execute();
+$result = $check_stmt->get_result();</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hallazgo C2 -->
+        <div class="finding">
+            <div class="finding-header">
+                <span class="severity-badge badge-critico">Crítico</span>
+                <span class="finding-id">C-02</span>
+                <span class="finding-title">Credenciales de correo hardcodeadas en código fuente</span>
+                <span class="finding-file">enviar_token.php:37-38</span>
+            </div>
+            <div class="finding-body">
+                <p class="finding-desc">
+                    La contraseña de aplicación de Gmail está escrita directamente en el código fuente.
+                    Cualquier persona con acceso al servidor, al repositorio o a un backup puede obtener esta credencial
+                    y usarla para enviar correos masivos, spam o acceder a la cuenta.
+                    <strong>Categoría OWASP: A07 — Fallas de Identificación y Autenticación.</strong>
+                </p>
+                <div class="finding-code">
+$mail->Username = <span class="danger">'uptag2026@gmail.com'</span>;    <span class="comment">// ← Expuesto</span>
+$mail->Password = <span class="danger">'xwnlhyllvdpdamyn'</span>;        <span class="comment">// ← App Password Gmail expuesta</span>
+</div>
+                <div class="finding-fix">
+                    <div class="fix-label">✓ Corrección Recomendada</div>
+                    <p>Usar variables de entorno o un archivo <code>.env</code> fuera del webroot, nunca en el código:</p>
+                    <div class="fix-code">$mail->Username = getenv('MAIL_USER');
+$mail->Password = getenv('MAIL_PASS');
+
+<span style="color:#6c7086;">// En archivo .env (fuera de htdocs, NO subir a git)</span>
+MAIL_USER=uptag2026@gmail.com
+MAIL_PASS=xwnlhyllvdpdamyn</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hallazgo C3 -->
+        <div class="finding">
+            <div class="finding-header">
+                <span class="severity-badge badge-critico">Crítico</span>
+                <span class="finding-id">C-03</span>
+                <span class="finding-title">Modo debug SMTP activo — vuelca sesión completa al navegador</span>
+                <span class="finding-file">enviar_token.php:41</span>
+            </div>
+            <div class="finding-body">
+                <p class="finding-desc">
+                    El nivel de debug 3 en PHPMailer imprime toda la comunicación SMTP en la respuesta HTTP,
+                    incluyendo el servidor, las credenciales negociadas y el contenido completo del correo.
+                    Esto expone información sensible a cualquier usuario que intente recuperar contraseña.
+                    <strong>Categoría OWASP: A09 — Fallas en el Registro y Monitoreo.</strong>
+                </p>
+                <div class="finding-code">
+$mail->SMTPDebug = <span class="danger">3</span>; <span class="comment">// ← Imprime sesión SMTP completa al HTML</span>
+<span class="comment">// Salida visible al usuario:</span>
+<span class="comment">// "CLIENT -> SERVER: AUTH LOGIN"</span>
+<span class="comment">// "CLIENT -> SERVER: [credencial en base64]"</span>
+</div>
+                <div class="finding-fix">
+                    <div class="fix-label">✓ Corrección Recomendada</div>
+                    <div class="fix-code">$mail->SMTPDebug = 0; // Deshabilitar en producción
+// Usar logs del servidor para depuración, no salida HTML</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── 6. HALLAZGOS ALTOS ── -->
+    <div class="section">
+        <div class="section-header">
+            <div class="section-number">6</div>
+            <div class="section-title">Hallazgos — Severidad Alta</div>
+        </div>
+
+        <!-- A1 -->
+        <div class="finding">
+            <div class="finding-header">
+                <span class="severity-badge badge-alto">Alto</span>
+                <span class="finding-id">A-01</span>
+                <span class="finding-title">Archivos sensibles accesibles públicamente en el webroot</span>
+                <span class="finding-file">test2.sql / generar_hash.php</span>
+            </div>
+            <div class="finding-body">
+                <p class="finding-desc">
+                    El dump completo de la base de datos (<code>test2.sql</code>) está accesible vía HTTP.
+                    Contiene hashes de contraseñas, tokens de recuperación, emails reales y toda la estructura de datos.
+                    Además, <code>generar_hash.php</code> es una utilidad que permite generar hashes arbitrarios.
+                    <strong>Categoría OWASP: A05 — Configuración de Seguridad Incorrecta.</strong>
+                </p>
+                <div class="finding-code">
+<span class="comment">// Accesibles públicamente:</span>
+http://dominio.com/buildsafe_system1/<span class="danger">test2.sql</span>        <span class="comment">// Dump BD completo</span>
+http://dominio.com/buildsafe_system1/<span class="danger">generar_hash.php</span>  <span class="comment">// Utilidad de hash</span>
+http://dominio.com/buildsafe_system1/<span class="danger">test.php</span>          <span class="comment">// Archivo de pruebas</span>
+</div>
+                <div class="finding-fix">
+                    <div class="fix-label">✓ Corrección Recomendada</div>
+                    <p>Eliminar <code>generar_hash.php</code> y <code>test.php</code>. Mover <code>test2.sql</code> fuera del webroot o bloquearlo en Apache:</p>
+                    <div class="fix-code"># En .htaccess
+&lt;FilesMatch "\.(sql|log|env|bak)$"&gt;
+    Require all denied
+&lt;/FilesMatch&gt;</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- A2 -->
+        <div class="finding">
+            <div class="finding-header">
+                <span class="severity-badge badge-alto">Alto</span>
+                <span class="finding-id">A-02</span>
+                <span class="finding-title">Sin protección CSRF en ningún formulario del sistema</span>
+                <span class="finding-file">add_user.php, edit_user.php, register_movement.php</span>
+            </div>
+            <div class="finding-body">
+                <p class="finding-desc">
+                    Ningún formulario implementa tokens CSRF. Un atacante puede crear una página externa
+                    que, al ser visitada por un administrador autenticado, ejecute acciones sin su conocimiento:
+                    crear usuarios, eliminar registros, cambiar estados de inventario.
+                    <strong>Categoría OWASP: A01 — Control de Acceso Roto.</strong>
+                </p>
+                <div class="finding-fix">
+                    <div class="fix-label">✓ Corrección Recomendada</div>
+                    <div class="fix-code"><span style="color:#6c7086;">// En head.php — generar token</span>
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
+<span style="color:#6c7086;">// En cada formulario HTML</span>
+&lt;input type="hidden" name="csrf_token"
+       value="&lt;?= $_SESSION['csrf_token'] ?&gt;"&gt;
+
+<span style="color:#6c7086;">// Al procesar el POST — validar</span>
+if ($_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+    die('Token CSRF inválido');
+}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- A3 -->
+        <div class="finding">
+            <div class="finding-header">
+                <span class="severity-badge badge-alto">Alto</span>
+                <span class="finding-id">A-03</span>
+                <span class="finding-title">Operaciones destructivas ejecutadas por petición GET</span>
+                <span class="finding-file">list_user.php:5,46</span>
+            </div>
+            <div class="finding-body">
+                <p class="finding-desc">
+                    Eliminar usuarios y cambiar su estado activo/inactivo se realiza mediante parámetros GET.
+                    Basta con que un admin autenticado visite un enlace malicioso para que la acción se ejecute.
+                    Los navegadores precargan enlaces, los motores de búsqueda los indexan y los logs los registran.
+                    <strong>Categoría OWASP: A01 — Control de Acceso Roto.</strong>
+                </p>
+                <div class="finding-code">
+<span class="comment">// Eliminar usuario con solo visitar la URL:</span>
+GET <span class="danger">/list_user.php?delete_id=3</span>
+GET <span class="danger">/list_user.php?toggle_status=5</span>
+</div>
+                <div class="finding-fix">
+                    <div class="fix-label">✓ Corrección Recomendada</div>
+                    <p>Las operaciones de escritura deben ser siempre POST con token CSRF. Convertir los links a formularios con método POST.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- A4 -->
+        <div class="finding">
+            <div class="finding-header">
+                <span class="severity-badge badge-alto">Alto</span>
+                <span class="finding-id">A-04</span>
+                <span class="finding-title">Consultas SQL mixtas sin prepared statements</span>
+                <span class="finding-file">list_user.php:52,58,65</span>
+            </div>
+            <div class="finding-body">
+                <p class="finding-desc">
+                    Varias consultas críticas mezclan <code>mysqli_query()</code> directo con variables interpoladas,
+                    en lugar de usar prepared statements. Aunque en estos casos los valores son enteros seguros,
+                    el patrón es peligroso y propenso a introducir vulnerabilidades en futuras modificaciones.
+                    <strong>Categoría OWASP: A03 — Injection.</strong>
+                </p>
+                <div class="finding-code">
+<span class="comment">// Patrón inseguro — consulta directa interpolada</span>
+mysqli_query($conn,
+    <span class="danger">"UPDATE user SET active = $new_status WHERE user_id = $user_id"</span>
+);
+mysqli_query($conn,
+    <span class="danger">"INSERT INTO binnacle ... VALUES ('$time', $action, $id)"</span>
+);
+</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── 7. HALLAZGOS MEDIOS ── -->
+    <div class="section page-break">
+        <div class="section-header">
+            <div class="section-number">7</div>
+            <div class="section-title">Hallazgos — Severidad Media</div>
+        </div>
+
+        <!-- M1 -->
+        <div class="finding">
+            <div class="finding-header">
+                <span class="severity-badge badge-medio">Medio</span>
+                <span class="finding-id">M-01</span>
+                <span class="finding-title">Sin regeneración de sesión tras autenticación exitosa</span>
+                <span class="finding-file">index.php:88-116</span>
+            </div>
+            <div class="finding-body">
+                <p class="finding-desc">
+                    Al iniciar sesión correctamente no se llama <code>session_regenerate_id(true)</code>.
+                    Esto permite ataques de <strong>session fixation</strong>: un atacante puede obtener un ID de sesión
+                    antes del login (por ejemplo desde una red compartida) y reutilizarlo con privilegios de administrador
+                    una vez que la víctima se autentica.
+                    <strong>Categoría OWASP: A07 — Fallas de Identificación.</strong>
+                </p>
+                <div class="finding-fix">
+                    <div class="fix-label">✓ Corrección — agregar en index.php antes de asignar $_SESSION</div>
+                    <div class="fix-code">// Justo después de verificar password_verify():
+session_regenerate_id(true);  // ← Genera nuevo ID de sesión
+$_SESSION['user'] = $result['name'];
+$_SESSION['id']   = $result['user_id'];
+// ... resto de variables de sesión</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- M2 -->
+        <div class="finding">
+            <div class="finding-header">
+                <span class="severity-badge badge-medio">Medio</span>
+                <span class="finding-id">M-02</span>
+                <span class="finding-title">Exposición de errores internos de base de datos al usuario</span>
+                <span class="finding-file">add_user.php:56, list_user.php:35,71, edit_user.php:65</span>
+            </div>
+            <div class="finding-body">
+                <p class="finding-desc">
+                    Los mensajes de error de MySQL se muestran directamente al usuario final.
+                    Esto revela la estructura de tablas, nombres de columnas y detalles del motor de base de datos
+                    que facilitan ataques de reconocimiento.
+                    <strong>Categoría OWASP: A05 — Configuración de Seguridad Incorrecta.</strong>
+                </p>
+                <div class="finding-code">
+<span class="comment">// Expone estructura interna de la BD:</span>
+$message = "Error al crear el usuario: " . <span class="danger">$conn->error</span>;
+$_SESSION['message'] = "Error al eliminar: " . <span class="danger">mysqli_error($conn)</span>;
+</div>
+                <div class="finding-fix">
+                    <div class="fix-label">✓ Corrección</div>
+                    <div class="fix-code">// Mostrar mensaje genérico al usuario
+$message = "Error interno. Por favor contacte al administrador.";
+// Registrar el error real en el log del servidor
+error_log("DB Error: " . $conn->error);</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- M3 -->
+        <div class="finding">
+            <div class="finding-header">
+                <span class="severity-badge badge-medio">Medio</span>
+                <span class="finding-id">M-03</span>
+                <span class="finding-title">Contraseña en texto plano en la base de datos</span>
+                <span class="finding-file">test2.sql — user_id=9</span>
+            </div>
+            <div class="finding-body">
+                <p class="finding-desc">
+                    El usuario con <code>user_id=9</code> (<code>ds@gmail.com</code>) tiene la contraseña <code>123456</code>
+                    almacenada sin ningún tipo de hash en la tabla <code>user</code>. Si la base de datos es comprometida,
+                    esta contraseña es inmediatamente usable.
+                </p>
+                <div class="finding-fix">
+                    <div class="fix-label">✓ Corrección</div>
+                    <div class="fix-code">-- En phpMyAdmin, actualizar con hash bcrypt:
+UPDATE user
+SET password = '$2y$10$[hash_generado_con_password_hash]'
+WHERE user_id = 9;</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- M4 -->
+        <div class="finding">
+            <div class="finding-header">
+                <span class="severity-badge badge-medio">Medio</span>
+                <span class="finding-id">M-04</span>
+                <span class="finding-title">Sin límite de peticiones en recuperación de contraseña</span>
+                <span class="finding-file">enviar_token.php</span>
+            </div>
+            <div class="finding-body">
+                <p class="finding-desc">
+                    El endpoint de recuperación de contraseña no implementa ningún tipo de rate limiting.
+                    Un atacante puede generar miles de correos hacia cualquier dirección registrada,
+                    usando el servidor de correo de la empresa como herramienta de spam.
+                    <strong>Categoría OWASP: A07 — Fallas de Identificación.</strong>
+                </p>
+                <div class="finding-fix">
+                    <div class="fix-label">✓ Corrección</div>
+                    <div class="fix-code">// Verificar que no haya token activo reciente (< 15 min)
+$stmt = $conn->prepare(
+    "SELECT token_expiracion FROM user
+     WHERE gmail = ? AND token_expiracion > NOW() - INTERVAL 15 MINUTE"
+);
+$stmt->bind_param("s", $email);
+$stmt->execute();
+if ($stmt->get_result()->num_rows > 0) {
+    $_SESSION['error'] = "Ya enviamos un enlace recientemente. Espera 15 minutos.";
+    header("Location: recuperar.php"); exit();
+}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- M5 -->
+        <div class="finding">
+            <div class="finding-header">
+                <span class="severity-badge badge-medio">Medio</span>
+                <span class="finding-id">M-05</span>
+                <span class="finding-title">Error lógico sutil en verificación de autorización</span>
+                <span class="finding-file">head.php:12</span>
+            </div>
+            <div class="finding-body">
+                <p class="finding-desc">
+                    La condición de autorización tiene un problema de precedencia de operadores.
+                    Aunque funciona correctamente en la práctica, es código engañoso que puede introducir
+                    fallos de seguridad si se modifica sin entender la evaluación correcta.
+                </p>
+                <div class="finding-code">
+<span class="comment">// Ambiguo: (!$seccion) == true  ←  no es lo mismo que  !($seccion == true)</span>
+if(<span class="danger">!$seccion == true</span> || $rol != 1) { ... }
+</div>
+                <div class="finding-fix">
+                    <div class="fix-label">✓ Corrección</div>
+                    <div class="fix-code">if ($seccion !== true || $rol !== 1) {
+    header("Location: destroyer.php");
+    exit();
+}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── 8. HALLAZGOS BAJOS ── -->
+    <div class="section">
+        <div class="section-header">
+            <div class="section-number">8</div>
+            <div class="section-title">Hallazgos — Severidad Baja</div>
+        </div>
+
+        <div class="finding">
+            <div class="finding-header">
+                <span class="severity-badge badge-bajo">Bajo</span>
+                <span class="finding-id">B-01</span>
+                <span class="finding-title">Clave secreta de reCAPTCHA hardcodeada</span>
+                <span class="finding-file">index.php:47</span>
+            </div>
+            <div class="finding-body">
+                <p class="finding-desc">
+                    La clave secreta de Google reCAPTCHA está en el código fuente. Si se filtra,
+                    permite falsificar la verificación de reCAPTCHA desde cualquier servidor.
+                </p>
+                <div class="finding-code">
+$secretkey = <span class="danger">"6LdVkrIrAAAAALXGfzMhYeIlaTLb1wDkX8NgHTVI"</span>;
+</div>
+                <div class="finding-fix">
+                    <div class="fix-label">✓ Corrección</div>
+                    <div class="fix-code">$secretkey = getenv('RECAPTCHA_SECRET');</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="finding">
+            <div class="finding-header">
+                <span class="severity-badge badge-bajo">Bajo</span>
+                <span class="finding-id">B-02</span>
+                <span class="finding-title">Sin cabeceras de seguridad HTTP</span>
+                <span class="finding-file">head.php / index.php</span>
+            </div>
+            <div class="finding-body">
+                <p class="finding-desc">
+                    El sistema no envía cabeceras de seguridad HTTP que mitiguen ataques de clickjacking,
+                    inyección de contenido y MIME-sniffing.
+                    <strong>Categoría OWASP: A05 — Configuración de Seguridad Incorrecta.</strong>
+                </p>
+                <div class="finding-fix">
+                    <div class="fix-label">✓ Agregar en head.php o en .htaccess</div>
+                    <div class="fix-code">header("X-Frame-Options: DENY");
+header("X-Content-Type-Options: nosniff");
+header("X-XSS-Protection: 1; mode=block");
+header("Referrer-Policy: strict-origin-when-cross-origin");
+header("Content-Security-Policy: default-src 'self' https://cdn.jsdelivr.net");</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── 9. TABLA RESUMEN ── -->
+    <div class="section page-break">
+        <div class="section-header">
+            <div class="section-number">9</div>
+            <div class="section-title">Tabla Consolidada de Hallazgos</div>
+        </div>
+
+        <table class="summary-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Vulnerabilidad</th>
+                    <th>Severidad</th>
+                    <th>Archivo</th>
+                    <th>OWASP</th>
+                    <th>Esfuerzo</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>C-01</td>
+                    <td>Inyección SQL en add_user</td>
+                    <td><span class="severity-badge badge-critico">Crítico</span></td>
+                    <td><code>add_user.php:29</code></td>
+                    <td>A03</td>
+                    <td>Bajo</td>
+                </tr>
+                <tr>
+                    <td>C-02</td>
+                    <td>Credenciales Gmail hardcodeadas</td>
+                    <td><span class="severity-badge badge-critico">Crítico</span></td>
+                    <td><code>enviar_token.php:38</code></td>
+                    <td>A07</td>
+                    <td>Bajo</td>
+                </tr>
+                <tr>
+                    <td>C-03</td>
+                    <td>Debug SMTP nivel 3 en producción</td>
+                    <td><span class="severity-badge badge-critico">Crítico</span></td>
+                    <td><code>enviar_token.php:41</code></td>
+                    <td>A09</td>
+                    <td>Muy Bajo</td>
+                </tr>
+                <tr>
+                    <td>A-01</td>
+                    <td>Archivos sensibles en webroot</td>
+                    <td><span class="severity-badge badge-alto">Alto</span></td>
+                    <td><code>test2.sql, generar_hash.php</code></td>
+                    <td>A05</td>
+                    <td>Muy Bajo</td>
+                </tr>
+                <tr>
+                    <td>A-02</td>
+                    <td>Sin protección CSRF</td>
+                    <td><span class="severity-badge badge-alto">Alto</span></td>
+                    <td>Todos los formularios</td>
+                    <td>A01</td>
+                    <td>Medio</td>
+                </tr>
+                <tr>
+                    <td>A-03</td>
+                    <td>Operaciones destructivas por GET</td>
+                    <td><span class="severity-badge badge-alto">Alto</span></td>
+                    <td><code>list_user.php:5,46</code></td>
+                    <td>A01</td>
+                    <td>Bajo</td>
+                </tr>
+                <tr>
+                    <td>A-04</td>
+                    <td>Consultas SQL sin prepared statements</td>
+                    <td><span class="severity-badge badge-alto">Alto</span></td>
+                    <td><code>list_user.php:52,65</code></td>
+                    <td>A03</td>
+                    <td>Bajo</td>
+                </tr>
+                <tr>
+                    <td>M-01</td>
+                    <td>Sin regeneración de sesión al login</td>
+                    <td><span class="severity-badge badge-medio">Medio</span></td>
+                    <td><code>index.php:88</code></td>
+                    <td>A07</td>
+                    <td>Muy Bajo</td>
+                </tr>
+                <tr>
+                    <td>M-02</td>
+                    <td>Errores BD expuestos al usuario</td>
+                    <td><span class="severity-badge badge-medio">Medio</span></td>
+                    <td><code>add_user.php:56</code></td>
+                    <td>A05</td>
+                    <td>Bajo</td>
+                </tr>
+                <tr>
+                    <td>M-03</td>
+                    <td>Contraseña sin hash en BD</td>
+                    <td><span class="severity-badge badge-medio">Medio</span></td>
+                    <td><code>test2.sql</code></td>
+                    <td>A07</td>
+                    <td>Muy Bajo</td>
+                </tr>
+                <tr>
+                    <td>M-04</td>
+                    <td>Sin rate limit en reset de contraseña</td>
+                    <td><span class="severity-badge badge-medio">Medio</span></td>
+                    <td><code>enviar_token.php</code></td>
+                    <td>A07</td>
+                    <td>Bajo</td>
+                </tr>
+                <tr>
+                    <td>M-05</td>
+                    <td>Error lógico en verificación de rol</td>
+                    <td><span class="severity-badge badge-medio">Medio</span></td>
+                    <td><code>head.php:12</code></td>
+                    <td>A01</td>
+                    <td>Muy Bajo</td>
+                </tr>
+                <tr>
+                    <td>B-01</td>
+                    <td>Clave reCAPTCHA hardcodeada</td>
+                    <td><span class="severity-badge badge-bajo">Bajo</span></td>
+                    <td><code>index.php:47</code></td>
+                    <td>A05</td>
+                    <td>Muy Bajo</td>
+                </tr>
+                <tr>
+                    <td>B-02</td>
+                    <td>Sin cabeceras de seguridad HTTP</td>
+                    <td><span class="severity-badge badge-bajo">Bajo</span></td>
+                    <td><code>head.php</code></td>
+                    <td>A05</td>
+                    <td>Muy Bajo</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ── 10. CONCLUSIONES ── -->
+    <div class="section">
+        <div class="section-header">
+            <div class="section-number">10</div>
+            <div class="section-title">Conclusiones y Plan de Remediación</div>
+        </div>
+
+        <div class="conclusion-box">
+            <h3>Evaluación General</h3>
+            <p>
+                El sistema BuildSafe System presenta <strong>14 vulnerabilidades de seguridad</strong>,
+                de las cuales 3 son de severidad crítica y requieren atención inmediata antes de cualquier
+                despliegue en producción. El mayor riesgo proviene de las credenciales expuestas en el código
+                fuente y la vulnerabilidad de inyección SQL, que combinadas podrían comprometer completamente
+                el sistema y los datos de los usuarios.
+            </p>
+            <ul>
+                <li><strong>Prioridad 1 (Esta semana):</strong> Eliminar credenciales hardcodeadas, deshabilitar SMTPDebug, mover archivos sensibles fuera del webroot, corregir SQL injection en add_user.php.</li>
+                <li><strong>Prioridad 2 (Próximas 2 semanas):</strong> Implementar protección CSRF en todos los formularios, convertir operaciones GET a POST, agregar regeneración de sesión.</li>
+                <li><strong>Prioridad 3 (Próximo mes):</strong> Implementar rate limiting, agregar cabeceras de seguridad HTTP, migrar todas las consultas a prepared statements, revisar y actualizar contraseñas en texto plano.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="doc-footer">
+        Auditoría de Seguridad — BuildSafe System — CONFALVI C.A. &nbsp;|&nbsp; Junio 2026 &nbsp;|&nbsp; Documento Confidencial — Uso Interno
+    </div>
+
+</div><!-- /content -->
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!--  SCRIPTS DE GRÁFICAS                                          -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<script>
+// ── Gráfica 1: Distribución por Severidad (Donut) ──
+new Chart(document.getElementById('chartSeveridad'), {
+    type: 'doughnut',
+    data: {
+        labels: ['Crítico', 'Alto', 'Medio', 'Bajo'],
+        datasets: [{
+            data: [3, 4, 5, 2],
+            backgroundColor: ['#e53935', '#fb8c00', '#f9a825', '#43a047'],
+            borderColor: ['#fff'],
+            borderWidth: 3,
+            hoverOffset: 6
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'bottom',
+                labels: { font: { size: 11 }, padding: 14 }
+            },
+            tooltip: {
+                callbacks: {
+                    label: ctx => ` ${ctx.label}: ${ctx.raw} hallazgo(s) (${Math.round(ctx.raw/14*100)}%)`
+                }
+            }
+        },
+        cutout: '60%'
+    }
+});
+
+// ── Gráfica 2: Categorías OWASP (Radar) ──
+new Chart(document.getElementById('chartOwasp'), {
+    type: 'radar',
+    data: {
+        labels: ['A01 Control\nAcceso', 'A03\nInjection', 'A05\nConfig', 'A07\nAutenticación', 'A09\nMonitoreo'],
+        datasets: [{
+            label: 'Hallazgos',
+            data: [3, 2, 4, 4, 1],
+            backgroundColor: 'rgba(229, 57, 53, 0.15)',
+            borderColor: '#e53935',
+            borderWidth: 2,
+            pointBackgroundColor: '#e53935',
+            pointRadius: 4
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            r: {
+                beginAtZero: true,
+                max: 5,
+                ticks: { stepSize: 1, font: { size: 9 } },
+                pointLabels: { font: { size: 9 } },
+                grid: { color: 'rgba(0,0,0,0.08)' }
+            }
+        },
+        plugins: {
+            legend: { display: false }
+        }
+    }
+});
+
+// ── Gráfica 3: Hallazgos por Archivo ──
+new Chart(document.getElementById('chartArchivos'), {
+    type: 'bar',
+    data: {
+        labels: ['enviar_token.php', 'add_user.php', 'list_user.php', 'head.php', 'index.php', 'edit_user.php', 'test2.sql', 'Globales'],
+        datasets: [{
+            label: 'Vulnerabilidades',
+            data: [3, 2, 3, 2, 2, 1, 1, 2],
+            backgroundColor: [
+                '#e53935', '#e53935',
+                '#fb8c00', '#fb8c00',
+                '#f9a825', '#f9a825',
+                '#43a047', '#78909c'
+            ],
+            borderRadius: 6,
+            borderSkipped: false
+        }]
+    },
+    options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            x: {
+                beginAtZero: true,
+                max: 4,
+                ticks: { stepSize: 1 },
+                grid: { color: 'rgba(0,0,0,0.05)' }
+            },
+            y: {
+                ticks: { font: { size: 11 }, font: { family: 'Courier New' } },
+                grid: { display: false }
+            }
+        },
+        plugins: {
+            legend: { display: false }
+        }
+    }
+});
+
+// ── Gráfica 4: Impacto vs Probabilidad ──
+new Chart(document.getElementById('chartImpacto'), {
+    type: 'bar',
+    data: {
+        labels: ['C-01\nSQL Inj.', 'C-02\nCredenc.', 'C-03\nDebug', 'A-01\nArchivos', 'A-02\nCSRF'],
+        datasets: [
+            {
+                label: 'Impacto (1-10)',
+                data: [9, 8, 7, 8, 7],
+                backgroundColor: 'rgba(229, 57, 53, 0.7)',
+                borderRadius: 4,
+                borderSkipped: false
+            },
+            {
+                label: 'Facilidad explotación (1-10)',
+                data: [7, 9, 9, 10, 8],
+                backgroundColor: 'rgba(251, 140, 0, 0.7)',
+                borderRadius: 4,
+                borderSkipped: false
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            y: {
+                beginAtZero: true,
+                max: 10,
+                ticks: { stepSize: 2 },
+                grid: { color: 'rgba(0,0,0,0.05)' }
+            },
+            x: {
+                ticks: { font: { size: 9 } },
+                grid: { display: false }
+            }
+        },
+        plugins: {
+            legend: {
+                position: 'bottom',
+                labels: { font: { size: 10 }, padding: 10 }
+            }
+        }
+    }
+});
+
+// ── Gráfica 5: Esfuerzo de Remediación ──
+new Chart(document.getElementById('chartRemediacion'), {
+    type: 'pie',
+    data: {
+        labels: ['Muy Bajo (< 1h)', 'Bajo (1-4h)', 'Medio (1-2 días)'],
+        datasets: [{
+            data: [7, 5, 2],
+            backgroundColor: ['#43a047', '#1e88e5', '#fb8c00'],
+            borderColor: '#fff',
+            borderWidth: 3,
+            hoverOffset: 5
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'bottom',
+                labels: { font: { size: 10 }, padding: 10 }
+            },
+            tooltip: {
+                callbacks: {
+                    label: ctx => ` ${ctx.label}: ${ctx.raw} vulnerabilidad(es)`
+                }
+            }
+        }
+    }
+});
+</script>
+</body>
+</html>

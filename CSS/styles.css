@@ -1,0 +1,114 @@
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .btn {
+            display: inline-flex;       /* Hace que el botón sea un contenedor flex */
+            align-items: center;       /* Centra verticalmente los elementos hijos */
+            justify-content: center;   /* Centra horizontalmente los elementos hijos */
+            gap: 0.5rem;              /* Espacio entre elementos hijos (icono y texto) */
+            padding: 0.5rem 2rem;     /* Padding interno (ajustable) */
+        }
+        .message {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .success {
+            background-color: #dff0d8;
+            color: #3c763d;
+        }
+        .error {
+            background-color: #f2dede;
+            color: #a94442;
+        }
+        .flex-row {
+            display: flex;
+            gap: 15px;
+        }
+        .flex-row .form-group {
+            flex: 1;
+        }
+
+        .btn-volver-container {
+            text-align: center;
+            margin: 10px 0;
+        }
+        
+        .btn-volver {
+            text-decoration: none;
+        }
+
+        .btn-edit {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .btn-status {
+            color: white;
+        }
+        .btn-active {
+            background-color: rgb(43, 82, 255);
+            border: rgb(43, 82, 255);
+            box-shadow: 4 6px 5px -5px rgb(43, 82, 255); 
+        }
+        .btn-inactive {
+            background-color: #ff9800;
+            box-shadow: 4 6px 5px -5px orange; 
+        }
+        .btn-delete {
+            background-color: #f44336;
+            color: white;
+        }
+        .btn-add {
+            background-color: #2196F3;
+            color: white;
+            padding: 8px 15px;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        .message {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .success {
+            background-color: #dff0d8;
+            color: #3c763d;
+        }
+        .error {
+            background-color: #f2dede;
+            color: #a94442;
+        }
+        .status-badge {
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+            color: white;
+        }
+        .active-badge {
+            background-color: #4CAF50;
+        }
+        .inactive-badge {
+            background-color: #777;
+        }
+
+        
