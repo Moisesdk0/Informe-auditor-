@@ -149,7 +149,7 @@ p.sec-intro{font-size:12.5px;color:#ccc;line-height:1.7;text-align:justify;margi
 <div class="toc-row"><span class="toc-t" style="padding-left:16px">HAL-004 — Debug SMTP activo en producción (Crítico)</span><span class="toc-dots"></span><span class="toc-p">12</span></div>
 <div class="toc-row"><span class="toc-t" style="padding-left:16px">HAL-005 — Sin límite de intentos (Medio)</span><span class="toc-dots"></span><span class="toc-p">13</span></div>
 <div class="toc-row"><span class="toc-t s">4. Módulo: Gestión de Usuarios</span><span class="toc-dots"></span><span class="toc-p">14</span></div>
-<div class="toc-row"><span class="toc-t" style="padding-left:16px">HAL-006 — Inyección SQL en registro (Crítico)</span><span class="toc-dots"></span><span class="toc-p">15</span></div>
+<div class="toc-row"><span class="toc-t" style="padding-left:16px">HAL-006 — Construcción insegura de consulta SQL en registro (Medio)</span><span class="toc-dots"></span><span class="toc-p">15</span></div>
 <div class="toc-row"><span class="toc-t" style="padding-left:16px">HAL-007 — Operaciones destructivas vía GET (Alto)</span><span class="toc-dots"></span><span class="toc-p">16</span></div>
 <div class="toc-row"><span class="toc-t" style="padding-left:16px">HAL-008 — Sin protección CSRF (Alto)</span><span class="toc-dots"></span><span class="toc-p">17</span></div>
 <div class="toc-row"><span class="toc-t s">5. Módulo: Materiales y Movimientos</span><span class="toc-dots"></span><span class="toc-p">18</span></div>
@@ -170,19 +170,19 @@ p.sec-intro{font-size:12.5px;color:#ccc;line-height:1.7;text-align:justify;margi
 <div class="ph"><span class="ph-l">Resumen Ejecutivo</span><span class="ph-r">BuildSafe System — CONFALVI C.A.</span></div>
 <div class="pill rel">Resumen Ejecutivo</div>
 <p class="sec-intro">La presente auditoría de seguridad informática fue realizada sobre el sistema <strong style="color:#fff">BuildSafe System</strong>, aplicación web desarrollada en PHP 8.2 para la gestión de inventario de materiales de la empresa CONFALVI C.A. El análisis fue ejecutado mediante revisión estática del código fuente, aplicando como marco de referencia el estándar <strong style="color:#4fc3f7">OWASP Top 10 — 2021</strong>. Se analizaron un total de <strong style="color:#fff">27 archivos PHP</strong> que conforman el núcleo funcional del sistema, identificando vulnerabilidades distribuidas en los módulos de autenticación, recuperación de contraseña, gestión de usuarios, gestión de materiales y configuración del servidor.</p>
-<p class="sec-intro">Como resultado del análisis, se encontraron <strong style="color:#fff">15 hallazgos de seguridad</strong>, de los cuales 3 son de severidad <strong style="color:#c0392b">Crítica</strong>, 4 de severidad <strong style="color:#d35400">Alta</strong>, 6 de severidad <strong style="color:#c9a800">Media</strong> y 2 de severidad <strong style="color:#1e8449">Baja</strong>. El nivel de riesgo global del sistema fue evaluado en <strong style="color:#c0392b">7.3 / 10 — ALTO</strong>, lo que indica que el sistema <strong style="color:#fff">no debe ser expuesto a producción pública</strong> en su estado actual sin corregir al menos los hallazgos críticos y altos.</p>
+<p class="sec-intro">Como resultado del análisis, se encontraron <strong style="color:#fff">15 hallazgos de seguridad</strong>, de los cuales 2 son de severidad <strong style="color:#c0392b">Crítica</strong>, 4 de severidad <strong style="color:#d35400">Alta</strong>, 7 de severidad <strong style="color:#c9a800">Media</strong> y 2 de severidad <strong style="color:#1e8449">Baja</strong>. El nivel de riesgo global del sistema fue evaluado en <strong style="color:#c0392b">6.8 / 10 — ALTO</strong>, lo que indica que el sistema <strong style="color:#fff">no debe ser expuesto a producción pública</strong> en su estado actual sin corregir al menos los hallazgos críticos y altos.</p>
 <div class="ec-grid">
-  <div class="ec c"><div class="ec-n">3</div><div class="ec-l">Crítico</div></div>
+  <div class="ec c"><div class="ec-n">2</div><div class="ec-l">Crítico</div></div>
   <div class="ec a"><div class="ec-n">4</div><div class="ec-l">Alto</div></div>
-  <div class="ec m"><div class="ec-n">6</div><div class="ec-l">Medio</div></div>
+  <div class="ec m"><div class="ec-n">7</div><div class="ec-l">Medio</div></div>
   <div class="ec b"><div class="ec-n">2</div><div class="ec-l">Bajo</div></div>
 </div>
 <div class="risk rel">
   <div style="font-size:10px;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.4);margin-bottom:6px">Nivel de Riesgo Global del Sistema</div>
-  <div class="risk-sc">7.3</div>
+  <div class="risk-sc">6.8</div>
   <div class="risk-lb">ALTO</div>
-  <div class="risk-bar-bg"><div class="risk-bar"></div></div>
-  <div class="risk-sc-row"><span>0 — Bajo</span><span>5 — Medio</span><span style="color:#c0392b">◄ 7.3</span><span>10 — Crítico</span></div>
+  <div class="risk-bar-bg"><div class="risk-bar" style="width:68%"></div></div>
+  <div class="risk-sc-row"><span>0 — Bajo</span><span>5 — Medio</span><span style="color:#c0392b">◄ 6.8</span><span>10 — Crítico</span></div>
 </div>
 <div class="pf"><span>Informe Final de Auditoría — BuildSafe System</span><span>Confidencial</span></div>
 </div>
@@ -217,7 +217,7 @@ p.sec-intro{font-size:12.5px;color:#ccc;line-height:1.7;text-align:justify;margi
   <tbody>
   <tr><td><span class="badge bid">A01</span></td><td>Control de Acceso Roto</td><td>HAL-007, HAL-008 <span class="badge ba" style="font-size:9px">Alto</span></td></tr>
   <tr><td><span class="badge bid">A02</span></td><td>Fallas Criptográficas</td><td>HAL-012 <span class="badge bm" style="font-size:9px">Medio</span></td></tr>
-  <tr><td><span class="badge bid">A03</span></td><td>Inyección</td><td>HAL-006, HAL-009 <span class="badge bc" style="font-size:9px">Crítico</span> / <span class="badge ba" style="font-size:9px">Alto</span></td></tr>
+  <tr><td><span class="badge bid">A03</span></td><td>Inyección</td><td>HAL-006 <span class="badge bm" style="font-size:9px">Medio</span> / HAL-009 <span class="badge ba" style="font-size:9px">Alto</span></td></tr>
   <tr><td><span class="badge bid">A04</span></td><td>Diseño Inseguro</td><td>HAL-005, HAL-013 <span class="badge bm" style="font-size:9px">Medio</span></td></tr>
   <tr><td><span class="badge bid">A05</span></td><td>Configuración de Seguridad Incorrecta</td><td>HAL-010, HAL-014, HAL-015 <span class="badge ba" style="font-size:9px">Alto</span> / <span class="badge bb" style="font-size:9px">Bajo</span></td></tr>
   <tr><td><span class="badge bid">A06</span></td><td>Componentes Vulnerables y Desactualizados</td><td>No aplicable en esta revisión</td></tr>
@@ -438,7 +438,7 @@ if ($stmt->get_result()->num_rows > 0) {
 <div class="mod-title">Módulo 3</div>
 <div class="mod-div"></div>
 <div style="font-size:22px;font-weight:700;color:#4fc3f7;position:relative;z-index:1;margin-bottom:14px">Gestión de Usuarios</div>
-<div class="mod-sub">Hallazgos: HAL-006 · HAL-007 · HAL-008 &nbsp;|&nbsp; Severidad máxima: <span style="color:#c0392b;font-weight:700">Crítico</span></div>
+<div class="mod-sub">Hallazgos: HAL-006 · HAL-007 · HAL-008 &nbsp;|&nbsp; Severidad máxima: <span style="color:#d35400;font-weight:700">Alto</span></div>
 <div class="pf"><span>Informe Final de Auditoría — BuildSafe System</span><span>Confidencial</span></div>
 </div>
 
@@ -446,27 +446,29 @@ if ($stmt->get_result()->num_rows > 0) {
 <div class="page">
 <div class="stripe-l"></div><div class="stripe-l2"></div><div class="stripe-br"></div><div class="stripe-br2"></div><div class="dots-tr"></div>
 <div class="ph"><span class="ph-l">Módulo: Gestión de Usuarios</span><span class="ph-r">BuildSafe System — CONFALVI C.A.</span></div>
-<div class="f-pill">Inyección SQL en Verificación de Duplicados de Usuario</div>
+<div class="f-pill">Construcción Insegura de Consulta SQL en Verificación de Duplicados</div>
 <div class="f-badges">
   <div class="f-bl">Identificación<br><span class="badge bid">HAL-006</span></div>
-  <div class="f-bl">Riesgo<br><span class="badge bc">Crítico</span></div>
+  <div class="f-bl">Riesgo<br><span class="badge bm">Medio</span></div>
   <div class="f-bl">Estatus<br><span class="badge bnv">Nuevo</span></div>
 </div>
 <div class="f-sec">Descripción</div>
-<p class="f-txt">En <code style="color:#4fc3f7">add_user.php</code>, la función <code style="color:#4fc3f7">htmlspecialchars()</code> se invoca sin la bandera <code style="color:#f07178">ENT_QUOTES</code>, lo que significa que las comillas simples (<code>'</code>) <strong style="color:#fff">no son escapadas</strong>. Los valores del formulario son interpolados directamente en la consulta SQL. Un atacante puede inyectar comandos SQL completos a través del campo nombre o email: extraer todas las contraseñas, bypassear la lógica de duplicados, o — en configuraciones con múltiples statements — ejecutar comandos destructivos. OWASP: <strong style="color:#4fc3f7">A03 — Injection</strong>.</p>
-<div class="f-code"><span class="c">// add_user.php — línea 29: htmlspecialchars() sin ENT_QUOTES</span>
-$email = htmlspecialchars($_POST['email']);  <span class="c">// ' no se escapa → vulnerable</span>
+<p class="f-txt">En <code style="color:#4fc3f7">add_user.php</code>, los valores de <code style="color:#4fc3f7">$user</code> y <code style="color:#4fc3f7">$email</code> se interpolan directamente dentro de una consulta SQL sin sentencias preparadas, pasando únicamente por <code style="color:#4fc3f7">htmlspecialchars()</code> — una función de sanitización para contexto <strong style="color:#fff">HTML</strong>, no para contexto <strong style="color:#fff">SQL</strong>. Se verificó en vivo contra la instalación real (PHP 8.2.12) el payload clásico <code>' OR '1'='1' --</code>: desde PHP 8.1, <code style="color:#4fc3f7">htmlspecialchars()</code> aplica <code style="color:#4fc3f7">ENT_QUOTES</code> por defecto, por lo que la comilla simple se convierte en la entidad literal <code>&amp;#039;</code> antes de llegar a la consulta. La prueba directa contra la base de datos confirmó que la consulta se ejecuta sin error y retorna <strong style="color:#fff">0 filas</strong> — el bypass de la lógica de duplicados <strong style="color:#fff">no se logra</strong> en esta versión de PHP. Aun así, el hallazgo se mantiene porque la protección es <strong style="color:#fff">incidental, no intencional</strong>: no existe ninguna sentencia preparada ni escape orientado a SQL, por lo que el código queda expuesto si el proyecto se ejecuta bajo PHP &lt; 8.1, si algún desarrollador cambia la función de sanitización, o si estas mismas variables se reutilizan en otra consulta sin pasar de nuevo por <code>htmlspecialchars()</code>. OWASP: <strong style="color:#4fc3f7">A03 — Injection</strong> (patrón de diseño, no explotación confirmada).</p>
+<div class="f-code"><span class="c">// add_user.php — línea 29: sanitización HTML usada en contexto SQL</span>
+$email = htmlspecialchars($_POST['email']);
 $user  = htmlspecialchars($_POST['user']);
 
 $check = mysqli_query($conn,
     <span class="d">"SELECT * FROM user WHERE name = '$user' OR gmail = '$email'"</span>
 );
-<span class="c">// Payload: email = ' OR '1'='1' -- </span>
-<span class="c">// Resultado: SELECT * FROM user WHERE name='' OR gmail='' OR '1'='1'--'</span>
-<span class="c">// → Retorna TODOS los registros → lógica de "ya existe" siempre falla</span></div>
+<span class="c">// Prueba en vivo (PHP 8.2.12 / test2.sql) — payload: ' OR '1'='1' --</span>
+<span class="c">// Tras htmlspecialchars(): &#039; OR &#039;1&#039;=&#039;1&#039; -- </span>
+<span class="c">// Consulta final: SELECT * FROM user WHERE name='attacker'</span>
+<span class="c">//                 OR gmail='&#039; OR &#039;1&#039;=&#039;1&#039; -- '</span>
+<span class="c">// Resultado real: sin error de SQL, 0 filas devueltas → NO explotable en PHP 8.1+</span></div>
 <div class="f-sec">Recomendación</div>
 <div class="f-fix">
-<div class="f-fix-l">✓ Usar Prepared Statements — separan datos del SQL estructuralmente</div>
+<div class="f-fix-l">✓ Usar Prepared Statements — no depender de un efecto colateral de PHP para la seguridad</div>
 <div class="f-fix-c">$stmt = $conn->prepare(
     "SELECT user_id FROM user WHERE name = ? OR gmail = ?"
 );
@@ -475,7 +477,7 @@ $stmt->execute();
 $result = $stmt->get_result();
 if ($result->num_rows > 0) { /* ya existe */ }</div>
 </div>
-<div class="f-loc"><span>Ubicación:</span>add_user.php — línea 29 (consulta de verificación de duplicados)</div>
+<div class="f-loc"><span>Ubicación:</span>add_user.php — línea 29 (consulta de verificación de duplicados) · verificado en vivo el 15-jul-2026</div>
 <div class="pf"><span>Informe Final de Auditoría — BuildSafe System</span><span>Confidencial</span></div>
 </div>
 
@@ -755,7 +757,7 @@ header(<span class="g">"Referrer-Policy: strict-origin-when-cross-origin"</span>
 <thead><tr><th>Prueba</th><th>Descripción</th><th>Resultado</th><th>HAL</th></tr></thead>
 <tbody>
 <tr><td>SQL Injection — Login</td><td>Inyección de payload <code>' OR '1'='1</code> en campo email del login</td><td><span class="badge bnv">Bloqueado</span> — reCAPTCHA previene automatización masiva</td><td>—</td></tr>
-<tr><td>SQL Injection — Registro</td><td>Email con comilla simple en add_user.php</td><td><span class="badge bc" style="font-size:9px">Vulnerable</span> — consulta malformada ejecutada</td><td>HAL-006</td></tr>
+<tr><td>SQL Injection — Registro</td><td>Payload <code>' OR '1'='1' --</code> en campo email de add_user.php, ejecutado directamente contra test2.sql (PHP 8.2.12)</td><td><span class="badge bm" style="font-size:9px">No explotable</span> — ENT_QUOTES (PHP 8.1+) neutraliza la comilla; consulta válida, 0 filas</td><td>HAL-006</td></tr>
 <tr><td>Acceso directo a SQL</td><td>GET http://localhost/buildsafe_system1/test2.sql</td><td><span class="badge bc" style="font-size:9px">Vulnerable</span> — descarga completa del dump</td><td>HAL-010</td></tr>
 <tr><td>Debug SMTP visible</td><td>Solicitud de recuperación de contraseña con email válido</td><td><span class="badge bc" style="font-size:9px">Vulnerable</span> — sesión SMTP visible en HTML</td><td>HAL-004</td></tr>
 <tr><td>Operación GET destructiva</td><td>Visitar /list_user.php?delete_id=1 como admin</td><td><span class="badge bc" style="font-size:9px">Vulnerable</span> — usuario eliminado sin confirmación</td><td>HAL-007</td></tr>
@@ -824,7 +826,7 @@ header(<span class="g">"Referrer-Policy: strict-origin-when-cross-origin"</span>
 <tr><td>HAL-003</td><td>Credenciales SMTP hardcodeadas</td><td><span class="badge bc">Crítico</span></td><td>enviar_token.php:37</td><td>A07</td><td>Bajo</td></tr>
 <tr><td>HAL-004</td><td>Debug SMTP nivel 3 en producción</td><td><span class="badge bc">Crítico</span></td><td>enviar_token.php:41</td><td>A09</td><td>Muy Bajo</td></tr>
 <tr><td>HAL-005</td><td>Sin rate limit recuperación</td><td><span class="badge bm">Medio</span></td><td>enviar_token.php</td><td>A04</td><td>Bajo</td></tr>
-<tr><td>HAL-006</td><td>Inyección SQL en registro</td><td><span class="badge bc">Crítico</span></td><td>add_user.php:29</td><td>A03</td><td>Bajo</td></tr>
+<tr><td>HAL-006</td><td>Construcción insegura de consulta SQL (no explotable en PHP 8.2)</td><td><span class="badge bm">Medio</span></td><td>add_user.php:29</td><td>A03</td><td>Bajo</td></tr>
 <tr><td>HAL-007</td><td>Operaciones destructivas vía GET</td><td><span class="badge ba">Alto</span></td><td>list_user.php:5,46 · list_material.php:5,30 · list_materials2.php:5</td><td>A01</td><td>Bajo</td></tr>
 <tr><td>HAL-008</td><td>Sin protección CSRF</td><td><span class="badge ba">Alto</span></td><td>Todos los formularios</td><td>A01</td><td>Medio</td></tr>
 <tr><td>HAL-009</td><td>SQL sin prepared statements</td><td><span class="badge ba">Alto</span></td><td>list_user.php:52,65 · list_material.php:34,40,47</td><td>A03</td><td>Bajo</td></tr>
@@ -847,7 +849,7 @@ header(<span class="g">"Referrer-Policy: strict-origin-when-cross-origin"</span>
 <p class="sec-intro">La auditoría de seguridad realizada al sistema BuildSafe System de CONFALVI C.A. evidencia que el sistema posee una <strong style="color:#fff">postura de seguridad deficiente</strong> que impide su despliegue responsable en un entorno de producción accesible públicamente en su estado actual. Los 15 hallazgos identificados abarcan las capas de autenticación, manejo de datos, configuración del servidor y gestión de credenciales.</p>
 <div style="background:rgba(192,57,43,.1);border:1px solid rgba(192,57,43,.3);border-radius:10px;padding:18px;margin-bottom:20px;position:relative;z-index:1">
 <div style="font-size:12px;font-weight:700;color:#e74c3c;margin-bottom:10px;text-transform:uppercase;letter-spacing:1px">⚠ Veredicto: No Apto para Producción</div>
-<p style="font-size:12px;color:#ccc;line-height:1.7">El sistema presenta 3 vulnerabilidades críticas activas que deben ser corregidas antes de cualquier despliegue. La exposición de credenciales SMTP, el dump de base de datos accesible via HTTP y la vulnerabilidad de inyección SQL representan riesgos inmediatos y explotables sin necesidad de conocimientos técnicos avanzados.</p>
+<p style="font-size:12px;color:#ccc;line-height:1.7">El sistema presenta 2 vulnerabilidades críticas activas que deben ser corregidas antes de cualquier despliegue. La exposición de credenciales SMTP y el dump de base de datos accesible vía HTTP representan riesgos inmediatos y explotables sin necesidad de conocimientos técnicos avanzados. Adicionalmente, se identificó un patrón de construcción de consultas SQL inseguro (HAL-006) que, si bien no resultó explotable en la versión de PHP actualmente instalada, debe corregirse por no constituir una defensa real.</p>
 </div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px;position:relative;z-index:1">
 <div style="background:rgba(255,255,255,.04);border-radius:8px;padding:16px">
@@ -867,7 +869,7 @@ header(<span class="g">"Referrer-Policy: strict-origin-when-cross-origin"</span>
 <li style="font-size:12px;color:#ccc;line-height:1.6;margin-bottom:4px">Revocar App Password de Gmail expuesta</li>
 <li style="font-size:12px;color:#ccc;line-height:1.6;margin-bottom:4px">Deshabilitar SMTPDebug</li>
 <li style="font-size:12px;color:#ccc;line-height:1.6;margin-bottom:4px">Eliminar test2.sql del webroot</li>
-<li style="font-size:12px;color:#ccc;line-height:1.6;margin-bottom:4px">Corregir inyección SQL en add_user.php</li>
+<li style="font-size:12px;color:#ccc;line-height:1.6;margin-bottom:4px">Migrar la consulta de duplicados de add_user.php a prepared statements (HAL-006)</li>
 <li style="font-size:12px;color:#ccc;line-height:1.6;margin-bottom:4px">Implementar protección CSRF</li>
 <li style="font-size:12px;color:#ccc;line-height:1.6">Cambiar acciones destructivas de GET a POST</li>
 </ul>
@@ -889,13 +891,13 @@ const dark = 'rgba(255,255,255,0)';
 Chart.defaults.color = 'rgba(255,255,255,0.6)';
 Chart.defaults.borderColor = 'rgba(255,255,255,0.08)';
 
-new Chart(document.getElementById('c1'),{type:'doughnut',data:{labels:['Crítico','Alto','Medio','Bajo'],datasets:[{data:[3,4,6,2],backgroundColor:['#c0392b','#d35400','#c9a800','#1e8449'],borderColor:'#0d1b2e',borderWidth:3,hoverOffset:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:10},padding:12,color:'rgba(255,255,255,0.6)'}},tooltip:{callbacks:{label:c=>' '+c.label+': '+c.raw+' ('+Math.round(c.raw/15*100)+'%)'}}},cutout:'62%'}});
+new Chart(document.getElementById('c1'),{type:'doughnut',data:{labels:['Crítico','Alto','Medio','Bajo'],datasets:[{data:[2,4,7,2],backgroundColor:['#c0392b','#d35400','#c9a800','#1e8449'],borderColor:'#0d1b2e',borderWidth:3,hoverOffset:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:10},padding:12,color:'rgba(255,255,255,0.6)'}},tooltip:{callbacks:{label:c=>' '+c.label+': '+c.raw+' ('+Math.round(c.raw/15*100)+'%)'}}},cutout:'62%'}});
 
 new Chart(document.getElementById('c2'),{type:'radar',data:{labels:['A01\nAcceso','A02\nCriptog.','A03\nInjecc.','A04\nDiseño','A05\nConfig.','A07\nAutent.','A09\nMonit.'],datasets:[{label:'Hallazgos',data:[2,1,2,2,3,4,1],backgroundColor:'rgba(192,57,43,0.15)',borderColor:'#c0392b',borderWidth:2,pointBackgroundColor:'#c0392b',pointRadius:3}]},options:{responsive:true,maintainAspectRatio:false,scales:{r:{beginAtZero:true,max:5,ticks:{stepSize:1,font:{size:8},color:'rgba(255,255,255,0.3)'},pointLabels:{font:{size:8},color:'rgba(255,255,255,0.6)'},grid:{color:'rgba(255,255,255,0.08)'},angleLines:{color:'rgba(255,255,255,0.08)'}}},plugins:{legend:{display:false}}}});
 
-new Chart(document.getElementById('c3'),{type:'bar',data:{labels:['enviar_token.php','list_user.php','add_user.php','head.php','index.php','edit_user.php','test2.sql','Globales'],datasets:[{label:'Hallazgos',data:[3,3,2,2,2,1,2,2],backgroundColor:['#c0392b','#d35400','#c0392b','#c9a800','#c9a800','#1e8449','#d35400','#c9a800'],borderRadius:5,borderSkipped:false}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{x:{beginAtZero:true,max:4,ticks:{stepSize:1},grid:{color:'rgba(255,255,255,0.05)'}},y:{ticks:{font:{size:10.5,family:'Courier New'}},grid:{display:false}}},plugins:{legend:{display:false}}}});
+new Chart(document.getElementById('c3'),{type:'bar',data:{labels:['enviar_token.php','list_user.php','add_user.php','head.php','index.php','edit_user.php','test2.sql','Globales'],datasets:[{label:'Hallazgos',data:[3,3,2,2,2,1,2,2],backgroundColor:['#c0392b','#d35400','#c9a800','#c9a800','#c9a800','#1e8449','#d35400','#c9a800'],borderRadius:5,borderSkipped:false}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{x:{beginAtZero:true,max:4,ticks:{stepSize:1},grid:{color:'rgba(255,255,255,0.05)'}},y:{ticks:{font:{size:10.5,family:'Courier New'}},grid:{display:false}}},plugins:{legend:{display:false}}}});
 
-new Chart(document.getElementById('c4'),{type:'bar',data:{labels:['HAL-003\nCredenc.','HAL-004\nDebug','HAL-006\nSQL Inj','HAL-007\nGET','HAL-008\nCSRF'],datasets:[{label:'Impacto (0-10)',data:[9,8,9,7,8],backgroundColor:'rgba(192,57,43,0.75)',borderRadius:4},{label:'Facilidad (0-10)',data:[9,10,7,9,8],backgroundColor:'rgba(211,84,0,0.7)',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true,max:10,ticks:{stepSize:2},grid:{color:'rgba(255,255,255,0.05)'}},x:{ticks:{font:{size:9}},grid:{display:false}}},plugins:{legend:{position:'bottom',labels:{font:{size:10},padding:10}}}}});
+new Chart(document.getElementById('c4'),{type:'bar',data:{labels:['HAL-003\nCredenc.','HAL-004\nDebug','HAL-006\nSQL (mitig.)','HAL-007\nGET','HAL-008\nCSRF'],datasets:[{label:'Impacto (0-10)',data:[9,8,4,7,8],backgroundColor:'rgba(192,57,43,0.75)',borderRadius:4},{label:'Facilidad (0-10)',data:[9,10,1,9,8],backgroundColor:'rgba(211,84,0,0.7)',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true,max:10,ticks:{stepSize:2},grid:{color:'rgba(255,255,255,0.05)'}},x:{ticks:{font:{size:9}},grid:{display:false}}},plugins:{legend:{position:'bottom',labels:{font:{size:10},padding:10}}}}});
 
 new Chart(document.getElementById('c5'),{type:'pie',data:{labels:['Muy Bajo (<1h)','Bajo (1-4h)','Medio (1-2 días)'],datasets:[{data:[8,5,2],backgroundColor:['#1e8449','#1e5799','#d35400'],borderColor:'#0d1b2e',borderWidth:3,hoverOffset:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:10},padding:10}},tooltip:{callbacks:{label:c=>' '+c.label+': '+c.raw}}}}});
 </script>
