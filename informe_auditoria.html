@@ -45,6 +45,11 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#0d1b2e;color:#fff;font-
 .f-fix-c{background:#040f07;border-radius:5px;padding:9px 13px;font-family:'Courier New',monospace;font-size:11px;color:#95d5b2;line-height:1.5;margin-top:7px;white-space:pre}
 .f-loc{background:linear-gradient(90deg,#1e5799,#2e86c1);border-radius:7px;padding:9px 16px;font-size:11.5px;font-weight:600;color:#fff;margin-top:8px;position:relative;z-index:1}
 .f-loc span{color:rgba(255,255,255,.55);margin-right:6px}
+.f-evi{background:#060d18;border:1px solid rgba(46,134,193,.3);border-radius:8px;padding:10px;margin-bottom:14px;position:relative;z-index:1}
+.f-evi-hd{font-size:9px;font-weight:700;color:#4fc3f7;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.f-evi-hd::before{content:'●';color:#27ae60;font-size:8px}
+.f-evi img{width:100%;border-radius:5px;display:block;border:1px solid rgba(255,255,255,.08)}
+.f-evi-cap{font-size:9.5px;color:rgba(255,255,255,.4);margin-top:7px;line-height:1.5}
 /* Module cover */
 .page-mod{display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}
 .mod-icon{font-size:70px;margin-bottom:24px;position:relative;z-index:1}
@@ -454,6 +459,11 @@ if ($stmt->get_result()->num_rows > 0) {
 </div>
 <div class="f-sec">Descripción</div>
 <p class="f-txt">En <code style="color:#4fc3f7">add_user.php</code>, los valores de <code style="color:#4fc3f7">$user</code> y <code style="color:#4fc3f7">$email</code> se interpolan directamente dentro de una consulta SQL sin sentencias preparadas, pasando únicamente por <code style="color:#4fc3f7">htmlspecialchars()</code> — una función de sanitización para contexto <strong style="color:#fff">HTML</strong>, no para contexto <strong style="color:#fff">SQL</strong>. Se verificó en vivo contra la instalación real (PHP 8.2.12) el payload clásico <code>' OR '1'='1' --</code>: desde PHP 8.1, <code style="color:#4fc3f7">htmlspecialchars()</code> aplica <code style="color:#4fc3f7">ENT_QUOTES</code> por defecto, por lo que la comilla simple se convierte en la entidad literal <code>&amp;#039;</code> antes de llegar a la consulta. La prueba directa contra la base de datos confirmó que la consulta se ejecuta sin error y retorna <strong style="color:#fff">0 filas</strong> — el bypass de la lógica de duplicados <strong style="color:#fff">no se logra</strong> en esta versión de PHP. Aun así, el hallazgo se mantiene porque la protección es <strong style="color:#fff">incidental, no intencional</strong>: no existe ninguna sentencia preparada ni escape orientado a SQL, por lo que el código queda expuesto si el proyecto se ejecuta bajo PHP &lt; 8.1, si algún desarrollador cambia la función de sanitización, o si estas mismas variables se reutilizan en otra consulta sin pasar de nuevo por <code>htmlspecialchars()</code>. OWASP: <strong style="color:#4fc3f7">A03 — Injection</strong> (patrón de diseño, no explotación confirmada).</p>
+<div class="f-evi">
+<div class="f-evi-hd">Evidencia — Prueba en Vivo Ejecutada Contra la Base de Datos Real</div>
+<img src="capturas_informe_v2/hal-006-evidencia-poc.png" alt="Evidencia de consola: prueba de inyección SQL contra add_user.php">
+<div class="f-evi-cap">Captura de consola de la prueba ejecutada el 15-jul-2026 contra <code style="color:#4fc3f7">test2</code> (PHP 8.2.12): se reprodujo exactamente la línea vulnerable de <code style="color:#4fc3f7">add_user.php:29</code> con el payload <code>' OR '1'='1' --</code>. El resultado real — <code style="color:#fff">0 filas devueltas, sin error de SQL</code> — confirma que <code>htmlspecialchars()</code> con <code>ENT_QUOTES</code> (por defecto desde PHP 8.1) neutraliza el bypass antes de que la comilla llegue a la consulta.</div>
+</div>
 <div class="f-code"><span class="c">// add_user.php — línea 29: sanitización HTML usada en contexto SQL</span>
 $email = htmlspecialchars($_POST['email']);
 $user  = htmlspecialchars($_POST['user']);
