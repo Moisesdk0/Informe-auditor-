@@ -1,0 +1,1749 @@
+{
+	"@programName": "ZAP",
+	"@version": "2.17.0",
+	"@generated": "jue, 15 oct. 2026 21:40:04",
+	"created": "2026-10-16T01:40:04.279624600Z",
+	"site":[ 
+		{
+			"@name": "http://localhost",
+			"@host": "localhost",
+			"@port": "80",
+			"@ssl": "false",
+			"alerts": [ 
+				{
+					"pluginid": "10202",
+					"alertRef": "10202",
+					"alert": "Ausencia de Tokens Anti-CSRF",
+					"name": "Ausencia de Tokens Anti-CSRF",
+					"riskcode": "2",
+					"confidence": "1",
+					"riskdesc": "Medio (Baja)",
+					"desc": "<p>No se encontraron tokens Anti-CSRF en formulario de env\u00EDo HTML.</p><p>Una solicutud falsa entre sitios en un ataque que compromete y obliga a una v\u00EDctima a enviar su solicitud HTTP a un destino objetivo sin su conocimiento o intenci\u00F3n para poder realizar una acci\u00F3n como v\u00EDctima. La causa oculta es la funcionalidad de la aplicaci\u00F3n utilizando acciones de URL/formulario que pueden ser adivinados de forma repetible. La naturaleza del ataque es que CSRG explota la confianza que un sitio web proporciona a un usuario. Por el contrario, las cadenas de comandos de los sitios cruzados (XSS) explotan la confianza que un usuario proporciona en un sitio web. Al igual que XSS, los ataques CSRG no son de forma necesaria de sitios cruzados, pero hay la posibilidad de que si pueden serlo. La falsificaci\u00F3n de las solicitudes ente los sitios tambi\u00E9n se conoce como CSRF, XSRG, ataques con un solo clic, montaje de sesi\u00F3n, diputado confundido y navegaci\u00F3n en alta mar.</p><p></p><p>Los ataques de CSRG son muy efectivos en varias situaciones, que incluyen:</p><p>*La victima tiene una sesi\u00F3n activa en el sitio de destino.</p><p>    *La v\u00EDctima se autoriza por medio de la autenticaci\u00F3n HTTP en el sitio de destino.</p><p>    *La v\u00EDctima se encuentra en la misma red local que el sitio de destino.</p><p></p><p>CSRF se ha utilizado especialmente para poder realizar una acci\u00F3n contra un sitio objetivo utilizando los privilegios de la v\u00EDctima, pero se han revelado t\u00E9cnicas recientes para difundir informaci\u00F3n al obtener el acceso a la respuesta. El riesgo de divulgaci\u00F3n de informaci\u00F3n aumenta de forma dr\u00E1stica cuando el sitio de destino se encuentra vulnerable a XSS, porque XSS se puede utilizar como una plataforma para CSRF, lo que le permite al atacante que opere desde adentro de los l\u00EDites de la misma pol\u00EDtica de origen.</p>",
+					"instances":[ 
+						{
+							"id": "24",
+							"uri": "http://localhost/buildsafe_system1/",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "<form method=\"POST\" action=\"/buildsafe_system1/index.php\" class=\"space-y-5 dark:text-white\">",
+							"otherinfo": "No se ha encontrado ning\u00FAn token Anti-CSRF [anticsrf, CSRFToken, __RequestVerificationToken, csrfmiddlewaretoken, authenticity_token, OWASP_CSRFTOKEN, anoncsrf, csrf_token, _csrf, _csrfSecret, __csrf_magic, CSRF, _token, _csrf_token, _csrfToken] conocido en el siguiente formulario HTML: [Form 1: \"email\" \"password\" ]."
+						},
+						{
+							"id": "1107",
+							"uri": "http://localhost/buildsafe_system1/edit_material.php?edit_id=1",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/edit_material.php (edit_id)",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "<form method=\"post\" id=\"editMovementForm\" onsubmit=\"return validateFormAndDates()\">",
+							"otherinfo": "No se ha encontrado ning\u00FAn token Anti-CSRF [anticsrf, CSRFToken, __RequestVerificationToken, csrfmiddlewaretoken, authenticity_token, OWASP_CSRFTOKEN, anoncsrf, csrf_token, _csrf, _csrfSecret, __csrf_magic, CSRF, _token, _csrf_token, _csrfToken] conocido en el siguiente formulario HTML: [Form 1: \"cantidad\" \"codigo\" \"fecha_entrada\" \"fecha_expiracion\" \"movement_id\" \"tipo\" ]."
+						},
+						{
+							"id": "1525",
+							"uri": "http://localhost/buildsafe_system1/edit_material2.php?edit_id=2",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/edit_material2.php (edit_id)",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "<form action=\"edit_material2.php?edit_id=2\" method=\"post\">",
+							"otherinfo": "No se ha encontrado ning\u00FAn token Anti-CSRF [anticsrf, CSRFToken, __RequestVerificationToken, csrfmiddlewaretoken, authenticity_token, OWASP_CSRFTOKEN, anoncsrf, csrf_token, _csrf, _csrfSecret, __csrf_magic, CSRF, _token, _csrf_token, _csrfToken] conocido en el siguiente formulario HTML: [Form 1: \"cantidad_total\" \"nombre\" \"tonelada\" ]."
+						},
+						{
+							"id": "1192",
+							"uri": "http://localhost/buildsafe_system1/edit_material.php?edit_id=1",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/edit_material.php (edit_id)(cantidad,codigo,fecha_entrada,fecha_expiracion,material_id,movement_id,submit_edit,tipo)",
+							"method": "POST",
+							"param": "",
+							"attack": "",
+							"evidence": "<form method=\"post\" id=\"editMovementForm\" onsubmit=\"return validateFormAndDates()\">",
+							"otherinfo": "No se ha encontrado ning\u00FAn token Anti-CSRF [anticsrf, CSRFToken, __RequestVerificationToken, csrfmiddlewaretoken, authenticity_token, OWASP_CSRFTOKEN, anoncsrf, csrf_token, _csrf, _csrfSecret, __csrf_magic, CSRF, _token, _csrf_token, _csrfToken] conocido en el siguiente formulario HTML: [Form 1: \"cantidad\" \"codigo\" \"fecha_entrada\" \"fecha_expiracion\" \"movement_id\" \"tipo\" ]."
+						},
+						{
+							"id": "343",
+							"uri": "http://localhost/buildsafe_system1/index.php",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/index.php ()(email,g-recaptcha-response,password,submit)",
+							"method": "POST",
+							"param": "",
+							"attack": "",
+							"evidence": "<form method=\"POST\" action=\"/buildsafe_system1/index.php\" class=\"space-y-5 dark:text-white\">",
+							"otherinfo": "No se ha encontrado ning\u00FAn token Anti-CSRF [anticsrf, CSRFToken, __RequestVerificationToken, csrfmiddlewaretoken, authenticity_token, OWASP_CSRFTOKEN, anoncsrf, csrf_token, _csrf, _csrfSecret, __csrf_magic, CSRF, _token, _csrf_token, _csrfToken] conocido en el siguiente formulario HTML: [Form 1: \"email\" \"password\" ]."
+						}
+					],
+					"count": "5",
+					"systemic": true,
+					"solution": "<p>Fase: Arquitectura y Dise\u00F1o</p><p>Utilizar una biblioteca o framework verificado y confiable que evite esta vulnerabilidad o proporcione elementos que faciliten evitarla.</p><p>Por ejemplo, utilice el paquete anti-CSRG como el CSRGuard de OWASP.</p><p></p><p>Fase: Implementaci\u00F3n</p><p>Aseg\u00FArese de que su aplicaci\u00F3n est\u00E9 libre de fallas de secuencias de comandos entre sitios, ya que la mayor\u00EDa de las defensas de CSRF pueden detenerse por alto por medio del uso de secuencias de comandos manejadas por el atacante.</p><p></p><p>Fase: Arquitectura y Dise\u00F1o</p><p>Origina un nonce \u00FAnico para cada uno de los formularios, coloque el nonce en el formularo y confirme la independencia al obtener el formulario. Aseg\u00FArese de que el nonce no sea predecible (CWE-330).</p><p>Usted tiene que tener en cuenta que esto puede pasar desapercibido utilizando XSS.</p><p></p><p>Identificar las operaciones que sean especialmente peligrosas. Cuando el usuario desarrolla una operaci\u00F3n peligrosa, env\u00EDe una solicitud de confirmaci\u00F3n de forma separada para poder garantizar que el usuario tenga la intenci\u00F3n de desarrollar esa operaci\u00F3n.</p><p>Usted tiene que tener en cuenta que esto puede pasar desapercibido utilizando XSS.</p><p></p><p>Utilice el control de gesti\u00F3n de la sesi\u00F3n de ESAPI.</p><p>Este control introduce un elemento para CSRF.</p><p></p><p>No utilice el m\u00E9todo GET para ninguna de las solicitudes que puedan desencadenar un cambio de estado.</p><p></p><p>Fase: Implementaci\u00F3n</p><p>Revise que la solicitud se cre\u00F3 en la p\u00E1gina esperada. Esto podr\u00EDa quebrar la funcionalidad aut\u00E9ntica, ya que los usuarios o los representantes puede ser que hayan desactivado el env\u00EDo de Referer por motivos de privacidad.</p>",
+					"otherinfo": "<p>No se ha encontrado ning\u00FAn token Anti-CSRF [anticsrf, CSRFToken, __RequestVerificationToken, csrfmiddlewaretoken, authenticity_token, OWASP_CSRFTOKEN, anoncsrf, csrf_token, _csrf, _csrfSecret, __csrf_magic, CSRF, _token, _csrf_token, _csrfToken] conocido en el siguiente formulario HTML: [Form 1: \"email\" \"password\" ].</p>",
+					"reference": "<p>https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html</p><p>https://cwe.mitre.org/data/definitions/352.html</p>",
+					"cweid": "352",
+					"wascid": "9",
+					"sourceid": "14"
+				},
+				{
+					"pluginid": "10038",
+					"alertRef": "10038-1",
+					"alert": "Cabecera Content Security Policy (CSP) no configurada",
+					"name": "Cabecera Content Security Policy (CSP) no configurada",
+					"riskcode": "2",
+					"confidence": "3",
+					"riskdesc": "Medio (Alta)",
+					"desc": "<p>La Pol\u00EDtica de seguridad de contenido (CSP) es una capa adicional de seguridad que ayuda a detectar y mitigar ciertos tipos de ataques, incluidos Cross Site Scripting (XSS) y ataques de inyecci\u00F3n de datos. Estos ataques se utilizan para todo, desde el robo de datos hasta la desfiguraci\u00F3n del sitio o la distribuci\u00F3n de malware. CSP proporciona un conjunto de encabezados HTTP est\u00E1ndar que permiten a los propietarios de sitios web declarar fuentes de contenido aprobadas que los navegadores deber\u00EDan poder cargar en esa p\u00E1gina; los tipos cubiertos son JavaScript, CSS, marcos HTML, fuentes, im\u00E1genes y objetos incrustados como applets de Java, ActiveX, archivos de audio y video.</p>",
+					"instances":[ 
+						{
+							"id": "14",
+							"uri": "http://localhost/buildsafe_system1/",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": ""
+						},
+						{
+							"id": "369",
+							"uri": "http://localhost/buildsafe_system1/JS/script.js",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/JS\/script.js",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": ""
+						},
+						{
+							"id": "9",
+							"uri": "http://localhost/buildsafe_system1/css2?family=Nunito:wght@400;500;600;700;800&display=swap",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/css2 (display,family)",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": ""
+						},
+						{
+							"id": "1",
+							"uri": "http://localhost/buildsafe_system1/script.js",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/script.js",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": ""
+						},
+						{
+							"id": "340",
+							"uri": "http://localhost/buildsafe_system1/index.php",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/index.php ()(email,g-recaptcha-response,password,submit)",
+							"method": "POST",
+							"param": "",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": ""
+						}
+					],
+					"count": "5",
+					"systemic": true,
+					"solution": "<p>Aseg\u00FArese de que su servidor web, servidor de aplicaciones, balanceador de carga, etc. est\u00E9 configurado para establecer la cabecera Content-Security-Policy.</p>",
+					"otherinfo": "",
+					"reference": "<p>https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CSP</p><p>https://cheatsheetseries.owasp.org/cheatsheets/Content_Security_Policy_Cheat_Sheet.html</p><p>https://www.w3.org/TR/CSP/</p><p>https://w3c.github.io/webappsec-csp/</p><p>https://web.dev/articles/csp</p><p>https://caniuse.com/#feat=contentsecuritypolicy</p><p>https://content-security-policy.com/</p>",
+					"cweid": "693",
+					"wascid": "15",
+					"sourceid": "14"
+				},
+				{
+					"pluginid": "90022",
+					"alertRef": "90022",
+					"alert": "Divulgaci\u00F3n de error de aplicaci\u00F3n",
+					"name": "Divulgaci\u00F3n de error de aplicaci\u00F3n",
+					"riskcode": "2",
+					"confidence": "2",
+					"riskdesc": "Medio (Media)",
+					"desc": "<p>Esta p\u00E1gina contiene un mensaje de error/advertencia que podr\u00EDa revelar informaci\u00F3n sensible como la ubicaci\u00F3n del archivo que produjo la excepci\u00F3n no controlada. Esta informaci\u00F3n puede ser usada para lanzas futuros ataques contra la aplicaci\u00F3n web. La alerta podr\u00EDa ser una falso positivo si el mensaje de error es encontrado dentro de una p\u00E1gina de documentaci\u00F3n.</p>",
+					"instances":[ 
+						{
+							"id": "2211",
+							"uri": "http://localhost/buildsafe_system1/CSS/",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/CSS\/",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "Parent Directory",
+							"otherinfo": ""
+						},
+						{
+							"id": "2270",
+							"uri": "http://localhost/buildsafe_system1/CSS/?C=N;O=D",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/CSS\/ (C)",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "Parent Directory",
+							"otherinfo": ""
+						},
+						{
+							"id": "2430",
+							"uri": "http://localhost/buildsafe_system1/assets/",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/assets\/",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "Parent Directory",
+							"otherinfo": ""
+						},
+						{
+							"id": "2553",
+							"uri": "http://localhost/buildsafe_system1/assets/?C=S;O=A",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/assets\/ (C)",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "Parent Directory",
+							"otherinfo": ""
+						},
+						{
+							"id": "2246",
+							"uri": "http://localhost/buildsafe_system1/assets/css/",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/assets\/css\/",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "Parent Directory",
+							"otherinfo": ""
+						},
+						{
+							"id": "2373",
+							"uri": "http://localhost/buildsafe_system1/assets/css/?C=N;O=D",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/assets\/css\/ (C)",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "Parent Directory",
+							"otherinfo": ""
+						},
+						{
+							"id": "2242",
+							"uri": "http://localhost/buildsafe_system1/assets/js/",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/assets\/js\/",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "Parent Directory",
+							"otherinfo": ""
+						},
+						{
+							"id": "2351",
+							"uri": "http://localhost/buildsafe_system1/assets/js/?C=D;O=A",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/assets\/js\/ (C)",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "Parent Directory",
+							"otherinfo": ""
+						},
+						{
+							"id": "2125",
+							"uri": "http://localhost/buildsafe_system1/binnacle.php",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/binnacle.php",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "<b>Warning</b>:  Undefined array key \"id\" in <b>C:\\xampp\\htdocs\\buildsafe_system1\\head.php</b> on line <b>5</b><br />",
+							"otherinfo": ""
+						},
+						{
+							"id": "2162",
+							"uri": "http://localhost/buildsafe_system1/dashboard.php",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/dashboard.php",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "<b>Warning</b>:  Undefined array key \"id\" in <b>C:\\xampp\\htdocs\\buildsafe_system1\\head.php</b> on line <b>5</b><br />",
+							"otherinfo": ""
+						},
+						{
+							"id": "2212",
+							"uri": "http://localhost/buildsafe_system1/edit_material.php?edit_id=7",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/edit_material.php (edit_id)",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "<b>Warning</b>:  Undefined array key \"id\" in <b>C:\\xampp\\htdocs\\buildsafe_system1\\head.php</b> on line <b>5</b><br />",
+							"otherinfo": ""
+						},
+						{
+							"id": "2164",
+							"uri": "http://localhost/buildsafe_system1/edit_material2.php?edit_id=2",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/edit_material2.php (edit_id)",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "<b>Warning</b>:  Undefined array key \"id\" in <b>C:\\xampp\\htdocs\\buildsafe_system1\\head.php</b> on line <b>5</b><br />",
+							"otherinfo": ""
+						},
+						{
+							"id": "2215",
+							"uri": "http://localhost/buildsafe_system1/edit_user.php?edit_id=22",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/edit_user.php (edit_id)",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "<b>Warning</b>:  Undefined array key \"id\" in <b>C:\\xampp\\htdocs\\buildsafe_system1\\head.php</b> on line <b>5</b><br />",
+							"otherinfo": ""
+						},
+						{
+							"id": "2197",
+							"uri": "http://localhost/buildsafe_system1/list_material.php",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/list_material.php",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "<b>Warning</b>:  Undefined array key \"id\" in <b>C:\\xampp\\htdocs\\buildsafe_system1\\head.php</b> on line <b>5</b><br />",
+							"otherinfo": ""
+						},
+						{
+							"id": "2144",
+							"uri": "http://localhost/buildsafe_system1/list_material.php?toggle_status=2",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/list_material.php (toggle_status)",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "<b>Warning</b>:  Undefined array key \"id\" in <b>C:\\xampp\\htdocs\\buildsafe_system1\\head.php</b> on line <b>5</b><br />",
+							"otherinfo": ""
+						},
+						{
+							"id": "2174",
+							"uri": "http://localhost/buildsafe_system1/list_materials.php",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/list_materials.php",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "<b>Warning</b>:  Undefined array key \"id\" in <b>C:\\xampp\\htdocs\\buildsafe_system1\\head.php</b> on line <b>5</b><br />",
+							"otherinfo": ""
+						},
+						{
+							"id": "2231",
+							"uri": "http://localhost/buildsafe_system1/list_materials2.php",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/list_materials2.php",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "<b>Warning</b>:  Undefined array key \"id\" in <b>C:\\xampp\\htdocs\\buildsafe_system1\\head.php</b> on line <b>5</b><br />",
+							"otherinfo": ""
+						},
+						{
+							"id": "2245",
+							"uri": "http://localhost/buildsafe_system1/list_user.php",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/list_user.php",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "<b>Warning</b>:  Undefined array key \"id\" in <b>C:\\xampp\\htdocs\\buildsafe_system1\\head.php</b> on line <b>5</b><br />",
+							"otherinfo": ""
+						},
+						{
+							"id": "1900",
+							"uri": "http://localhost/buildsafe_system1/list_user.php?toggle_status=9",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/list_user.php (toggle_status)",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "<b>Warning</b>:  Cannot modify header information - headers already sent by (output started at C:\\xampp\\htdocs\\buildsafe_system1\\head.php:41) in <b>C:\\xampp\\htdocs\\buildsafe_system1\\list_user.php</b> on line <b>79</b><br />",
+							"otherinfo": ""
+						},
+						{
+							"id": "2229",
+							"uri": "http://localhost/buildsafe_system1/list_user.php?toggle_status=9",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/list_user.php (toggle_status)",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "<b>Warning</b>:  Undefined array key \"id\" in <b>C:\\xampp\\htdocs\\buildsafe_system1\\head.php</b> on line <b>5</b><br />",
+							"otherinfo": ""
+						},
+						{
+							"id": "2285",
+							"uri": "http://localhost/buildsafe_system1/src/",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/src\/",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "Parent Directory",
+							"otherinfo": ""
+						},
+						{
+							"id": "2393",
+							"uri": "http://localhost/buildsafe_system1/src/?C=M;O=A",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/src\/ (C)",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "Parent Directory",
+							"otherinfo": ""
+						},
+						{
+							"id": "2267",
+							"uri": "http://localhost/buildsafe_system1/enviar_token.php",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/enviar_token.php ()(email,submit)",
+							"method": "POST",
+							"param": "",
+							"attack": "",
+							"evidence": "<b>Warning</b>:  require_once(C:\\xampp\\htdocs\\buildsafe_system1\\vendor/composer/autoload_real.php): Failed to open stream: No such file or directory in <b>C:\\xampp\\htdocs\\buildsafe_system1\\vendor\\autoload.php</b> on line <b>20</b><br />",
+							"otherinfo": ""
+						}
+					],
+					"count": "23",
+					"systemic": false,
+					"solution": "<p>Revisar el c\u00F3digo de fuente de esta p\u00E1gina. Implementaci\u00F3n de p\u00E1ginas de error personalizadas. Considerar implementar un mecanismos para proveer una \u00FAnica referencia/identificaci\u00F3n de error para el cliente (navegador) mientras insertando los detalles en el sitio del navegador y no exponi\u00E9ndolos al usuario.</p>",
+					"otherinfo": "",
+					"reference": "",
+					"cweid": "550",
+					"wascid": "13",
+					"sourceid": "558"
+				},
+				{
+					"pluginid": "10033",
+					"alertRef": "10033",
+					"alert": "Exploraci\u00F3n de Directorios",
+					"name": "Exploraci\u00F3n de Directorios",
+					"riskcode": "2",
+					"confidence": "2",
+					"riskdesc": "Medio (Media)",
+					"desc": "<p>Es posible ver un listado del contenido del directorio. Los listados de directorios pueden revelar scripts ocultos, archivos de inclusi\u00F3n, archivos fuente de copia de seguridad, etc., a los que se puede acceder para revelar informaci\u00F3n sensible.</p>",
+					"instances":[ 
+						{
+							"id": "2218",
+							"uri": "http://localhost/buildsafe_system1/CSS/",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/CSS\/",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "<title>Index of /buildsafe_system1/CSS</title>",
+							"otherinfo": "Servidor web identificado: Apache 2"
+						},
+						{
+							"id": "2276",
+							"uri": "http://localhost/buildsafe_system1/CSS/?C=N;O=D",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/CSS\/ (C)",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "<title>Index of /buildsafe_system1/CSS</title>",
+							"otherinfo": "Servidor web identificado: Apache 2"
+						},
+						{
+							"id": "2256",
+							"uri": "http://localhost/buildsafe_system1/assets/css/",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/assets\/css\/",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "<title>Index of /buildsafe_system1/assets/css</title>",
+							"otherinfo": "Servidor web identificado: Apache 2"
+						},
+						{
+							"id": "2248",
+							"uri": "http://localhost/buildsafe_system1/assets/js/",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/assets\/js\/",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "<title>Index of /buildsafe_system1/assets/js</title>",
+							"otherinfo": "Servidor web identificado: Apache 2"
+						},
+						{
+							"id": "2287",
+							"uri": "http://localhost/buildsafe_system1/src/",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/src\/",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "<title>Index of /buildsafe_system1/src</title>",
+							"otherinfo": "Servidor web identificado: Apache 2"
+						}
+					],
+					"count": "5",
+					"systemic": true,
+					"solution": "<p>Configure el servidor web para desactivar la exploraci\u00F3n de directorios.</p>",
+					"otherinfo": "<p>Servidor web identificado: Apache 2</p>",
+					"reference": "<p>https://cwe.mitre.org/data/definitions/548.html</p>",
+					"cweid": "548",
+					"wascid": "16",
+					"sourceid": "558"
+				},
+				{
+					"pluginid": "90003",
+					"alertRef": "90003",
+					"alert": "Falta atributo de integridad de recursos secundarios",
+					"name": "Falta atributo de integridad de recursos secundarios",
+					"riskcode": "2",
+					"confidence": "3",
+					"riskdesc": "Medio (Alta)",
+					"desc": "<p>Falta el atributo de integridad en una etiqueta de script o enlace servida por un servidor externo. La etiqueta de integridad evita que un atacante que haya obtenido acceso a este servidor inyecte un contenido malicioso.</p>",
+					"instances":[ 
+						{
+							"id": "28",
+							"uri": "http://localhost/buildsafe_system1/",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css\">",
+							"otherinfo": ""
+						},
+						{
+							"id": "29",
+							"uri": "http://localhost/buildsafe_system1/",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "<script src=\"https://cdn.jsdelivr.net/npm/sweetalert2@11\"></script>",
+							"otherinfo": ""
+						},
+						{
+							"id": "27",
+							"uri": "http://localhost/buildsafe_system1/",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "<script src=\"https://www.google.com/recaptcha/api.js\" async defer></script>",
+							"otherinfo": ""
+						},
+						{
+							"id": "346",
+							"uri": "http://localhost/buildsafe_system1/index.php",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/index.php ()(email,g-recaptcha-response,password,submit)",
+							"method": "POST",
+							"param": "",
+							"attack": "",
+							"evidence": "<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css\">",
+							"otherinfo": ""
+						},
+						{
+							"id": "345",
+							"uri": "http://localhost/buildsafe_system1/index.php",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/index.php ()(email,g-recaptcha-response,password,submit)",
+							"method": "POST",
+							"param": "",
+							"attack": "",
+							"evidence": "<script src=\"https://www.google.com/recaptcha/api.js\" async defer></script>",
+							"otherinfo": "El siguiente hash fue calculado (usando codificaci\u00F3n base64 de la salida del algoritmo hash: SHA-384) para el script en cuesti\u00F3n sha384-rXPkcteSS6CkQNkLhp8tSR3Dlg4ndTvgy419/OLNAiswTaUV2pED+px/Ps0JUiDq"
+						}
+					],
+					"count": "5",
+					"systemic": true,
+					"solution": "<p>Proporcionar un atributo de integridad v\u00E1lido a la etiqueta.</p>",
+					"otherinfo": "",
+					"reference": "<p>https://developer.mozilla.org/en-US/docs/Web/Security/Defenses/Subresource_Integrity</p>",
+					"cweid": "345",
+					"wascid": "15",
+					"sourceid": "14"
+				},
+				{
+					"pluginid": "10020",
+					"alertRef": "10020-1",
+					"alert": "Falta de cabecera Anti-Clickjacking",
+					"name": "Falta de cabecera Anti-Clickjacking",
+					"riskcode": "2",
+					"confidence": "2",
+					"riskdesc": "Medio (Media)",
+					"desc": "<p>La respuesta no protege contra ataques de \"ClickJacking\". Debes incluir Content-Security-Policy con la directiva \"frame-ancestors\" o X-Frame-Options.</p>",
+					"instances":[ 
+						{
+							"id": "12",
+							"uri": "http://localhost/buildsafe_system1/",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/",
+							"method": "GET",
+							"param": "x-frame-options",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": ""
+						},
+						{
+							"id": "378",
+							"uri": "http://localhost/buildsafe_system1/dashboard.php",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/dashboard.php",
+							"method": "GET",
+							"param": "x-frame-options",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": ""
+						},
+						{
+							"id": "1102",
+							"uri": "http://localhost/buildsafe_system1/edit_material.php?edit_id=1",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/edit_material.php (edit_id)",
+							"method": "GET",
+							"param": "x-frame-options",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": ""
+						},
+						{
+							"id": "1014",
+							"uri": "http://localhost/buildsafe_system1/list_materials.php",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/list_materials.php",
+							"method": "GET",
+							"param": "x-frame-options",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": ""
+						},
+						{
+							"id": "339",
+							"uri": "http://localhost/buildsafe_system1/index.php",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/index.php ()(email,g-recaptcha-response,password,submit)",
+							"method": "POST",
+							"param": "x-frame-options",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": ""
+						}
+					],
+					"count": "5",
+					"systemic": true,
+					"solution": "<p>Los navegadores web modernos admiten las cabeceras HTTP Content-Security-Policy y X-Frame-Options. Aseg\u00FArese de que una de ellas est\u00E1 configurada en todas las p\u00E1ginas web devueltas por su sitio/aplicaci\u00F3n.</p><p>Si espera que la p\u00E1gina est\u00E9 enmarcada solo por p\u00E1ginas en su servidor (por ejemplo, si forma parte de un FRAMESET), utilice SAMEORIGIN; de lo contrario, si no espera que la p\u00E1gina est\u00E9 enmarcada, utilice DENY. Alternativamente, considere implementar la directiva \"frame-ancestors\" de la Pol\u00EDtica de Seguridad de Contenidos.</p>",
+					"otherinfo": "",
+					"reference": "<p>https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/X-Frame-Options</p>",
+					"cweid": "1021",
+					"wascid": "15",
+					"sourceid": "14"
+				},
+				{
+					"pluginid": "10010",
+					"alertRef": "10010",
+					"alert": "Cookie Sin Flag HttpOnly",
+					"name": "Cookie Sin Flag HttpOnly",
+					"riskcode": "1",
+					"confidence": "2",
+					"riskdesc": "Bajo (Media)",
+					"desc": "<p>Se ha establecido una cookie sin el flag HttpOnly, lo que significa que JavaScript puede acceder a la cookie. Si un script malicioso puede ser ejecutado en esta p\u00E1gina, entonces la cookie ser\u00E1 accesible y puede ser transmitida a otro sitio. Si se trata de una cookie de sesi\u00F3n, el secuestro de sesi\u00F3n puede ser posible.</p>",
+					"instances":[ 
+						{
+							"id": "16",
+							"uri": "http://localhost/buildsafe_system1/",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/",
+							"method": "GET",
+							"param": "PHPSESSID",
+							"attack": "",
+							"evidence": "Set-Cookie: PHPSESSID",
+							"otherinfo": ""
+						}
+					],
+					"count": "1",
+					"systemic": true,
+					"solution": "<p>Aseg\u00FArese de que la flag HttpOnly est\u00E1 establecida para todas las cookies.</p>",
+					"otherinfo": "",
+					"reference": "<p>https://owasp.org/www-community/HttpOnly</p>",
+					"cweid": "1004",
+					"wascid": "13",
+					"sourceid": "14"
+				},
+				{
+					"pluginid": "10054",
+					"alertRef": "10054-1",
+					"alert": "Cookie sin el atributo SameSite",
+					"name": "Cookie sin el atributo SameSite",
+					"riskcode": "1",
+					"confidence": "2",
+					"riskdesc": "Bajo (Media)",
+					"desc": "<p>Se ha establecido una cookie sin el atributo SameSite, lo que significa que la cookie puede ser enviada como resultado de una solicitud 'cross-site'. El atributo SameSite es una medida eficaz para contrarrestar la falsificaci\u00F3n de peticiones entre sitios, la inclusi\u00F3n de scripts entre sitios y los ataques de sincronizaci\u00F3n.</p>",
+					"instances":[ 
+						{
+							"id": "18",
+							"uri": "http://localhost/buildsafe_system1/",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/",
+							"method": "GET",
+							"param": "PHPSESSID",
+							"attack": "",
+							"evidence": "Set-Cookie: PHPSESSID",
+							"otherinfo": ""
+						}
+					],
+					"count": "1",
+					"systemic": true,
+					"solution": "<p>Aseg\u00FArese que el atributo SameSite est\u00E1 establecido como 'lax' o idealmente 'strict' para todas las cookies.</p>",
+					"otherinfo": "",
+					"reference": "<p>https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-cookie-same-site</p>",
+					"cweid": "1275",
+					"wascid": "13",
+					"sourceid": "14"
+				},
+				{
+					"pluginid": "10037",
+					"alertRef": "10037",
+					"alert": "El servidor divulga informaci\u00F3n mediante un campo(s) de encabezado de respuesta HTTP ''''X-Powered-By''''",
+					"name": "El servidor divulga informaci\u00F3n mediante un campo(s) de encabezado de respuesta HTTP ''''X-Powered-By''''",
+					"riskcode": "1",
+					"confidence": "2",
+					"riskdesc": "Bajo (Media)",
+					"desc": "<p>El servidor de la web/aplicaci\u00F3n est\u00E1 divulgando informaci\u00F3n mediante uno o m\u00E1s encabezados de respuesta HTTP ''''X-Powered-By''''. El acceso a tal informaci\u00F3n podr\u00EDa facilitarle a los atacantes la identificaci\u00F3n de otros marcos/componentes de los que su aplicaci\u00F3n web depende y las vulnerabilidades a las que pueden estar sujetos tales componentes.</p>",
+					"instances":[ 
+						{
+							"id": "35",
+							"uri": "http://localhost/buildsafe_system1/",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "X-Powered-By: PHP/8.2.12",
+							"otherinfo": ""
+						},
+						{
+							"id": "398",
+							"uri": "http://localhost/buildsafe_system1/dashboard.php",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/dashboard.php",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "X-Powered-By: PHP/8.2.12",
+							"otherinfo": ""
+						},
+						{
+							"id": "1115",
+							"uri": "http://localhost/buildsafe_system1/edit_material.php?edit_id=1",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/edit_material.php (edit_id)",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "X-Powered-By: PHP/8.2.12",
+							"otherinfo": ""
+						},
+						{
+							"id": "1047",
+							"uri": "http://localhost/buildsafe_system1/list_materials.php",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/list_materials.php",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "X-Powered-By: PHP/8.2.12",
+							"otherinfo": ""
+						},
+						{
+							"id": "350",
+							"uri": "http://localhost/buildsafe_system1/index.php",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/index.php ()(email,g-recaptcha-response,password,submit)",
+							"method": "POST",
+							"param": "",
+							"attack": "",
+							"evidence": "X-Powered-By: PHP/8.2.12",
+							"otherinfo": ""
+						}
+					],
+					"count": "5",
+					"systemic": true,
+					"solution": "<p>Aseg\u00FArese de que su servidor web, servidor de aplicaciones, balanceador de carga, etc. est\u00E1 configurado para suprimir las cabeceras \"X-Powered-By\".</p>",
+					"otherinfo": "",
+					"reference": "<p>https://owasp.org/www-project-web-security-testing-guide/v42/4-Web_Application_Security_Testing/01-Information_Gathering/08-Fingerprint_Web_Application_Framework</p><p>https://www.troyhunt.com/shhh-dont-let-your-response-headers/</p>",
+					"cweid": "497",
+					"wascid": "13",
+					"sourceid": "14"
+				},
+				{
+					"pluginid": "10036",
+					"alertRef": "10036-2",
+					"alert": "El servidor filtra informaci\u00F3n de versi\u00F3n a trav\u00E9s del campo \"Server\" del encabezado de respuesta HTTP",
+					"name": "El servidor filtra informaci\u00F3n de versi\u00F3n a trav\u00E9s del campo \"Server\" del encabezado de respuesta HTTP",
+					"riskcode": "1",
+					"confidence": "3",
+					"riskdesc": "Bajo (Alta)",
+					"desc": "<p>El servidor web/aplicaci\u00F3n est\u00E1 filtrando informaci\u00F3n de versi\u00F3n a trav\u00E9s de la cabecera de respuesta HTTP \"Server\". El acceso a dicha informaci\u00F3n puede facilitar a los atacantes la identificaci\u00F3n de otras vulnerabilidades a las que est\u00E1 sujeto su servidor web/aplicaci\u00F3n.</p>",
+					"instances":[ 
+						{
+							"id": "2",
+							"uri": "http://localhost/buildsafe_system1/CSS/captcha.css",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/CSS\/captcha.css",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "Apache/2.4.58 (Win64) OpenSSL/3.1.3 PHP/8.2.12",
+							"otherinfo": ""
+						},
+						{
+							"id": "3",
+							"uri": "http://localhost/buildsafe_system1/assets/js/alpine-collaspe.min.js",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/assets\/js\/alpine-collaspe.min.js",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "Apache/2.4.58 (Win64) OpenSSL/3.1.3 PHP/8.2.12",
+							"otherinfo": ""
+						},
+						{
+							"id": "5",
+							"uri": "http://localhost/buildsafe_system1/assets/js/alpine-persist.min.js",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/assets\/js\/alpine-persist.min.js",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "Apache/2.4.58 (Win64) OpenSSL/3.1.3 PHP/8.2.12",
+							"otherinfo": ""
+						},
+						{
+							"id": "15",
+							"uri": "http://localhost/buildsafe_system1/css2?family=Nunito:wght@400;500;600;700;800&display=swap",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/css2 (display,family)",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "Apache/2.4.58 (Win64) OpenSSL/3.1.3 PHP/8.2.12",
+							"otherinfo": ""
+						},
+						{
+							"id": "20",
+							"uri": "http://localhost/buildsafe_system1/script.js",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/script.js",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "Apache/2.4.58 (Win64) OpenSSL/3.1.3 PHP/8.2.12",
+							"otherinfo": ""
+						}
+					],
+					"count": "5",
+					"systemic": true,
+					"solution": "<p>Aseg\u00FArese de que su servidor web, servidor de aplicaciones, balanceador de carga, etc. est\u00E1 configurado para suprimir la cabecera \"Server\" o proporcionar detalles gen\u00E9ricos.</p>",
+					"otherinfo": "",
+					"reference": "<p>https://httpd.apache.org/docs/current/mod/core.html#servertokens</p><p>https://learn.microsoft.com/en-us/previous-versions/msp-n-p/ff648552(v=pandp.10)</p><p>https://www.troyhunt.com/shhh-dont-let-your-response-headers/</p>",
+					"cweid": "497",
+					"wascid": "13",
+					"sourceid": "18"
+				},
+				{
+					"pluginid": "10021",
+					"alertRef": "10021",
+					"alert": "Falta encabezado X-Content-Type-Options",
+					"name": "Falta encabezado X-Content-Type-Options",
+					"riskcode": "1",
+					"confidence": "2",
+					"riskdesc": "Bajo (Media)",
+					"desc": "<p>La cabecera Anti-MIME-Sniffing X-Content-Type-Options no se ha establecido en 'nosniff'. Esto permite que las versiones anteriores de Internet Explorer y Chrome realicen MIME-sniffing en el cuerpo de la respuesta, lo que puede provocar que el cuerpo d\u00E9 la respuesta se interprete y se muestre como un tipo de contenido distinto del tipo de contenido declarado. Las versiones actuales (principios de 2014) y heredadas de Firefox utilizar\u00E1n el tipo de contenido declarado (si se establece uno), en lugar de realizar MIME-sniffing.</p>",
+					"instances":[ 
+						{
+							"id": "33",
+							"uri": "http://localhost/buildsafe_system1/",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/",
+							"method": "GET",
+							"param": "x-content-type-options",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": "Este problema a\u00FAn se aplica a las p\u00E1ginas de tipo error (401, 403, 500, etc.), ya que esas p\u00E1ginas a menudo se ven afectadas por problemas de inyecci\u00F3n, en cuyo caso a\u00FAn existe la preocupaci\u00F3n de que los navegadores husmeen las p\u00E1ginas lejos de su tipo de contenido real.\nEn el umbral \u00ABAlto\u00BB esta regla de an\u00E1lisis no alertar\u00E1 sobre respuestas de error del cliente o servidor."
+						},
+						{
+							"id": "8",
+							"uri": "http://localhost/buildsafe_system1/CSS/captcha.css",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/CSS\/captcha.css",
+							"method": "GET",
+							"param": "x-content-type-options",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": "Este problema a\u00FAn se aplica a las p\u00E1ginas de tipo error (401, 403, 500, etc.), ya que esas p\u00E1ginas a menudo se ven afectadas por problemas de inyecci\u00F3n, en cuyo caso a\u00FAn existe la preocupaci\u00F3n de que los navegadores husmeen las p\u00E1ginas lejos de su tipo de contenido real.\nEn el umbral \u00ABAlto\u00BB esta regla de an\u00E1lisis no alertar\u00E1 sobre respuestas de error del cliente o servidor."
+						},
+						{
+							"id": "23",
+							"uri": "http://localhost/buildsafe_system1/assets/css/style.css",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/assets\/css\/style.css",
+							"method": "GET",
+							"param": "x-content-type-options",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": "Este problema a\u00FAn se aplica a las p\u00E1ginas de tipo error (401, 403, 500, etc.), ya que esas p\u00E1ginas a menudo se ven afectadas por problemas de inyecci\u00F3n, en cuyo caso a\u00FAn existe la preocupaci\u00F3n de que los navegadores husmeen las p\u00E1ginas lejos de su tipo de contenido real.\nEn el umbral \u00ABAlto\u00BB esta regla de an\u00E1lisis no alertar\u00E1 sobre respuestas de error del cliente o servidor."
+						},
+						{
+							"id": "11",
+							"uri": "http://localhost/buildsafe_system1/assets/js/alpine-collaspe.min.js",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/assets\/js\/alpine-collaspe.min.js",
+							"method": "GET",
+							"param": "x-content-type-options",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": "Este problema a\u00FAn se aplica a las p\u00E1ginas de tipo error (401, 403, 500, etc.), ya que esas p\u00E1ginas a menudo se ven afectadas por problemas de inyecci\u00F3n, en cuyo caso a\u00FAn existe la preocupaci\u00F3n de que los navegadores husmeen las p\u00E1ginas lejos de su tipo de contenido real.\nEn el umbral \u00ABAlto\u00BB esta regla de an\u00E1lisis no alertar\u00E1 sobre respuestas de error del cliente o servidor."
+						},
+						{
+							"id": "10",
+							"uri": "http://localhost/buildsafe_system1/assets/js/alpine-persist.min.js",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/assets\/js\/alpine-persist.min.js",
+							"method": "GET",
+							"param": "x-content-type-options",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": "Este problema a\u00FAn se aplica a las p\u00E1ginas de tipo error (401, 403, 500, etc.), ya que esas p\u00E1ginas a menudo se ven afectadas por problemas de inyecci\u00F3n, en cuyo caso a\u00FAn existe la preocupaci\u00F3n de que los navegadores husmeen las p\u00E1ginas lejos de su tipo de contenido real.\nEn el umbral \u00ABAlto\u00BB esta regla de an\u00E1lisis no alertar\u00E1 sobre respuestas de error del cliente o servidor."
+						}
+					],
+					"count": "5",
+					"systemic": true,
+					"solution": "<p>Aseg\u00FArese de que la aplicaci\u00F3n/servidor web establece el encabezado Content-Type adecuadamente, y que establece el encabezado X-Content-Type-Options a 'nosniff' para todas las p\u00E1ginas web.</p><p>Si es posible, aseg\u00FArese de que el usuario final utiliza un navegador web moderno y compatible con los est\u00E1ndares que no realiza MIME-sniffing en absoluto, o que puede ser dirigido por la aplicaci\u00F3n web/servidor web para que no realice MIME-sniffing.</p>",
+					"otherinfo": "<p>Este problema a\u00FAn se aplica a las p\u00E1ginas de tipo error (401, 403, 500, etc.), ya que esas p\u00E1ginas a menudo se ven afectadas por problemas de inyecci\u00F3n, en cuyo caso a\u00FAn existe la preocupaci\u00F3n de que los navegadores husmeen las p\u00E1ginas lejos de su tipo de contenido real.</p><p>En el umbral \u00ABAlto\u00BB esta regla de an\u00E1lisis no alertar\u00E1 sobre respuestas de error del cliente o servidor.</p>",
+					"reference": "<p>https://learn.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/compatibility/gg622941(v=vs.85)</p><p>https://owasp.org/www-community/Security_Headers</p>",
+					"cweid": "693",
+					"wascid": "15",
+					"sourceid": "14"
+				},
+				{
+					"pluginid": "10009",
+					"alertRef": "10009",
+					"alert": "Fuga de informaci\u00F3n en el Banner de la P\u00E1gina",
+					"name": "Fuga de informaci\u00F3n en el Banner de la P\u00E1gina",
+					"riskcode": "1",
+					"confidence": "3",
+					"riskdesc": "Bajo (Alta)",
+					"desc": "<p>El servidor devolvi\u00F3 una cadena mostr\u00F3 el banner con la versi\u00F3n en el contenido de la respuesta. Estas filtraciones de informaci\u00F3n pueden permitir a los atacantes centrarse en problemas espec\u00EDficos que afecten al producto y la versi\u00F3n en uso.</p>",
+					"instances":[ 
+						{
+							"id": "373",
+							"uri": "http://localhost/buildsafe_system1/JS/script.js",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/JS\/script.js",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "Apache/2.4.58",
+							"otherinfo": "Existe la posibilidad de que lo encontrado est\u00E9 en un valor en los headers, en lugar de en la cadena que coincide en el cuerpo de la respuesta."
+						},
+						{
+							"id": "13",
+							"uri": "http://localhost/buildsafe_system1/css2?family=Nunito:wght@400;500;600;700;800&display=swap",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/css2 (display,family)",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "Apache/2.4.58",
+							"otherinfo": "Existe la posibilidad de que lo encontrado est\u00E9 en un valor en los headers, en lugar de en la cadena que coincide en el cuerpo de la respuesta."
+						},
+						{
+							"id": "1339",
+							"uri": "http://localhost/buildsafe_system1/list_materials_salida.php?delete_id=11",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/list_materials_salida.php (delete_id)",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "Apache/2.4.58",
+							"otherinfo": "Existe la posibilidad de que lo encontrado est\u00E9 en un valor en los headers, en lugar de en la cadena que coincide en el cuerpo de la respuesta."
+						},
+						{
+							"id": "6",
+							"uri": "http://localhost/buildsafe_system1/script.js",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/script.js",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "Apache/2.4.58",
+							"otherinfo": "Existe la posibilidad de que lo encontrado est\u00E9 en un valor en los headers, en lugar de en la cadena que coincide en el cuerpo de la respuesta."
+						}
+					],
+					"count": "4",
+					"systemic": true,
+					"solution": "<p>Configura el servidor para evitar este tipo de fugas de informaci\u00F3n. Por ejemplo:</p><p>En Tomcat, esto se hace mediante la directiva \"server\" y la implementaci\u00F3n de p\u00E1ginas de error personalizadas.</p><p>En Apache, esto se hace mediante las directivas \"ServerSignature\" y \"ServerTokens\".</p>",
+					"otherinfo": "<p>Existe la posibilidad de que lo encontrado est\u00E9 en un valor en los headers, en lugar de en la cadena que coincide en el cuerpo de la respuesta.</p>",
+					"reference": "<p>https://owasp.org/www-project-web-security-testing-guide/v41/4-Web_Application_Security_Testing/08-Testing_for_Error_Handling/</p>",
+					"cweid": "497",
+					"wascid": "13",
+					"sourceid": "138"
+				},
+				{
+					"pluginid": "10044",
+					"alertRef": "10044-1",
+					"alert": "Gran redirecci\u00F3n detectada (posible fuga de informaci\u00F3n confidencial)",
+					"name": "Gran redirecci\u00F3n detectada (posible fuga de informaci\u00F3n confidencial)",
+					"riskcode": "1",
+					"confidence": "2",
+					"riskdesc": "Bajo (Media)",
+					"desc": "<p>El servidor ha respondido con una redirecci\u00F3n que parece proporcionar una respuesta larga. Esto puede indicar que aunque el servidor envi\u00F3 una redirecci\u00F3n, tambi\u00E9n respondi\u00F3 con el contenido del cuerpo (que puede incluir detalles confidenciales, PII, etc.).</p>",
+					"instances":[ 
+						{
+							"id": "2098",
+							"uri": "http://localhost/buildsafe_system1",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": "Longitud URI de la cabecera de ubicaci\u00F3n: 35 [http://localhost/buildsafe_system1/].\nTama\u00F1o previsto de la respuesta: 335.\nLongitud del cuerpo de la respuesta: 342."
+						},
+						{
+							"id": "2102",
+							"uri": "http://localhost/buildsafe_system1/CSS",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/CSS",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": "Longitud URI de la cabecera de ubicaci\u00F3n: 39 [http://localhost/buildsafe_system1/CSS/].\nTama\u00F1o previsto de la respuesta: 339.\nLongitud del cuerpo de la respuesta: 346."
+						},
+						{
+							"id": "2104",
+							"uri": "http://localhost/buildsafe_system1/assets",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/assets",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": "Longitud URI de la cabecera de ubicaci\u00F3n: 42 [http://localhost/buildsafe_system1/assets/].\nTama\u00F1o previsto de la respuesta: 342.\nLongitud del cuerpo de la respuesta: 349."
+						},
+						{
+							"id": "2111",
+							"uri": "http://localhost/buildsafe_system1/assets/css",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/assets\/css",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": "Longitud URI de la cabecera de ubicaci\u00F3n: 46 [http://localhost/buildsafe_system1/assets/css/].\nTama\u00F1o previsto de la respuesta: 346.\nLongitud del cuerpo de la respuesta: 353."
+						},
+						{
+							"id": "2117",
+							"uri": "http://localhost/buildsafe_system1/assets/js",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/assets\/js",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": "Longitud URI de la cabecera de ubicaci\u00F3n: 45 [http://localhost/buildsafe_system1/assets/js/].\nTama\u00F1o previsto de la respuesta: 345.\nLongitud del cuerpo de la respuesta: 352."
+						},
+						{
+							"id": "2127",
+							"uri": "http://localhost/buildsafe_system1/binnacle.php",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/binnacle.php",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": "Longitud URI de la cabecera de ubicaci\u00F3n: 13 [destroyer.php].\nTama\u00F1o previsto de la respuesta: 313.\nLongitud del cuerpo de la respuesta: 636."
+						},
+						{
+							"id": "2163",
+							"uri": "http://localhost/buildsafe_system1/dashboard.php",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/dashboard.php",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": "Longitud URI de la cabecera de ubicaci\u00F3n: 13 [destroyer.php].\nTama\u00F1o previsto de la respuesta: 313.\nLongitud del cuerpo de la respuesta: 636."
+						},
+						{
+							"id": "2216",
+							"uri": "http://localhost/buildsafe_system1/edit_material.php?edit_id=7",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/edit_material.php (edit_id)",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": "Longitud URI de la cabecera de ubicaci\u00F3n: 13 [destroyer.php].\nTama\u00F1o previsto de la respuesta: 313.\nLongitud del cuerpo de la respuesta: 636."
+						},
+						{
+							"id": "2165",
+							"uri": "http://localhost/buildsafe_system1/edit_material2.php?edit_id=2",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/edit_material2.php (edit_id)",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": "Longitud URI de la cabecera de ubicaci\u00F3n: 13 [destroyer.php].\nTama\u00F1o previsto de la respuesta: 313.\nLongitud del cuerpo de la respuesta: 636."
+						},
+						{
+							"id": "2219",
+							"uri": "http://localhost/buildsafe_system1/edit_user.php?edit_id=22",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/edit_user.php (edit_id)",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": "Longitud URI de la cabecera de ubicaci\u00F3n: 13 [destroyer.php].\nTama\u00F1o previsto de la respuesta: 313.\nLongitud del cuerpo de la respuesta: 636."
+						},
+						{
+							"id": "2199",
+							"uri": "http://localhost/buildsafe_system1/list_material.php",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/list_material.php",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": "Longitud URI de la cabecera de ubicaci\u00F3n: 13 [destroyer.php].\nTama\u00F1o previsto de la respuesta: 313.\nLongitud del cuerpo de la respuesta: 636."
+						},
+						{
+							"id": "2145",
+							"uri": "http://localhost/buildsafe_system1/list_material.php?toggle_status=2",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/list_material.php (toggle_status)",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": "Longitud URI de la cabecera de ubicaci\u00F3n: 13 [destroyer.php].\nTama\u00F1o previsto de la respuesta: 313.\nLongitud del cuerpo de la respuesta: 636."
+						},
+						{
+							"id": "2177",
+							"uri": "http://localhost/buildsafe_system1/list_materials.php",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/list_materials.php",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": "Longitud URI de la cabecera de ubicaci\u00F3n: 13 [destroyer.php].\nTama\u00F1o previsto de la respuesta: 313.\nLongitud del cuerpo de la respuesta: 636."
+						},
+						{
+							"id": "2235",
+							"uri": "http://localhost/buildsafe_system1/list_materials2.php",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/list_materials2.php",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": "Longitud URI de la cabecera de ubicaci\u00F3n: 13 [destroyer.php].\nTama\u00F1o previsto de la respuesta: 313.\nLongitud del cuerpo de la respuesta: 636."
+						},
+						{
+							"id": "2249",
+							"uri": "http://localhost/buildsafe_system1/list_user.php",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/list_user.php",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": "Longitud URI de la cabecera de ubicaci\u00F3n: 13 [destroyer.php].\nTama\u00F1o previsto de la respuesta: 313.\nLongitud del cuerpo de la respuesta: 636."
+						},
+						{
+							"id": "2232",
+							"uri": "http://localhost/buildsafe_system1/list_user.php?toggle_status=9",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/list_user.php (toggle_status)",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": "Longitud URI de la cabecera de ubicaci\u00F3n: 13 [destroyer.php].\nTama\u00F1o previsto de la respuesta: 313.\nLongitud del cuerpo de la respuesta: 636."
+						},
+						{
+							"id": "2135",
+							"uri": "http://localhost/buildsafe_system1/src",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/src",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": "Longitud URI de la cabecera de ubicaci\u00F3n: 39 [http://localhost/buildsafe_system1/src/].\nTama\u00F1o previsto de la respuesta: 339.\nLongitud del cuerpo de la respuesta: 346."
+						}
+					],
+					"count": "17",
+					"systemic": false,
+					"solution": "<p>Aseg\u00FArese de que no se filtre informaci\u00F3n confidencial a trav\u00E9s de las respuestas de redirecci\u00F3n. Las respuestas de redireccionamiento casi no deben tener contenido.</p>",
+					"otherinfo": "<p>Longitud URI de la cabecera de ubicaci\u00F3n: 35 [http://localhost/buildsafe_system1/].</p><p>Tama\u00F1o previsto de la respuesta: 335.</p><p>Longitud del cuerpo de la respuesta: 342.</p>",
+					"reference": "",
+					"cweid": "201",
+					"wascid": "13",
+					"sourceid": "499"
+				},
+				{
+					"pluginid": "10017",
+					"alertRef": "10017",
+					"alert": "Inclusi\u00F3n de archivos fuente JavaScript entre dominios",
+					"name": "Inclusi\u00F3n de archivos fuente JavaScript entre dominios",
+					"riskcode": "1",
+					"confidence": "2",
+					"riskdesc": "Bajo (Media)",
+					"desc": "<p>La p\u00E1gina incluye uno o m\u00E1s archivos de script de un dominio de terceros.</p>",
+					"instances":[ 
+						{
+							"id": "22",
+							"uri": "http://localhost/buildsafe_system1/",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/",
+							"method": "GET",
+							"param": "https://cdn.jsdelivr.net/npm/sweetalert2@11",
+							"attack": "",
+							"evidence": "<script src=\"https://cdn.jsdelivr.net/npm/sweetalert2@11\"></script>",
+							"otherinfo": ""
+						},
+						{
+							"id": "21",
+							"uri": "http://localhost/buildsafe_system1/",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/",
+							"method": "GET",
+							"param": "https://www.google.com/recaptcha/api.js",
+							"attack": "",
+							"evidence": "<script src=\"https://www.google.com/recaptcha/api.js\" async defer></script>",
+							"otherinfo": ""
+						},
+						{
+							"id": "382",
+							"uri": "http://localhost/buildsafe_system1/dashboard.php",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/dashboard.php",
+							"method": "GET",
+							"param": "https://code.jquery.com/jquery-3.6.0.min.js",
+							"attack": "",
+							"evidence": "<script src=\"https://code.jquery.com/jquery-3.6.0.min.js\"></script>",
+							"otherinfo": ""
+						},
+						{
+							"id": "342",
+							"uri": "http://localhost/buildsafe_system1/index.php",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/index.php ()(email,g-recaptcha-response,password,submit)",
+							"method": "POST",
+							"param": "https://cdn.jsdelivr.net/npm/sweetalert2@11",
+							"attack": "",
+							"evidence": "<script src=\"https://cdn.jsdelivr.net/npm/sweetalert2@11\"></script>",
+							"otherinfo": ""
+						},
+						{
+							"id": "341",
+							"uri": "http://localhost/buildsafe_system1/index.php",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/index.php ()(email,g-recaptcha-response,password,submit)",
+							"method": "POST",
+							"param": "https://www.google.com/recaptcha/api.js",
+							"attack": "",
+							"evidence": "<script src=\"https://www.google.com/recaptcha/api.js\" async defer></script>",
+							"otherinfo": ""
+						}
+					],
+					"count": "5",
+					"systemic": true,
+					"solution": "<p>Aseg\u00FArese de que los archivos fuente JavaScript se cargan solo desde fuentes de confianza, y que las fuentes no pueden ser controladas por los usuarios finales de la aplicaci\u00F3n.</p>",
+					"otherinfo": "",
+					"reference": "",
+					"cweid": "829",
+					"wascid": "15",
+					"sourceid": "14"
+				},
+				{
+					"pluginid": "10031",
+					"alertRef": "10031",
+					"alert": "Atributo de elemento HTML controlable por el usuario (XSS potencial)",
+					"name": "Atributo de elemento HTML controlable por el usuario (XSS potencial)",
+					"riskcode": "0",
+					"confidence": "1",
+					"riskdesc": "Informativo (Baja)",
+					"desc": "<p>Esta comprobaci\u00F3n examina la entrada proporcionada por el usuario en par\u00E1metros de cadenas de consulta y datos POST para identificar d\u00F3nde podr\u00EDan estar controlados ciertos valores de atributos HTML. Esto proporciona detecci\u00F3n de puntos calientes para XSS (cross-site scripting) que requerir\u00E1n una revisi\u00F3n adicional por parte de un analista de seguridad para determinar la explotabilidad.</p>",
+					"instances":[ 
+						{
+							"id": "2029",
+							"uri": "http://localhost/buildsafe_system1/edit_user.php?edit_id=22",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/edit_user.php (edit_id)",
+							"method": "GET",
+							"param": "edit_id",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": "Se han encontrado valores de atributos HTML controlados por el usuario. Intente inyectar caracteres especiales para ver si es posible XSS. La p\u00E1gina en la siguiente URL parece incluir una entrada de usuario en una etiqueta [input] atributo [value] La entrada de usuario encontrada era:edit_id=22 El valor controlado por el usuario era:22."
+						},
+						{
+							"id": "1419",
+							"uri": "http://localhost/buildsafe_system1/edit_material.php?edit_id=7",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/edit_material.php (edit_id)(cantidad,codigo,fecha_entrada,fecha_expiracion,material_id,movement_id,submit_edit,tipo)",
+							"method": "POST",
+							"param": "cantidad",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": "Se han encontrado valores de atributos HTML controlados por el usuario. Intente inyectar caracteres especiales para ver si es posible XSS. La p\u00E1gina en la siguiente URL parece incluir una entrada de usuario en una etiqueta [line] atributo [x1] La entrada de usuario encontrada era:cantidad=18 El valor controlado por el usuario era:18."
+						},
+						{
+							"id": "1201",
+							"uri": "http://localhost/buildsafe_system1/edit_material.php?edit_id=1",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/edit_material.php (edit_id)(cantidad,codigo,fecha_entrada,fecha_expiracion,material_id,movement_id,submit_edit,tipo)",
+							"method": "POST",
+							"param": "codigo",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": "Se han encontrado valores de atributos HTML controlados por el usuario. Intente inyectar caracteres especiales para ver si es posible XSS. La p\u00E1gina en la siguiente URL parece incluir una entrada de usuario en una etiqueta [input] atributo [value] La entrada de usuario encontrada era:codigo=asdASDdss El valor controlado por el usuario era:asdasddss."
+						},
+						{
+							"id": "1202",
+							"uri": "http://localhost/buildsafe_system1/edit_material.php?edit_id=1",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/edit_material.php (edit_id)(cantidad,codigo,fecha_entrada,fecha_expiracion,material_id,movement_id,submit_edit,tipo)",
+							"method": "POST",
+							"param": "fecha_entrada",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": "Se han encontrado valores de atributos HTML controlados por el usuario. Intente inyectar caracteres especiales para ver si es posible XSS. La p\u00E1gina en la siguiente URL parece incluir una entrada de usuario en una etiqueta [input] atributo [value] La entrada de usuario encontrada era:fecha_entrada=2025-05-10 El valor controlado por el usuario era:2025-05-10."
+						},
+						{
+							"id": "1203",
+							"uri": "http://localhost/buildsafe_system1/edit_material.php?edit_id=1",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/edit_material.php (edit_id)(cantidad,codigo,fecha_entrada,fecha_expiracion,material_id,movement_id,submit_edit,tipo)",
+							"method": "POST",
+							"param": "fecha_expiracion",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": "Se han encontrado valores de atributos HTML controlados por el usuario. Intente inyectar caracteres especiales para ver si es posible XSS. La p\u00E1gina en la siguiente URL parece incluir una entrada de usuario en una etiqueta [input] atributo [value] La entrada de usuario encontrada era:fecha_expiracion=2026-10-02 El valor controlado por el usuario era:2026-10-02."
+						},
+						{
+							"id": "1199",
+							"uri": "http://localhost/buildsafe_system1/edit_material.php?edit_id=1",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/edit_material.php (edit_id)(cantidad,codigo,fecha_entrada,fecha_expiracion,material_id,movement_id,submit_edit,tipo)",
+							"method": "POST",
+							"param": "tipo",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": "Se han encontrado valores de atributos HTML controlados por el usuario. Intente inyectar caracteres especiales para ver si es posible XSS. La p\u00E1gina en la siguiente URL parece incluir una entrada de usuario en una etiqueta [option] atributo [value] La entrada de usuario encontrada era:tipo=entrada El valor controlado por el usuario era:entrada."
+						},
+						{
+							"id": "1553",
+							"uri": "http://localhost/buildsafe_system1/edit_material2.php?edit_id=2",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/edit_material2.php (edit_id)(cantidad_total,categoria_id,nombre,tonelada,unidad_id)",
+							"method": "POST",
+							"param": "cantidad_total",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": "Se han encontrado valores de atributos HTML controlados por el usuario. Intente inyectar caracteres especiales para ver si es posible XSS. La p\u00E1gina en la siguiente URL parece incluir una entrada de usuario en una etiqueta [input] atributo [value] La entrada de usuario encontrada era:cantidad_total=73 El valor controlado por el usuario era:73."
+						},
+						{
+							"id": "1551",
+							"uri": "http://localhost/buildsafe_system1/edit_material2.php?edit_id=2",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/edit_material2.php (edit_id)(cantidad_total,categoria_id,nombre,tonelada,unidad_id)",
+							"method": "POST",
+							"param": "nombre",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": "Se han encontrado valores de atributos HTML controlados por el usuario. Intente inyectar caracteres especiales para ver si es posible XSS. La p\u00E1gina en la siguiente URL parece incluir una entrada de usuario en una etiqueta [input] atributo [value] La entrada de usuario encontrada era:nombre=Fibrass El valor controlado por el usuario era:fibrass."
+						},
+						{
+							"id": "1552",
+							"uri": "http://localhost/buildsafe_system1/edit_material2.php?edit_id=2",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/edit_material2.php (edit_id)(cantidad_total,categoria_id,nombre,tonelada,unidad_id)",
+							"method": "POST",
+							"param": "tonelada",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": "Se han encontrado valores de atributos HTML controlados por el usuario. Intente inyectar caracteres especiales para ver si es posible XSS. La p\u00E1gina en la siguiente URL parece incluir una entrada de usuario en una etiqueta [input] atributo [value] La entrada de usuario encontrada era:tonelada=0.012 El valor controlado por el usuario era:0.012."
+						},
+						{
+							"id": "2052",
+							"uri": "http://localhost/buildsafe_system1/edit_user.php?edit_id=22",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/edit_user.php (edit_id)(email,pregunta,respuesta,rol,rol_display,submit_edit,user,user_id)",
+							"method": "POST",
+							"param": "edit_id",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": "Se han encontrado valores de atributos HTML controlados por el usuario. Intente inyectar caracteres especiales para ver si es posible XSS. La p\u00E1gina en la siguiente URL parece incluir una entrada de usuario en una etiqueta [input] atributo [value] La entrada de usuario encontrada era:edit_id=22 El valor controlado por el usuario era:22."
+						},
+						{
+							"id": "1857",
+							"uri": "http://localhost/buildsafe_system1/edit_user.php?edit_id=9",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/edit_user.php (edit_id)(email,pregunta,respuesta,rol,rol_display,submit_edit,user,user_id)",
+							"method": "POST",
+							"param": "email",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": "Se han encontrado valores de atributos HTML controlados por el usuario. Intente inyectar caracteres especiales para ver si es posible XSS. La p\u00E1gina en la siguiente URL parece incluir una entrada de usuario en una etiqueta [input] atributo [value] La entrada de usuario encontrada era:email=ds@gmdail.com El valor controlado por el usuario era:ds@gmdail.com."
+						},
+						{
+							"id": "1858",
+							"uri": "http://localhost/buildsafe_system1/edit_user.php?edit_id=9",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/edit_user.php (edit_id)(email,pregunta,respuesta,rol,rol_display,submit_edit,user,user_id)",
+							"method": "POST",
+							"param": "pregunta",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": "Se han encontrado valores de atributos HTML controlados por el usuario. Intente inyectar caracteres especiales para ver si es posible XSS. La p\u00E1gina en la siguiente URL parece incluir una entrada de usuario en una etiqueta [input] atributo [value] La entrada de usuario encontrada era:pregunta=color favoritoo El valor controlado por el usuario era:color favoritoo."
+						},
+						{
+							"id": "1859",
+							"uri": "http://localhost/buildsafe_system1/edit_user.php?edit_id=9",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/edit_user.php (edit_id)(email,pregunta,respuesta,rol,rol_display,submit_edit,user,user_id)",
+							"method": "POST",
+							"param": "respuesta",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": "Se han encontrado valores de atributos HTML controlados por el usuario. Intente inyectar caracteres especiales para ver si es posible XSS. La p\u00E1gina en la siguiente URL parece incluir una entrada de usuario en una etiqueta [input] atributo [value] La entrada de usuario encontrada era:respuesta=azul El valor controlado por el usuario era:azul."
+						},
+						{
+							"id": "1860",
+							"uri": "http://localhost/buildsafe_system1/edit_user.php?edit_id=9",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/edit_user.php (edit_id)(email,pregunta,respuesta,rol,rol_display,submit_edit,user,user_id)",
+							"method": "POST",
+							"param": "rol_display",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": "Se han encontrado valores de atributos HTML controlados por el usuario. Intente inyectar caracteres especiales para ver si es posible XSS. La p\u00E1gina en la siguiente URL parece incluir una entrada de usuario en una etiqueta [input] atributo [value] La entrada de usuario encontrada era:rol_display=Usuario El valor controlado por el usuario era:usuario."
+						},
+						{
+							"id": "1856",
+							"uri": "http://localhost/buildsafe_system1/edit_user.php?edit_id=9",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/edit_user.php (edit_id)(email,pregunta,respuesta,rol,rol_display,submit_edit,user,user_id)",
+							"method": "POST",
+							"param": "user",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": "Se han encontrado valores de atributos HTML controlados por el usuario. Intente inyectar caracteres especiales para ver si es posible XSS. La p\u00E1gina en la siguiente URL parece incluir una entrada de usuario en una etiqueta [input] atributo [value] La entrada de usuario encontrada era:user=dsid El valor controlado por el usuario era:dsid."
+						},
+						{
+							"id": "2051",
+							"uri": "http://localhost/buildsafe_system1/edit_user.php?edit_id=22",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/edit_user.php (edit_id)(email,pregunta,respuesta,rol,rol_display,submit_edit,user,user_id)",
+							"method": "POST",
+							"param": "user_id",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": "Se han encontrado valores de atributos HTML controlados por el usuario. Intente inyectar caracteres especiales para ver si es posible XSS. La p\u00E1gina en la siguiente URL parece incluir una entrada de usuario en una etiqueta [input] atributo [value] La entrada de usuario encontrada era:user_id=22 El valor controlado por el usuario era:22."
+						},
+						{
+							"id": "348",
+							"uri": "http://localhost/buildsafe_system1/index.php",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/index.php ()(email,g-recaptcha-response,password,submit)",
+							"method": "POST",
+							"param": "submit",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": "Se han encontrado valores de atributos HTML controlados por el usuario. Intente inyectar caracteres especiales para ver si es posible XSS. La p\u00E1gina en la siguiente URL parece incluir una entrada de usuario en una etiqueta [button] atributo [value] La entrada de usuario encontrada era:submit=Ingresar El valor controlado por el usuario era:ingresar."
+						},
+						{
+							"id": "2307",
+							"uri": "http://localhost/buildsafe_system1/index.php",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/index.php ()(email,password,submit)",
+							"method": "POST",
+							"param": "submit",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": "Se han encontrado valores de atributos HTML controlados por el usuario. Intente inyectar caracteres especiales para ver si es posible XSS. La p\u00E1gina en la siguiente URL parece incluir una entrada de usuario en una etiqueta [button] atributo [value] La entrada de usuario encontrada era:submit=Ingresar El valor controlado por el usuario era:ingresar."
+						}
+					],
+					"count": "18",
+					"systemic": false,
+					"solution": "<p>V\u00E1lida la entrada y sanea la salida antes de escribirla en cualquier atributo HTML.</p>",
+					"otherinfo": "<p>Se han encontrado valores de atributos HTML controlados por el usuario. Intente inyectar caracteres especiales para ver si es posible XSS. La p\u00E1gina en la siguiente URL parece incluir una entrada de usuario en una etiqueta [input] atributo [value] La entrada de usuario encontrada era:edit_id=22 El valor controlado por el usuario era:22.</p>",
+					"reference": "<p>https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html</p>",
+					"cweid": "20",
+					"wascid": "20",
+					"sourceid": "440"
+				},
+				{
+					"pluginid": "10027",
+					"alertRef": "10027",
+					"alert": "Divulgaci\u00F3n de informaci\u00F3n - Comentarios sospechosos",
+					"name": "Divulgaci\u00F3n de informaci\u00F3n - Comentarios sospechosos",
+					"riskcode": "0",
+					"confidence": "2",
+					"riskdesc": "Informativo (Media)",
+					"desc": "<p>The response appears to contain suspicious comments which may help an attacker.</p>",
+					"instances":[ 
+						{
+							"id": "2309",
+							"uri": "http://localhost/buildsafe_system1/assets/js/countUp.min.js",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/assets\/js\/countUp.min.js",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "// determines where easing starts and w",
+							"otherinfo": "The following pattern was used: \\bWHERE\\b and was detected in likely comment: \"// determines where easing starts and whether to count down or up\", see evidence field for the suspicious comment/snippet."
+						},
+						{
+							"id": "2548",
+							"uri": "http://localhost/buildsafe_system1/assets/js/file-upload-with-preview.iife.js",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/assets\/js\/file-upload-with-preview.iife.js",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "// locations where there is no enclosi",
+							"otherinfo": "The following pattern was used: \\bWHERE\\b and was detected in likely comment: \"// locations where there is no enclosing try statement.\", see evidence field for the suspicious comment/snippet."
+						},
+						{
+							"id": "2546",
+							"uri": "http://localhost/buildsafe_system1/assets/js/file-upload-with-preview.iife.js",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/assets\/js\/file-upload-with-preview.iife.js",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "romises returned by later",
+							"otherinfo": "The following pattern was used: \\bLATER\\b and was detected in likely comment: \"// Avoid propagating failures to Promises returned by later\", see evidence field for the suspicious comment/snippet."
+						},
+						{
+							"id": "2547",
+							"uri": "http://localhost/buildsafe_system1/assets/js/file-upload-with-preview.iife.js",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/assets\/js\/file-upload-with-preview.iife.js",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "turning this object from the innerFn has the",
+							"otherinfo": "The following pattern was used: \\bFROM\\b and was detected 6 times, the first in likely comment: \"// Returning this object from the innerFn has the same effect as\", see evidence field for the suspicious comment/snippet."
+						},
+						{
+							"id": "403",
+							"uri": "http://localhost/buildsafe_system1/assets/js/perfect-scrollbar.min.js",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/assets\/js\/perfect-scrollbar.min.js",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "// FIXME: this is a workarou",
+							"otherinfo": "The following pattern was used: \\bFIXME\\b and was detected in likely comment: \"// FIXME: this is a workaround for <select> issue in FF and IE #571\", see evidence field for the suspicious comment/snippet."
+						},
+						{
+							"id": "405",
+							"uri": "http://localhost/buildsafe_system1/assets/js/perfect-scrollbar.min.js",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/assets\/js\/perfect-scrollbar.min.js",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "// user is perhaps trying t",
+							"otherinfo": "The following pattern was used: \\bUSER\\b and was detected 2 times, the first in likely comment: \"// user is perhaps trying to swipe up/down the page\", see evidence field for the suspicious comment/snippet."
+						},
+						{
+							"id": "2606",
+							"uri": "http://localhost/buildsafe_system1/assets/js/quill.js",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/assets\/js\/quill.js",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": " the \"Enter\" key to select an item",
+							"otherinfo": "The following pattern was used: \\bSELECT\\b and was detected 2 times, the first in likely comment: \"// Allows the \"Enter\" key to select an item\", see evidence field for the suspicious comment/snippet."
+						},
+						{
+							"id": "2605",
+							"uri": "http://localhost/buildsafe_system1/assets/js/quill.js",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/assets\/js\/quill.js",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "// IE11 has bug with Text nodes",
+							"otherinfo": "The following pattern was used: \\bBUG\\b and was detected in likely comment: \"// IE11 has bug with Text nodes\", see evidence field for the suspicious comment/snippet."
+						},
+						{
+							"id": "2608",
+							"uri": "http://localhost/buildsafe_system1/assets/js/quill.js",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/assets\/js\/quill.js",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "// TODO use WeakMap",
+							"otherinfo": "The following pattern was used: \\bTODO\\b and was detected 10 times, the first in likely comment: \"// TODO use WeakMap\", see evidence field for the suspicious comment/snippet."
+						},
+						{
+							"id": "2607",
+							"uri": "http://localhost/buildsafe_system1/assets/js/quill.js",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/assets\/js\/quill.js",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "// from DOM but MutationRec",
+							"otherinfo": "The following pattern was used: \\bFROM\\b and was detected 5 times, the first in likely comment: \"// from DOM but MutationRecord is correct in its reported removal\", see evidence field for the suspicious comment/snippet."
+						},
+						{
+							"id": "2609",
+							"uri": "http://localhost/buildsafe_system1/assets/js/quill.js",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/assets\/js\/quill.js",
+							"method": "GET",
+							"param": "",
+							"attack": "",
+							"evidence": "ircular references, where corresponding paren",
+							"otherinfo": "The following pattern was used: \\bWHERE\\b and was detected in likely comment: \"// maintain two arrays for circular references, where corresponding parents\", see evidence field for the suspicious comment/snippet."
+						}
+					],
+					"count": "11",
+					"systemic": false,
+					"solution": "<p>Eliminar todos los comentarios que muestren informaci\u00F3n que pueda ayudar a un atacante y solucionar el problema al que se refieren.</p>",
+					"otherinfo": "<p>The following pattern was used: \\bWHERE\\b and was detected in likely comment: \"// determines where easing starts and whether to count down or up\", see evidence field for the suspicious comment/snippet.</p>",
+					"reference": "",
+					"cweid": "615",
+					"wascid": "13",
+					"sourceid": "619"
+				},
+				{
+					"pluginid": "120000",
+					"alertRef": "120000-1",
+					"alert": "Divulgaci\u00F3n de informaci\u00F3n - Informaci\u00F3n en el navegador localStorage",
+					"name": "Divulgaci\u00F3n de informaci\u00F3n - Informaci\u00F3n en el navegador localStorage",
+					"riskcode": "0",
+					"confidence": "3",
+					"riskdesc": "Informativo (Alta)",
+					"desc": "<p>Se ha almacenado informaci\u00F3n en el navegador localStorage.</p><p>Esto no es inusual o necesariamente inseguro - esta alerta informativa se ha planteado para ayudarle a obtener una mejor comprensi\u00F3n de lo que esta aplicaci\u00F3n est\u00E1 haciendo. Para m\u00E1s detalles vea las pesta\u00F1as de Cliente - esta informaci\u00F3n se estableci\u00F3 directamente en el navegador y por lo tanto no aparecer\u00E1 necesariamente de esta forma en ning\u00FAn mensaje HTTP(S).</p>",
+					"instances":[ 
+						{
+							"id": "326",
+							"uri": "http://localhost/buildsafe_system1/",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/",
+							"method": "GET",
+							"param": "_grecaptcha",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": "Se han establecido los siguientes datos (key=value): _grecaptcha=09AKhCRwgFZotSqUuITtkD64Fc98WZwtIFTHGXc6SMhGW1k4prQ7tbxZaDrNHvRlVQ7ed5Ng1V654SeugzoiKkTJwhyJ-h5XBfo5Vv7H-K5u-qgWSSSbJkerhnBqmCfUsW\nTenga en cuenta que esta alerta s\u00F3lo se activar\u00E1 una vez por cada key de URL."
+						},
+						{
+							"id": "51",
+							"uri": "http://localhost/buildsafe_system1/",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/",
+							"method": "GET",
+							"param": "_x_animation",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": "Se han establecido los siguientes datos (key=value): _x_animation=\"\"\nTenga en cuenta que esta alerta s\u00F3lo se activar\u00E1 una vez por cada key de URL."
+						},
+						{
+							"id": "52",
+							"uri": "http://localhost/buildsafe_system1/",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/",
+							"method": "GET",
+							"param": "_x_isDarkMode",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": "Se han establecido los siguientes datos (key=value): _x_isDarkMode=false\nTenga en cuenta que esta alerta s\u00F3lo se activar\u00E1 una vez por cada key de URL."
+						},
+						{
+							"id": "38",
+							"uri": "http://localhost/buildsafe_system1/",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/",
+							"method": "GET",
+							"param": "_x_layout",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": "Se han establecido los siguientes datos (key=value): _x_layout=\"full\"\nTenga en cuenta que esta alerta s\u00F3lo se activar\u00E1 una vez por cada key de URL."
+						},
+						{
+							"id": "40",
+							"uri": "http://localhost/buildsafe_system1/",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/",
+							"method": "GET",
+							"param": "_x_locale",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": "Se han establecido los siguientes datos (key=value): _x_locale=\"en\"\nTenga en cuenta que esta alerta s\u00F3lo se activar\u00E1 una vez por cada key de URL."
+						},
+						{
+							"id": "50",
+							"uri": "http://localhost/buildsafe_system1/",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/",
+							"method": "GET",
+							"param": "_x_menu",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": "Se han establecido los siguientes datos (key=value): _x_menu=\"vertical\"\nTenga en cuenta que esta alerta s\u00F3lo se activar\u00E1 una vez por cada key de URL."
+						},
+						{
+							"id": "37",
+							"uri": "http://localhost/buildsafe_system1/",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/",
+							"method": "GET",
+							"param": "_x_navbar",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": "Se han establecido los siguientes datos (key=value): _x_navbar=\"navbar-sticky\"\nTenga en cuenta que esta alerta s\u00F3lo se activar\u00E1 una vez por cada key de URL."
+						},
+						{
+							"id": "39",
+							"uri": "http://localhost/buildsafe_system1/",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/",
+							"method": "GET",
+							"param": "_x_rtlClass",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": "Se han establecido los siguientes datos (key=value): _x_rtlClass=\"ltr\"\nTenga en cuenta que esta alerta s\u00F3lo se activar\u00E1 una vez por cada key de URL."
+						},
+						{
+							"id": "41",
+							"uri": "http://localhost/buildsafe_system1/",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/",
+							"method": "GET",
+							"param": "_x_semidark",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": "Se han establecido los siguientes datos (key=value): _x_semidark=false\nTenga en cuenta que esta alerta s\u00F3lo se activar\u00E1 una vez por cada key de URL."
+						},
+						{
+							"id": "49",
+							"uri": "http://localhost/buildsafe_system1/",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/",
+							"method": "GET",
+							"param": "_x_theme",
+							"attack": "",
+							"evidence": "",
+							"otherinfo": "Se han establecido los siguientes datos (key=value): _x_theme=\"light\"\nTenga en cuenta que esta alerta s\u00F3lo se activar\u00E1 una vez por cada key de URL."
+						}
+					],
+					"count": "10",
+					"systemic": false,
+					"solution": "<p>Se trata de una alerta informativa y no es necesario actuar. </p>",
+					"otherinfo": "<p>Se han establecido los siguientes datos (key=value): _grecaptcha=09AKhCRwgFZotSqUuITtkD64Fc98WZwtIFTHGXc6SMhGW1k4prQ7tbxZaDrNHvRlVQ7ed5Ng1V654SeugzoiKkTJwhyJ-h5XBfo5Vv7H-K5u-qgWSSSbJkerhnBqmCfUsW</p><p>Tenga en cuenta que esta alerta s\u00F3lo se activar\u00E1 una vez por cada key de URL.</p>",
+					"reference": "",
+					"cweid": "359",
+					"wascid": "13",
+					"sourceid": "14"
+				},
+				{
+					"pluginid": "10111",
+					"alertRef": "10111",
+					"alert": "Petici\u00F3n de Autenticaci\u00F3n Identificada",
+					"name": "Petici\u00F3n de Autenticaci\u00F3n Identificada",
+					"riskcode": "0",
+					"confidence": "1",
+					"riskdesc": "Informativo (Baja)",
+					"desc": "<p>La petici\u00F3n en cuesti\u00F3n se ha identificado como una petici\u00F3n de autenticaci\u00F3n. El campo \"Otra informaci\u00F3n\" contiene un conjunto de l\u00EDneas key=vvalue que identifican cualquier campo relevante. Si la solicitud est\u00E1 en un contexto que tiene un m\u00E9todo de autenticaci\u00F3n configurado como \"Detecci\u00F3n autom\u00E1tica\", esta regla cambiar\u00E1 la autenticaci\u00F3n para que coincida con la petici\u00F3n identificada.</p>",
+					"instances":[ 
+						{
+							"id": "338",
+							"uri": "http://localhost/buildsafe_system1/index.php",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/index.php ()(email,g-recaptcha-response,password,submit)",
+							"method": "POST",
+							"param": "email",
+							"attack": "",
+							"evidence": "password",
+							"otherinfo": "userParam=email\nuserValue=auditor@test.com\npasswordParam=password\nreferer=http://localhost/buildsafe_system1/"
+						},
+						{
+							"id": "2296",
+							"uri": "http://localhost/buildsafe_system1/index.php",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/index.php ()(email,password,submit)",
+							"method": "POST",
+							"param": "email",
+							"attack": "",
+							"evidence": "password",
+							"otherinfo": "userParam=email\nuserValue=foo-bar@example.com\npasswordParam=password\nreferer=http://localhost/buildsafe_system1/"
+						}
+					],
+					"count": "2",
+					"systemic": false,
+					"solution": "<p>Se trata de una alerta informativa y no de una vulnerabilidad, por lo que no hay nada que corregir.</p>",
+					"otherinfo": "<p>userParam=email</p><p>userValue=auditor@test.com</p><p>passwordParam=password</p><p>referer=http://localhost/buildsafe_system1/</p>",
+					"reference": "<p>https://www.zaproxy.org/docs/desktop/addons/authentication-helper/auth-req-id/</p>",
+					"cweid": "-1",
+					"wascid": "-1",
+					"sourceid": "124"
+				},
+				{
+					"pluginid": "10112",
+					"alertRef": "10112",
+					"alert": "Respuesta de Gesti\u00F3n de Sesi\u00F3n Identificada",
+					"name": "Respuesta de Gesti\u00F3n de Sesi\u00F3n Identificada",
+					"riskcode": "0",
+					"confidence": "2",
+					"riskdesc": "Informativo (Media)",
+					"desc": "<p>Se ha identificado que la respuesta dada contiene un token de gesti\u00F3n de sesi\u00F3n. El campo 'Other Info' contiene un conjunto de tokens de cabecera que pueden utilizarse en el m\u00E9todo Header Based Session Management (gesti\u00F3n de sesi\u00F3n basado en cabecera). Si la petici\u00F3n se encuentra en un contexto que tiene un m\u00E9todo Session Management establecido en \"Auto-Detect\", esta regla cambiar\u00E1 la gesti\u00F3n de sesi\u00F3n para utilizar los tokens identificados.</p>",
+					"instances":[ 
+						{
+							"id": "7",
+							"uri": "http://localhost/buildsafe_system1/",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/",
+							"method": "GET",
+							"param": "PHPSESSID",
+							"attack": "",
+							"evidence": "PHPSESSID",
+							"otherinfo": "cookie:PHPSESSID"
+						},
+						{
+							"id": "2124",
+							"uri": "http://localhost/buildsafe_system1/binnacle.php",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/binnacle.php",
+							"method": "GET",
+							"param": "PHPSESSID",
+							"attack": "",
+							"evidence": "PHPSESSID",
+							"otherinfo": "cookie:PHPSESSID"
+						},
+						{
+							"id": "4",
+							"uri": "http://localhost/buildsafe_system1/",
+							"nodeName": "http:\/\/localhost\/buildsafe_system1\/",
+							"method": "GET",
+							"param": "PHPSESSID",
+							"attack": "",
+							"evidence": "PHPSESSID",
+							"otherinfo": "cookie:PHPSESSID"
+						}
+					],
+					"count": "3",
+					"systemic": false,
+					"solution": "<p>Se trata de una alerta informativa y no de una vulnerabilidad, por lo que no hay nada que corregir.</p>",
+					"otherinfo": "<p>cookie:PHPSESSID</p>",
+					"reference": "<p>https://www.zaproxy.org/docs/desktop/addons/authentication-helper/session-mgmt-id/</p>",
+					"cweid": "-1",
+					"wascid": "-1",
+					"sourceid": "14"
+				}
+			]
+		}
+	],
+	"sequences":[
+	]
+
+}
