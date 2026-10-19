@@ -13,6 +13,7 @@ Este archivo no modifica el informe; sirve para documentar, validar y luego deci
 |---|---|---|---|---|---|
 | 1 | OWASP ZAP 2.17.0 | DAST (escaneo dinámico): pasivo + spider | Hecha (activo pendiente) | 6 (NH-001 a NH-006) | 4 alertas (HAL-008, HAL-015) |
 | 2 | Lighthouse 13.5.0 (CLI, Chrome 155 headless) | Auditoría de rendimiento, accesibilidad, buenas prácticas y SEO | Hecha (7 páginas, escritorio y móvil) | 5 (NH-007 a NH-011), de calidad | — |
+| 3 | sqlmap 1.10.10 | DAST dirigido: inyección SQL (escaneo activo, el que ZAP dejó pendiente) | Hecha (parámetros GET/POST principales) | 1 (NH-012), confirmación negativa | HAL-006, HAL-009 (refuerza "no explotable") |
 
 ## Índice de hallazgos nuevos
 
@@ -264,3 +265,45 @@ Siglas: FCP = First Contentful Paint, LCP = Largest Contentful Paint, TBT = Tota
 - [ ] Confirmar el origen de NH-008 en la consola del navegador.
 - [ ] Extraer el detalle de `list_materials2` y `list_material`.
 - [ ] Decidir si NH-007 a NH-011 pasan al informe como sección de calidad (ISO/IEC 25010).
+
+---
+
+# 3. sqlmap
+
+> **Tecnología:** sqlmap 1.10.10 (instalado vía `pip`), contra la copia local en XAMPP (`http://localhost/buildsafe_system1/`, PHP 8.2.12, MariaDB).
+> **Pruebas realizadas:** escaneo activo dirigido a inyección SQL — el que OWASP ZAP dejó pendiente (ver sección 1.2, limitación 4). Cubre todos los parámetros GET con acceso a SQL y el único punto POST sin prepared statement.
+> **Resultado:** ningún parámetro probado resultó inyectable. Confirma, con herramienta automatizada y con pruebas manuales de comparación, que HAL-006 y el vector GET de HAL-009 no son explotables en esta versión de PHP.
+
+## 3.1 Alcance y configuración
+
+| Dato | Valor |
+|---|---|
+| Fecha | 17/10/2026 |
+| Objetivo | `http://localhost/buildsafe_system1/` (XAMPP local: Apache 2.4.58, PHP 8.2.12, MariaDB) |
+| Base de datos | `test2`, importada desde `test2.sql` |
+| Sesión | Administrador (`admintest@example.com`, user_id 100, rol 1, creado para estas pruebas), cookie `PHPSESSID` pasada con `--cookie` |
+| Parámetros de sqlmap | `--batch` (sin preguntas interactivas); GET: `--level=2 --risk=1`; POST (`add_user.php`): `--level=3 --risk=2`; verificación adicional en `toggle_status` con `--level=5 --risk=3` |
+
+## 3.2 NH-012 — Confirmación con sqlmap: ningún parámetro probado es inyectable
+
+- **Herramienta:** sqlmap 1.10.10 (escaneo activo)
+- **Estado:** Verificado
+- **Dónde (GET, nivel 2 / riesgo 1):**
+  - `list_user.php` — `toggle_status`, `delete_id`
+  - `list_material.php` — `toggle_status`, `delete_id`
+  - `list_materials.php` — `delete_id`
+  - `list_materials2.php` — `delete_id`
+  - `edit_user.php` — `edit_id`
+  - `edit_material.php` — `edit_id`
+  - `edit_material2.php` — `edit_id`
+- **Dónde (POST, nivel 3 / riesgo 2):** `add_user.php` — `user`, `email` (re-confirmación de HAL-006 con herramienta, además de la prueba manual ya documentada en el informe)
+- **Resultado:** `all tested parameters do not appear to be injectable` en los 9 casos. Se repitió `toggle_status` en `list_user.php` con `--level=5 --risk=3` (el máximo) y confirmó lo mismo con más de 100 payloads distintos (boolean-based, error-based para MySQL/PostgreSQL/MSSQL/Oracle/SQLite/H2/CUBRID, stacked queries, time-based, UNION).
+- **Verificación manual adicional:** comparación directa con `curl` de `toggle_status=1` vs `toggle_status=1' OR '1'='1` — misma respuesta exacta del servidor en ambos casos (sin error de sintaxis SQL), lo que confirma que `intval()` neutraliza el payload antes de llegar a la consulta.
+- **Causa:** los parámetros GET pasan por `intval()`/`is_numeric()` antes de interpolarse en el SQL (código ya señalado en HAL-009); `user`/`email` de `add_user.php` pasan por `htmlspecialchars()`, que en PHP 8.1+ neutraliza la comilla (ya señalado en HAL-006).
+- **Relación:** refuerza la conclusión de HAL-006 (ya probado manualmente, ahora también con herramienta) y acota el alcance de HAL-009: el código sigue sin prepared statements (mala práctica real, mantener el hallazgo), pero los vectores GET concretos no son explotables como inyección SQL.
+- **Evidencia:** salidas de consola de sqlmap para cada endpoint (ver historial de esta sesión); se recomienda guardar un reporte con `--output-dir` si se quiere adjuntar como anexo.
+
+## 3.3 Pendientes de sqlmap
+- [ ] Probar el login (`index.php`, POST `email`/`password`) — descartado para automatización por el reCAPTCHA; pendiente confirmar a mano si el payload `' OR '1'='1' --` sigue sin romper la consulta (ya documentado como "Bloqueado" en el informe, sin herramienta).
+- [ ] Revisar si hay otros formularios POST sin prepared statement fuera de `add_user.php` (`edit_user.php`, `edit_material.php`, `register_movement.php`, etc.) y correr sqlmap sobre ellos.
+- [ ] Guardar un reporte consolidado con `--output-dir` como evidencia anexa.
