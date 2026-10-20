@@ -1,0 +1,911 @@
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>Guía de Demostración — BuildSafe</title>
+<style>
+/* Paleta: toma el azul-noche y los colores de severidad del propio informe de auditoría,
+   así la guía se siente parte del mismo documento. Layout: nav lateral fija + contenido,
+   como una referencia de consulta rápida durante la exposición. */
+:root{
+  --bg:#f4f6f9; --panel:#ffffff; --ink:#15212f; --ink-dim:#51627a; --line:#dde3ec;
+  --accent:#1e5799; --accent-2:#2e86c1;
+  --crit:#c0392b; --alto:#d35400; --medio:#9a7b00; --bajo:#1e7a42; --info:#51627a;
+  --mono-bg:#0d1b2e; --mono-ink:#bcd9ef;
+  --done-bg:#eaf6ef;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0d1420; --panel:#141e2c; --ink:#e8edf4; --ink-dim:#93a3b8; --line:#253244;
+    --accent:#5ea7e8; --accent-2:#4fc3f7;
+    --crit:#ef5350; --alto:#ff9248; --medio:#e8c547; --bajo:#4fd18c; --info:#93a3b8;
+    --mono-bg:#060d18; --mono-ink:#a8d8f0;
+    --done-bg:#102a1d;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0d1420; --panel:#141e2c; --ink:#e8edf4; --ink-dim:#93a3b8; --line:#253244;
+  --accent:#5ea7e8; --accent-2:#4fc3f7;
+  --crit:#ef5350; --alto:#ff9248; --medio:#e8c547; --bajo:#4fd18c; --info:#93a3b8;
+  --mono-bg:#060d18; --mono-ink:#a8d8f0;
+  --done-bg:#102a1d;
+  color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'IBM Plex Sans',Arial,sans-serif;font-size:14.5px;line-height:1.55}
+h1,h2,h3{font-family:'Sora',Arial,sans-serif;text-wrap:balance}
+code,.mono{font-family:'IBM Plex Mono',Consolas,monospace}
+a{color:var(--accent-2)}
+
+.app{display:flex;min-height:100%}
+
+/* ---- Barra lateral ---- */
+.side{
+  width:290px;flex:0 0 290px;background:var(--panel);border-right:1px solid var(--line);
+  padding:18px 14px;position:sticky;top:0;height:100vh;overflow-y:auto;
+}
+.side-top{padding:4px 6px 14px}
+.side-top .eyebrow{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-dim);margin-bottom:4px}
+.side-top h1{font-size:18px;margin:0 0 4px}
+.side-top p{font-size:12px;color:var(--ink-dim);margin:0}
+
+.progress{margin:14px 6px 16px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+.progress-row{display:flex;justify-content:space-between;font-size:11px;color:var(--ink-dim);margin-bottom:6px}
+.progress-bar{height:6px;border-radius:4px;background:var(--line);overflow:hidden}
+.progress-bar i{display:block;height:100%;background:var(--bajo);width:0%;transition:width .25s}
+
+.search{margin:0 6px 14px}
+.search input{
+  width:100%;padding:8px 10px;border-radius:8px;border:1px solid var(--line);
+  background:var(--bg);color:var(--ink);font-size:13px;font-family:inherit
+}
+.search input:focus{outline:2px solid var(--accent-2);outline-offset:1px}
+
+.navgroup{margin-bottom:4px}
+.navgroup>summary{
+  list-style:none;cursor:pointer;padding:8px 6px;font-size:11px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.5px;color:var(--ink-dim);display:flex;
+  align-items:center;justify-content:space-between;border-radius:6px;
+}
+.navgroup>summary::-webkit-details-marker{display:none}
+.navgroup>summary:hover{background:var(--bg)}
+.navgroup>summary::after{content:'▸';transition:transform .15s;font-size:10px}
+.navgroup[open]>summary::after{transform:rotate(90deg)}
+.navlink{
+  display:flex;align-items:center;gap:8px;padding:6px 8px 6px 14px;border-radius:6px;
+  font-size:12.5px;color:var(--ink);text-decoration:none;cursor:pointer;
+}
+.navlink:hover{background:var(--bg)}
+.navlink.active{background:var(--accent);color:#fff}
+.navlink .dot{width:7px;height:7px;border-radius:50%;flex:0 0 7px}
+.navlink .id{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-dim);flex:0 0 auto}
+.navlink.active .id{color:rgba(255,255,255,.75)}
+.navlink.done{opacity:.55;text-decoration:line-through}
+
+/* ---- Contenido ---- */
+.main{flex:1;min-width:0;padding:28px max(20px,env(safe-area-inset-right,0px)) 80px max(24px,env(safe-area-inset-left,0px))}
+.wrap{max-width:780px;margin:0 auto}
+
+.hero h1{font-size:28px;margin:0 0 8px}
+.hero p{color:var(--ink-dim);max-width:60ch;margin:0 0 20px}
+
+.setup{
+  background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:28px;
+}
+.setup h2{font-size:15px;margin:0 0 12px;display:flex;align-items:center;gap:8px}
+.setup h2 svg{width:17px;height:17px;color:var(--accent-2)}
+.setup dl{display:grid;grid-template-columns:auto 1fr;gap:8px 16px;margin:0;font-size:13px}
+.setup dt{color:var(--ink-dim);white-space:nowrap}
+.setup dd{margin:0}
+.setup .warn{
+  margin-top:14px;padding:10px 12px;border-radius:8px;background:rgba(211,84,0,.1);
+  border:1px solid rgba(211,84,0,.3);font-size:12.5px;color:var(--ink)
+}
+
+.modhead{
+  padding-top:36px;margin-top:8px;margin-bottom:14px;scroll-margin-top:20px;
+}
+.modhead h2{font-size:13px;text-transform:uppercase;letter-spacing:1px;color:var(--accent-2);margin:0 0 2px}
+.modhead p{font-size:12.5px;color:var(--ink-dim);margin:0}
+
+.card{
+  background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--info);
+  border-radius:12px;padding:18px 20px;margin-bottom:16px;scroll-margin-top:20px;
+}
+.card.sev-crit{border-left-color:var(--crit)}
+.card.sev-alto{border-left-color:var(--alto)}
+.card.sev-medio{border-left-color:var(--medio)}
+.card.sev-bajo{border-left-color:var(--bajo)}
+
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:6px}
+.card-id{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-dim)}
+.card h3{font-size:16px;margin:2px 0 0}
+.badges{display:flex;gap:6px;flex:0 0 auto;flex-wrap:wrap;justify-content:flex-end}
+.badge{
+  font-size:10px;font-weight:700;letter-spacing:.3px;text-transform:uppercase;
+  padding:3px 9px;border-radius:20px;color:#fff;white-space:nowrap
+}
+.b-crit{background:var(--crit)}.b-alto{background:var(--alto)}
+.b-medio{background:var(--medio);color:#111}.b-bajo{background:var(--bajo)}
+.b-tool{background:var(--accent)}
+
+.card .que{font-size:13.5px;color:var(--ink-dim);margin:8px 0 14px}
+
+.code{
+  background:var(--mono-bg);color:var(--mono-ink);border-radius:8px;padding:12px 14px;
+  font-family:'IBM Plex Mono',Consolas,monospace;font-size:12px;line-height:1.6;
+  white-space:pre;overflow-x:auto;margin:10px 0 2px;
+}
+.code .c{color:#5a7891}
+.code .d{color:#f29a9a;background:rgba(240,113,120,.12);border-radius:3px;padding:0 2px}
+.code .g{color:#9fd99a}
+.code-cap{font-size:11px;color:var(--ink-dim);margin:0 0 12px}
+
+.steps{margin:0 0 10px;padding-left:20px}
+.steps li{margin-bottom:6px;font-size:13.5px}
+.steps code,.que code,.showpoint code{
+  background:var(--mono-bg);color:var(--mono-ink);padding:1px 6px;border-radius:4px;font-size:12px;
+}
+
+.showpoint{
+  margin-top:10px;padding:10px 12px;border-radius:8px;background:var(--bg);
+  border:1px solid var(--line);font-size:12.5px;display:flex;gap:8px;
+}
+.showpoint svg{width:14px;height:14px;color:var(--accent-2);flex:0 0 auto;margin-top:2px}
+
+.impact{
+  margin:4px 0 14px;padding:10px 12px;border-radius:8px;display:flex;gap:9px;
+  background:rgba(211,84,0,.08);border:1px solid rgba(211,84,0,.22);font-size:13px;
+}
+.impact svg{width:15px;height:15px;color:var(--alto);flex:0 0 auto;margin-top:2px}
+.impact b{color:var(--alto)}
+
+.note{
+  margin-top:10px;padding:8px 12px;border-radius:8px;font-size:12px;
+  background:rgba(154,123,0,.12);border:1px solid rgba(154,123,0,.3);color:var(--ink)
+}
+
+.check{
+  display:flex;align-items:center;gap:8px;margin-top:14px;padding-top:12px;
+  border-top:1px solid var(--line);font-size:12px;color:var(--ink-dim);cursor:pointer;user-select:none
+}
+.check input{width:15px;height:15px;accent-color:var(--bajo);cursor:pointer}
+.card.is-done{background:var(--done-bg)}
+
+.back-top{
+  position:fixed;right:max(20px,env(safe-area-inset-right,0px));bottom:20px;
+  width:40px;height:40px;border-radius:50%;background:var(--accent);color:#fff;
+  display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;
+  box-shadow:0 4px 14px rgba(0,0,0,.25);opacity:0;pointer-events:none;transition:opacity .2s;
+}
+.back-top.show{opacity:1;pointer-events:auto}
+
+.menu-btn{display:none}
+
+@media (max-width:860px){
+  .side{position:fixed;inset:0 auto 0 0;z-index:40;transform:translateX(-100%);transition:transform .2s;box-shadow:0 0 30px rgba(0,0,0,.3)}
+  .side.open{transform:translateX(0)}
+  .main{padding-top:64px}
+  .menu-btn{
+    display:flex;position:fixed;top:max(12px,env(safe-area-inset-top,0px));left:16px;z-index:50;
+    width:38px;height:38px;border-radius:8px;background:var(--panel);border:1px solid var(--line);
+    align-items:center;justify-content:center;cursor:pointer
+  }
+  .menu-btn svg{width:18px;height:18px;color:var(--ink)}
+  .scrim{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:35}
+  .scrim.show{display:block}
+}
+</style>
+
+<div class="app">
+  <button class="menu-btn" id="menuBtn" aria-label="Abrir índice">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+  </button>
+  <div class="scrim" id="scrim"></div>
+
+  <nav class="side" id="side">
+    <div class="side-top">
+      <div class="eyebrow">Auditoría BuildSafe System</div>
+      <h1>Guía de demostración</h1>
+      <p>27 hallazgos, paso a paso, para mostrar en vivo.</p>
+    </div>
+
+    <div class="progress">
+      <div class="progress-row"><span>Ensayados</span><span id="progTxt">0 / 27</span></div>
+      <div class="progress-bar"><i id="progBar"></i></div>
+    </div>
+
+    <div class="search">
+      <input type="text" id="searchBox" placeholder="Buscar HAL-xxx o palabra clave…">
+    </div>
+
+    <details class="navgroup" open><summary>Preparación</summary>
+      <a class="navlink" data-target="setup"><span class="dot" style="background:var(--accent-2)"></span><span>Antes de empezar</span></a>
+    </details>
+    <details class="navgroup" open><summary>1 · Autenticación</summary></details>
+    <details class="navgroup" open><summary>2 · Recuperación de Contraseña</summary></details>
+    <details class="navgroup" open><summary>3 · Gestión de Usuarios</summary></details>
+    <details class="navgroup" open><summary>4 · Materiales y Movimientos</summary></details>
+    <details class="navgroup"><summary>5 · Inspección del Código</summary></details>
+    <details class="navgroup"><summary>6 · Herramientas Automatizadas</summary></details>
+  </nav>
+
+  <main class="main">
+    <div class="wrap">
+
+      <div class="hero">
+        <h1>Cómo mostrar cada hallazgo</h1>
+        <p>Para cada uno de los 27 hallazgos: qué es en palabras simples, los pasos exactos para reproducirlo en vivo, y qué señalar en pantalla como evidencia. Marca la casilla de cada tarjeta mientras ensayas.</p>
+      </div>
+
+      <section class="setup" id="setup">
+        <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><path d="M12 7v5l3 3"/></svg>Antes de empezar</h2>
+        <dl>
+          <dt>Entorno</dt><dd>XAMPP con Apache y MariaDB activos</dd>
+          <dt>Proyecto</dt><dd><code>C:\xampp\htdocs\buildsafe_system1\</code></dd>
+          <dt>URL base</dt><dd><code>http://localhost/buildsafe_system1/</code></dd>
+          <dt>Base de datos</dt><dd><code>test2</code> (importada desde <code>test2.sql</code>)</dd>
+          <dt>Usuario admin</dt><dd><code>auditor@test.com</code> / <code>admin123</code> (requiere resolver reCAPTCHA)</dd>
+          <dt>Herramientas</dt><dd>DevTools de Chrome (F12) para la mayoría · OWASP ZAP solo para HAL-023 · phpMyAdmin para HAL-012</dd>
+        </dl>
+        <div class="warn">Antes de la demo, restaura la base de datos desde tu respaldo (<code>test2_respaldo_antes_de_zap.sql</code>) para que los hallazgos con <code>delete_id</code> o <code>toggle_status</code> tengan datos de prueba intactos para borrar/desactivar.</div>
+      </section>
+
+      <!-- ================= MÓDULO 1 ================= -->
+      <div class="modhead" id="mod-1"><h2>Módulo 1 — Autenticación</h2><p>HAL-001 · HAL-002</p></div>
+
+      <article class="card sev-medio" id="HAL-001" data-id="HAL-001" data-text="sin regeneracion de sesion session fixation cookie">
+        <div class="card-top">
+          <div><div class="card-id">HAL-001</div><h3>Sin Regeneración de Sesión (Session Fixation)</h3></div>
+          <div class="badges"><span class="badge b-medio">Medio</span></div>
+        </div>
+        <p class="que">El identificador de la sesión no cambia al iniciar sesión: alguien que ya tenía ese identificador puede seguir usándolo después de que inicies sesión como administrador.</p>
+        <div class="impact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><div><b>Impacto:</b> si un atacante le hace llegar a la víctima un enlace con un ID de sesión que él ya conoce (por ejemplo, con un parámetro manipulado), y la víctima inicia sesión con ese ID, el atacante puede reutilizarlo después y quedar autenticado con sus mismos privilegios — incluidos los de administrador — sin necesitar su contraseña.</div></div>
+        <ol class="steps">
+          <li>Abre <code>index.php</code> y presiona <code>F12</code> → pestaña <b>Application</b> → <b>Cookies</b>. Anota el valor de <code>PHPSESSID</code>.</li>
+          <li>Inicia sesión con el usuario admin (resolviendo el reCAPTCHA).</li>
+          <li>Vuelve a <b>Application → Cookies</b>: el valor de <code>PHPSESSID</code> es exactamente el mismo.</li>
+        </ol>
+        <div class="showpoint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>Señala las dos capturas lado a lado: el mismo valor de cookie antes y después del login.</div>
+        <label class="check"><input type="checkbox" class="doneBox">Marcar como ensayado</label>
+      </article>
+
+      <article class="card sev-medio" id="HAL-002" data-id="HAL-002" data-text="error logico verificacion rol head.php precedencia operadores">
+        <div class="card-top">
+          <div><div class="card-id">HAL-002</div><h3>Error Lógico en Verificación de Rol</h3></div>
+          <div class="badges"><span class="badge b-medio">Medio</span></div>
+        </div>
+        <p class="que">La condición <code>!$seccion == true</code> en <code>head.php</code> es ambigua por cómo PHP evalúa los operadores: funciona por casualidad, no porque esté bien escrita.</p>
+        <div class="impact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><div><b>Impacto:</b> hoy el resultado práctico es correcto, pero el código es engañoso. Si alguien lo "simplifica" pensando que entiende la lógica, podría dejar sin querer una ruta de acceso para usuarios sin permiso de administrador, y nadie lo notaría hasta que ya estuviera explotado.</div></div>
+        <ol class="steps">
+          <li>No se demuestra con el sistema en ejecución — es un hallazgo de lectura de código.</li>
+          <li>Abre <code>head.php:12</code> en el editor.</li>
+          <li>Explica: PHP evalúa primero <code>!$seccion</code> y después compara ese resultado con <code>true</code>, no lo que el nombre de la variable sugiere a simple vista.</li>
+        </ol>
+        <div class="code-cap">head.php — línea 12</div>
+        <div class="code"><span class="c">// condición ambigua por precedencia de operadores</span>
+<b>if</b>(<span class="d">!$seccion == true</span> || $rol != 1) {
+    header("location: destroyer.php");
+    <span class="c">// ← FALTA exit(); — ejecución puede continuar tras la redirección</span>
+}</div>
+        <div class="showpoint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>Muestra la línea original y, al lado, la versión corregida con comparación explícita (<code>!== true</code>) y <code>exit()</code>.</div>
+        <label class="check"><input type="checkbox" class="doneBox">Marcar como ensayado</label>
+      </article>
+
+      <!-- ================= MÓDULO 2 ================= -->
+      <div class="modhead" id="mod-2"><h2>Módulo 2 — Recuperación de Contraseña</h2><p>HAL-003 · HAL-004 · HAL-005</p></div>
+
+      <article class="card sev-crit" id="HAL-003" data-id="HAL-003" data-text="credenciales smtp hardcodeadas gmail enviar_token">
+        <div class="card-top">
+          <div><div class="card-id">HAL-003</div><h3>Credenciales de Correo Expuestas en el Código</h3></div>
+          <div class="badges"><span class="badge b-crit">Crítico</span></div>
+        </div>
+        <p class="que">La contraseña de la cuenta de Gmail que envía los correos de recuperación está escrita directamente dentro del código.</p>
+        <div class="impact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><div><b>Impacto:</b> quien consiga acceso al código (servidor, un backup, o un repositorio mal configurado) controla la cuenta de correo corporativa completa: puede enviar phishing o spam a nombre de la empresa, leer el historial de mensajes, y no se puede revocar esa contraseña sola sin desactivar la verificación en dos pasos de toda la cuenta.</div></div>
+        <ol class="steps">
+          <li>Abre <code>enviar_token.php</code>, alrededor de la línea 37.</li>
+          <li>Señala la línea con el usuario y la contraseña de Gmail en texto plano.</li>
+        </ol>
+        <div class="code-cap">enviar_token.php — líneas 37-38</div>
+        <div class="code"><span class="d">$mail->Username = 'uptag2026@gmail.com';</span>     <span class="c">// ← cuenta expuesta</span>
+<span class="d">$mail->Password = 'xwnlhyllvdpdamyn';</span>         <span class="c">// ← App Password de Gmail expuesta</span></div>
+        <div class="note">No ejecutes ni muestres el envío real de correo con estas credenciales en una demo pública: esa contraseña de aplicación debería estar ya revocada. Basta con mostrar el código fuente.</div>
+        <label class="check"><input type="checkbox" class="doneBox">Marcar como ensayado</label>
+      </article>
+
+      <article class="card sev-crit" id="HAL-004" data-id="HAL-004" data-text="debug smtp produccion recuperar contrasena">
+        <div class="card-top">
+          <div><div class="card-id">HAL-004</div><h3>Depuración SMTP Visible en Producción</h3></div>
+          <div class="badges"><span class="badge b-crit">Crítico</span></div>
+        </div>
+        <p class="que">Al pedir recuperar la contraseña, el sistema muestra en pantalla toda la conversación técnica con el servidor de Gmail — información que solo debería ver un programador, no el usuario.</p>
+        <div class="impact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><div><b>Impacto:</b> expone el usuario de correo codificado en base64 (fácil de decodificar) a cualquier visitante del sitio, sin necesidad de iniciar sesión. Facilita que alguien reconstruya parte de las credenciales de HAL-003 o entienda cómo está armado el servidor de correo.</div></div>
+        <ol class="steps">
+          <li>En <code>index.php</code>, pulsa <b>¿Olvidó su contraseña? → RECUPERAR</b>.</li>
+          <li>Escribe un correo que exista en la base de datos y envía el formulario.</li>
+          <li>En la respuesta, señala el bloque de texto con líneas como <code>SMTP -&gt; FROM SERVER</code> y <code>250 OK</code>.</li>
+        </ol>
+        <div class="code-cap">enviar_token.php — línea 41</div>
+        <div class="code"><span class="d">$mail->SMTPDebug = 3;</span>  <span class="c">// ← vuelca la sesión SMTP completa al HTML</span></div>
+        <div class="showpoint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>Resalta que ese texto técnico lo ve cualquier visitante, autenticado o no.</div>
+        <label class="check"><input type="checkbox" class="doneBox">Marcar como ensayado</label>
+      </article>
+
+      <article class="card sev-medio" id="HAL-005" data-id="HAL-005" data-text="sin limite intentos recuperacion rate limit">
+        <div class="card-top">
+          <div><div class="card-id">HAL-005</div><h3>Sin Límite de Intentos en Recuperación</h3></div>
+          <div class="badges"><span class="badge b-medio">Medio</span></div>
+        </div>
+        <p class="que">Se puede pedir el correo de recuperación cuantas veces se quiera, sin ningún bloqueo.</p>
+        <div class="impact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><div><b>Impacto:</b> un atacante puede automatizar miles de solicitudes para saturar la bandeja de entrada de un usuario, abusar del servicio de correo de la empresa (riesgo de que Gmail bloquee la cuenta por spam), o usar las respuestas distintas del sistema para averiguar qué correos existen registrados.</div></div>
+        <ol class="steps">
+          <li>Envía el formulario de recuperación 4 o 5 veces seguidas, con el mismo correo.</li>
+          <li>Muestra que el sistema responde igual cada vez, sin bloquear ni pedir un captcha adicional.</li>
+        </ol>
+        <label class="check"><input type="checkbox" class="doneBox">Marcar como ensayado</label>
+      </article>
+
+      <!-- ================= MÓDULO 3 ================= -->
+      <div class="modhead" id="mod-3"><h2>Módulo 3 — Gestión de Usuarios</h2><p>HAL-006 · HAL-007 · HAL-008</p></div>
+
+      <article class="card sev-medio" id="HAL-006" data-id="HAL-006" data-text="sql injection add_user registro no explotable">
+        <div class="card-top">
+          <div><div class="card-id">HAL-006</div><h3>Construcción Insegura de SQL en Registro</h3></div>
+          <div class="badges"><span class="badge b-medio">Medio</span><span class="badge b-bajo" style="background:var(--info)">No explotable</span></div>
+        </div>
+        <p class="que">El código arma la consulta SQL pegando directamente lo que escribe el usuario, en vez de usar una consulta preparada. En esta versión de PHP no se puede aprovechar, pero sigue siendo una mala práctica.</p>
+        <div class="impact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><div><b>Impacto:</b> hoy la protección es incidental (un efecto colateral de <code>htmlspecialchars()</code>), no intencional. Si el proyecto se ejecuta en una versión de PHP anterior a 8.1, si alguien cambia esa función de sanitización, o si estas mismas variables se reutilizan en otra consulta, el mismo código permitiría inyección SQL real — lectura o alteración de toda la base de datos.</div></div>
+        <ol class="steps">
+          <li>Ve a <b>Agregar usuario</b>, campo correo, escribe: <code>' OR '1'='1' --</code></li>
+          <li>Completa el resto del formulario y envíalo.</li>
+          <li>Muestra que no pasa nada raro: la consulta queda bien formada y 0 filas, sin ningún error.</li>
+          <li>Abre <code>add_user.php:29</code> y explica por qué: <code>htmlspecialchars()</code> con <code>ENT_QUOTES</code> (por defecto desde PHP 8.1) neutraliza la comilla.</li>
+        </ol>
+        <div class="code-cap">add_user.php — línea 29: sanitización HTML usada en contexto SQL</div>
+        <div class="code">$email = htmlspecialchars($_POST['email']);
+$user  = htmlspecialchars($_POST['user']);
+
+$check = mysqli_query($conn,
+    <span class="d">"SELECT * FROM user WHERE name = '$user' OR gmail = '$email'"</span>
+);
+<span class="c">// payload ' OR '1'='1' -- se convierte en &#039; OR &#039;1&#039;=&#039;1&#039; --
+// resultado real: sin error de SQL, 0 filas → no explotable en PHP 8.1+</span></div>
+        <div class="note">Aclara al público que esto demuestra la mala práctica en el código, no un ataque exitoso — ya se probó también con sqlmap (ver HAL-006/HAL-009 en inyecciones.md) y ningún parámetro resultó inyectable.</div>
+        <label class="check"><input type="checkbox" class="doneBox">Marcar como ensayado</label>
+      </article>
+
+      <article class="card sev-alto" id="HAL-007" data-id="HAL-007" data-text="operaciones destructivas get delete_id borrar sin confirmacion">
+        <div class="card-top">
+          <div><div class="card-id">HAL-007</div><h3>Operaciones Destructivas vía GET</h3></div>
+          <div class="badges"><span class="badge b-alto">Alto</span></div>
+        </div>
+        <p class="que">Se puede borrar un usuario o un material solo con visitar una dirección web — sin ningún botón de confirmación.</p>
+        <div class="impact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><div><b>Impacto:</b> un enlace, una imagen oculta en un correo, o un anuncio malicioso en otra página puede disparar esta misma URL mientras el administrador tiene la sesión abierta — sin que haga clic en nada dentro de BuildSafe. El resultado es pérdida de datos irreversible y sin rastro de quién lo causó.</div></div>
+        <ol class="steps">
+          <li>Inicia sesión como admin.</li>
+          <li>Crea de antemano un usuario de prueba desechable para esta demo (no uses uno real).</li>
+          <li>En la barra de direcciones, visita: <code>list_user.php?delete_id=&lt;id_de_prueba&gt;</code></li>
+          <li>Muestra que el usuario desaparece de la lista al instante, sin cuadro de confirmación.</li>
+        </ol>
+        <div class="showpoint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>Enfatiza que un simple enlace o imagen en otra página podría disparar esta misma URL.</div>
+        <label class="check"><input type="checkbox" class="doneBox">Marcar como ensayado</label>
+      </article>
+
+      <article class="card sev-alto" id="HAL-008" data-id="HAL-008" data-text="csrf sin proteccion formulario externo">
+        <div class="card-top">
+          <div><div class="card-id">HAL-008</div><h3>Sin Protección CSRF</h3></div>
+          <div class="badges"><span class="badge b-alto">Alto</span></div>
+        </div>
+        <p class="que">Un sitio externo puede enviar, sin que tú lo notes, un formulario que crea un usuario en BuildSafe — aprovechando que tu sesión de administrador ya está abierta.</p>
+        <div class="impact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><div><b>Impacto:</b> no solo crear usuarios — cualquier formulario del sistema (editar materiales, cambiar estados) es vulnerable al mismo patrón. Basta con que el administrador visite una página cualquiera mientras tiene la sesión abierta para que ocurra la acción, sin que lo vea ni lo apruebe.</div></div>
+        <ol class="steps">
+          <li>Prepara, fuera del proyecto, un archivo HTML con un formulario oculto que apunte a <code>add_user.php</code> con los mismos campos.</li>
+          <li>Con la sesión de admin abierta en el navegador, abre ese archivo HTML en otra pestaña y pulsa el botón de envío.</li>
+          <li>Vuelve a BuildSafe y muestra que el usuario se creó, aunque el formulario vivía en otra página.</li>
+        </ol>
+        <div class="note">Si no tienes ese archivo de prueba preparado, dilo y lo armamos antes de la demo.</div>
+        <label class="check"><input type="checkbox" class="doneBox">Marcar como ensayado</label>
+      </article>
+
+      <!-- ================= MÓDULO 4 ================= -->
+      <div class="modhead" id="mod-4"><h2>Módulo 4 — Materiales y Movimientos</h2><p>HAL-009</p></div>
+
+      <article class="card sev-alto" id="HAL-009" data-id="HAL-009" data-text="sql sin prepared statements list_user list_material">
+        <div class="card-top">
+          <div><div class="card-id">HAL-009</div><h3>Consultas SQL sin Prepared Statements</h3></div>
+          <div class="badges"><span class="badge b-alto">Alto</span></div>
+        </div>
+        <p class="que">Varias consultas arman el texto SQL pegando directamente valores, en vez de usar parámetros preparados — el mismo problema de fondo que HAL-006, pero en otros archivos.</p>
+        <div class="impact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><div><b>Impacto:</b> hoy los valores pasan por <code>intval()</code>, pero el INSERT de la bitácora interpola una cadena de texto directamente, el caso más riesgoso. Basta un cambio futuro que agregue un campo de texto sin pasar por ese mismo cuidado para introducir una inyección SQL real.</div></div>
+        <ol class="steps">
+          <li>Es un hallazgo de código: abre <code>list_user.php:52,65</code>.</li>
+          <li>Ábrelo junto a <code>list_materials.php</code>, que sí usa <code>$conn-&gt;prepare()</code>, para contrastar el antes/después dentro del mismo proyecto.</li>
+        </ol>
+        <div class="code-cap">list_user.php — líneas 52, 65: interpolación directa</div>
+        <div class="code">mysqli_query($conn,
+    <span class="d">"UPDATE user SET active = $new_status WHERE user_id = $user_id"</span>
+);
+mysqli_query($conn,
+    <span class="d">"DELETE FROM user WHERE user_id = $id"</span>
+);
+<span class="c">// list_material.php — líneas 34, 40, 47: mismo patrón</span></div>
+        <label class="check"><input type="checkbox" class="doneBox">Marcar como ensayado</label>
+      </article>
+
+      <!-- ================= MÓDULO 5 ================= -->
+      <div class="modhead" id="mod-5"><h2>Módulo 5 — Inspección del Código Fuente</h2><p>HAL-010 a HAL-017</p></div>
+
+      <article class="card sev-alto" id="HAL-010" data-id="HAL-010" data-text="archivos sensibles webroot test2.sql dump descarga">
+        <div class="card-top">
+          <div><div class="card-id">HAL-010</div><h3>Archivos Sensibles en el Webroot</h3></div>
+          <div class="badges"><span class="badge b-alto">Alto</span></div>
+        </div>
+        <p class="que">El volcado completo de la base de datos quedó dentro de la carpeta pública del sitio web.</p>
+        <div class="impact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><div><b>Impacto:</b> cualquier persona en internet, sin necesitar cuenta ni contraseña, puede descargar todos los usuarios, contraseñas hasheadas (y la de HAL-012, en texto plano), materiales y movimientos de inventario con una sola dirección web.</div></div>
+        <ol class="steps">
+          <li>En el navegador, visita directamente: <code>http://localhost/buildsafe_system1/test2.sql</code></li>
+          <li>Muestra que se descarga (o se muestra) el archivo completo, con usuarios, contraseñas hasheadas y toda la estructura de tablas.</li>
+        </ol>
+        <label class="check"><input type="checkbox" class="doneBox">Marcar como ensayado</label>
+      </article>
+
+      <article class="card sev-medio" id="HAL-011" data-id="HAL-011" data-text="errores base datos expuestos conn error">
+        <div class="card-top">
+          <div><div class="card-id">HAL-011</div><h3>Errores de Base de Datos Expuestos</h3></div>
+          <div class="badges"><span class="badge b-medio">Medio</span></div>
+        </div>
+        <p class="que">Cuando una consulta falla, el sistema le muestra al usuario normal el mensaje técnico completo de MySQL.</p>
+        <div class="impact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><div><b>Impacto:</b> revela nombres de tablas, columnas y detalles del motor de base de datos — información que un atacante usa para planear ataques más precisos contra el sistema, aunque por sí sola no permite acceder a datos.</div></div>
+        <ol class="steps">
+          <li>En <b>Agregar usuario</b>, intenta registrar un correo que ya exista en la base de datos.</li>
+          <li>Señala el mensaje <code>Error: ...</code> con el texto crudo que viene de <code>$conn-&gt;error</code>.</li>
+        </ol>
+        <div class="code-cap">add_user.php:56 · list_user.php:35,71 · edit_user.php:65</div>
+        <div class="code"><span class="c">// VULNERABLE — expone estructura interna:</span>
+<span class="d">$_SESSION['message'] = "Error: " . $conn->error;</span></div>
+        <label class="check"><input type="checkbox" class="doneBox">Marcar como ensayado</label>
+      </article>
+
+      <article class="card sev-medio" id="HAL-012" data-id="HAL-012" data-text="contrasena sin hash texto plano phpmyadmin">
+        <div class="card-top">
+          <div><div class="card-id">HAL-012</div><h3>Contraseña sin Hash en la Base de Datos</h3></div>
+          <div class="badges"><span class="badge b-medio">Medio</span></div>
+        </div>
+        <p class="que">Un usuario de la base de datos tiene la contraseña guardada tal cual, sin cifrar.</p>
+        <div class="impact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><div><b>Impacto:</b> si la base de datos se filtra o se accede a ella (como ya demuestra HAL-010), esa contraseña queda lista para usarse de inmediato, sin que el atacante necesite descifrar nada — a diferencia de las demás, protegidas con hash bcrypt.</div></div>
+        <ol class="steps">
+          <li>Abre phpMyAdmin → base <code>test2</code> → tabla <code>user</code>.</li>
+          <li>Busca <code>user_id = 9</code> (correo <code>ds@gmail.com</code>) y señala la columna <code>password</code>: dice <code>123456</code>, en texto plano.</li>
+          <li>Compáralo con otra fila cualquiera, donde la contraseña es un hash bcrypt largo (<code>$2y$10$...</code>).</li>
+        </ol>
+        <div class="code-cap">test2.sql — tabla user, user_id=9</div>
+        <div class="code"><span class="d">user_id=9, gmail='ds@gmail.com', password='123456'</span>  <span class="c">// ← texto plano, sin hash</span>
+<span class="c">// cualquier otra fila: password='$2y$...' (hash bcrypt real) — compara en pantalla</span></div>
+        <label class="check"><input type="checkbox" class="doneBox">Marcar como ensayado</label>
+      </article>
+
+      <article class="card sev-medio" id="HAL-013" data-id="HAL-013" data-text="sin control versiones git">
+        <div class="card-top">
+          <div><div class="card-id">HAL-013</div><h3>Ausencia de Control de Versiones</h3></div>
+          <div class="badges"><span class="badge b-medio">Medio</span></div>
+        </div>
+        <p class="que">El proyecto no traía ningún historial de cambios (sin Git) cuando se entregó para auditar.</p>
+        <div class="impact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><div><b>Impacto:</b> sin historial, no se puede saber quién introdujo un cambio problemático ni revertirlo con confianza; si en el futuro se usa Git sin cuidado, credenciales que se "eliminen" del código fuente podrían quedar igualmente accesibles en versiones anteriores del repositorio.</div></div>
+        <ol class="steps">
+          <li>Muestra que la carpeta original del sistema no tenía una carpeta <code>.git</code>.</li>
+          <li>Contrasta con esta misma carpeta de auditoría, donde sí creamos un repositorio para llevar el control del propio trabajo de auditoría.</li>
+        </ol>
+        <label class="check"><input type="checkbox" class="doneBox">Marcar como ensayado</label>
+      </article>
+
+      <article class="card sev-bajo" id="HAL-014" data-id="HAL-014" data-text="recaptcha secret hardcodeada index.php">
+        <div class="card-top">
+          <div><div class="card-id">HAL-014</div><h3>Clave Secreta de reCAPTCHA Hardcodeada</h3></div>
+          <div class="badges"><span class="badge b-bajo">Bajo</span></div>
+        </div>
+        <p class="que">La clave secreta de reCAPTCHA está escrita directamente en el código, en vez de guardarse por fuera.</p>
+        <div class="impact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><div><b>Impacto:</b> si esta clave se filtra, alguien puede falsificar verificaciones de reCAPTCHA desde cualquier servidor, anulando la protección contra bots en el login y debilitando esa barrera frente a ataques automatizados (como HAL-005 y los intentos de fuerza bruta).</div></div>
+        <ol class="steps">
+          <li>Abre <code>index.php:47</code> y señala la línea con la clave.</li>
+        </ol>
+        <div class="code-cap">index.php — línea 47</div>
+        <div class="code">$secretkey = <span class="d">'6LdVkrIrAAAAALXGfzMhYeIlaTLb1wDkX8NgHTVI'</span>;</div>
+        <label class="check"><input type="checkbox" class="doneBox">Marcar como ensayado</label>
+      </article>
+
+      <article class="card sev-bajo" id="HAL-015" data-id="HAL-015" data-text="sin cabeceras seguridad http x-frame-options">
+        <div class="card-top">
+          <div><div class="card-id">HAL-015</div><h3>Sin Cabeceras de Seguridad HTTP</h3></div>
+          <div class="badges"><span class="badge b-bajo">Bajo</span></div>
+        </div>
+        <p class="que">El servidor no envía las cabeceras que ayudan a protegerse de clickjacking o de que el navegador adivine mal el tipo de archivo.</p>
+        <div class="impact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><div><b>Impacto:</b> sin <code>X-Frame-Options</code>, el sitio puede incrustarse dentro de otra página invisible para engañar a un usuario a hacer clic en algo distinto de lo que ve (clickjacking); sin <code>X-Content-Type-Options</code>, versiones antiguas de navegadores pueden interpretar mal un archivo y ejecutarlo como si fuera otro tipo.</div></div>
+        <ol class="steps">
+          <li><code>F12</code> → pestaña <b>Network</b>, recarga cualquier página.</li>
+          <li>Abre la petición principal → pestaña <b>Headers</b> → <b>Response Headers</b>.</li>
+          <li>Señala que faltan <code>X-Frame-Options</code>, <code>X-Content-Type-Options</code>, etc.</li>
+        </ol>
+        <div class="code-cap">head.php — cabeceras que faltan agregar al inicio</div>
+        <div class="code"><span class="c">// ninguna de estas líneas existe hoy en head.php:</span>
+<span class="d">header("X-Frame-Options: DENY");
+header("X-Content-Type-Options: nosniff");
+header("Referrer-Policy: strict-origin-when-cross-origin");</span></div>
+        <label class="check"><input type="checkbox" class="doneBox">Marcar como ensayado</label>
+      </article>
+
+      <article class="card sev-alto" id="HAL-016" data-id="HAL-016" data-text="falta verificacion rol toggle_status desactivar admin">
+        <div class="card-top">
+          <div><div class="card-id">HAL-016</div><h3>Falta Verificación de Rol al Cambiar Estado</h3></div>
+          <div class="badges"><span class="badge b-alto">Alto</span></div>
+        </div>
+        <p class="que">Se puede desactivar a otro administrador: la validación que sí existe para "eliminar" nunca se copió al botón de "activar/desactivar".</p>
+        <div class="impact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><div><b>Impacto:</b> cualquier administrador autenticado (incluso una cuenta comprometida con pocos privilegios reales) puede desactivar a todos los demás administradores, incluido el principal, dejando el sistema efectivamente sin control administrativo.</div></div>
+        <ol class="steps">
+          <li>Ten listo un segundo usuario con rol administrador, creado para la demo.</li>
+          <li>Visita: <code>list_user.php?toggle_status=&lt;id_del_otro_admin&gt;</code></li>
+          <li>Muestra que su cuenta queda desactivada — aunque la interfaz normalmente oculta ese botón para filas de administrador.</li>
+        </ol>
+        <div class="code-cap">list_user.php — línea 16-19 (DELETE sí valida) vs. línea 46-58 (toggle_status no)</div>
+        <div class="code"><span class="c">// el DELETE sí valida el rol del objetivo:</span>
+<b>if</b>($row['rol'] == 1){
+    $_SESSION['message'] = "No se puede eliminar otro administrador";
+}
+
+<span class="c">// toggle_status NO repite esa validación:</span>
+<b>if</b>(isset($_GET['toggle_status'])) {
+    $user_id = intval($_GET['toggle_status']);
+    <b>if</b>($id != $user_id){  <span class="d">// ← solo compara contra uno mismo, no valida $row['rol']</span>
+        mysqli_query($conn, "UPDATE user SET active = $new_status WHERE user_id = $user_id");
+    }
+}</div>
+        <label class="check"><input type="checkbox" class="doneBox">Marcar como ensayado</label>
+      </article>
+
+      <article class="card sev-bajo" id="HAL-017" data-id="HAL-017" data-text="sin documentacion readme">
+        <div class="card-top">
+          <div><div class="card-id">HAL-017</div><h3>Ausencia de Documentación Técnica</h3></div>
+          <div class="badges"><span class="badge b-bajo">Bajo</span></div>
+        </div>
+        <p class="que">El proyecto no traía ningún <code>README</code> ni guía de instalación.</p>
+        <div class="impact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><div><b>Impacto:</b> no es un vector de ataque por sí mismo, pero sin un estándar documentado de dónde deben ir las credenciales, cada desarrollador resuelve ese problema a su manera — y la opción más simple termina siendo escribirlas directo en el código, como ya pasó en HAL-003 y HAL-014.</div></div>
+        <ol class="steps">
+          <li>Muestra la carpeta raíz del proyecto original y señala que no hay <code>README.md</code>, <code>.env.example</code> ni carpeta <code>docs/</code>.</li>
+        </ol>
+        <label class="check"><input type="checkbox" class="doneBox">Marcar como ensayado</label>
+      </article>
+
+      <!-- ================= MÓDULO 6 ================= -->
+      <div class="modhead" id="mod-6"><h2>Módulo 6 — Herramientas Automatizadas</h2><p>HAL-018 a HAL-027 · OWASP ZAP · Lighthouse</p></div>
+
+      <article class="card sev-medio" id="HAL-018" data-id="HAL-018" data-text="listado directorios apache index of src assets">
+        <div class="card-top">
+          <div><div class="card-id">HAL-018</div><h3>Listado de Directorios Habilitado</h3></div>
+          <div class="badges"><span class="badge b-medio">Medio</span><span class="badge b-tool">OWASP ZAP</span></div>
+        </div>
+        <p class="que">Apache muestra la lista de archivos de una carpeta en vez de dar un error, cuando esa carpeta no tiene un <code>index.php</code>.</p>
+        <div class="impact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><div><b>Impacto:</b> expone la estructura completa de archivos de carpetas como <code>/src/</code>, que puede contener código fuente. Un atacante usa ese listado para encontrar exactamente qué archivos atacar, en vez de tener que adivinarlos.</div></div>
+        <ol class="steps">
+          <li>En el navegador, visita: <code>http://localhost/buildsafe_system1/src/</code></li>
+          <li>Muestra el listado "Index of /buildsafe_system1/src" con los archivos dentro.</li>
+        </ol>
+        <label class="check"><input type="checkbox" class="doneBox">Marcar como ensayado</label>
+      </article>
+
+      <article class="card sev-medio" id="HAL-019" data-id="HAL-019" data-text="rutas internas warnings php undefined array key head.php">
+        <div class="card-top">
+          <div><div class="card-id">HAL-019</div><h3>Divulgación de Rutas Internas por Warnings de PHP</h3></div>
+          <div class="badges"><span class="badge b-medio">Medio</span><span class="badge b-tool">OWASP ZAP</span></div>
+        </div>
+        <p class="que">El servidor tiene activados los avisos de error de PHP, y esos avisos revelan la ruta completa del servidor.</p>
+        <div class="impact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><div><b>Impacto:</b> la ruta absoluta (<code>C:\xampp\htdocs\buildsafe_system1\</code>) confirma a un atacante el sistema operativo, el servidor y la estructura exacta de carpetas, información útil para apuntar otros ataques específicos a esa instalación.</div></div>
+        <ol class="steps">
+          <li>Ten lista la captura ya tomada: el warning <code>Undefined array key "id" in C:\xampp\htdocs\buildsafe_system1\head.php on line 5</code>.</li>
+          <li>Es más estable mostrarlo como evidencia guardada que intentar reproducirlo en vivo, porque depende del estado exacto de la sesión.</li>
+        </ol>
+        <div class="code-cap">Evidencia capturada por OWASP ZAP (head.php:5, list_user.php:79)</div>
+        <div class="code"><span class="d">Warning: Undefined array key "id" in C:\xampp\htdocs\buildsafe_system1\head.php on line 5</span>
+<span class="d">Warning: Cannot modify header information - headers already sent by
+(output started at head.php:41) in list_user.php on line 79</span></div>
+        <div class="note">Evidencia de respaldo recomendada para este hallazgo: captura de pantalla ya guardada, en vez de reproducción en vivo.</div>
+        <label class="check"><input type="checkbox" class="doneBox">Marcar como ensayado</label>
+      </article>
+
+      <article class="card sev-medio" id="HAL-020" data-id="HAL-020" data-text="scripts terceros sin integrity sri cdn sweetalert jquery">
+        <div class="card-top">
+          <div><div class="card-id">HAL-020</div><h3>Scripts de Terceros sin Atributo de Integridad</h3></div>
+          <div class="badges"><span class="badge b-medio">Medio</span><span class="badge b-tool">OWASP ZAP</span></div>
+        </div>
+        <p class="que">El sistema carga librerías desde internet (CDN) sin una "huella digital" que confirme que el archivo no fue alterado.</p>
+        <div class="impact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><div><b>Impacto:</b> si el CDN externo es comprometido, el código malicioso se ejecutaría directamente en el navegador de cualquier usuario del sistema — administradores incluidos — sin que BuildSafe tenga forma de detectarlo o bloquearlo.</div></div>
+        <ol class="steps">
+          <li><code>Ctrl+U</code> (ver código fuente) en <code>index.php</code>.</li>
+          <li>Busca las etiquetas <code>&lt;script src="https://cdn.jsdelivr.net/..."&gt;</code> y señala que no tienen el atributo <code>integrity</code>.</li>
+        </ol>
+        <div class="code-cap">index.php — etiquetas tal como están hoy</div>
+        <div class="code"><span class="d">&lt;script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"&gt;&lt;/script&gt;
+&lt;script src="https://www.google.com/recaptcha/api.js" async defer&gt;&lt;/script&gt;</span>
+<span class="c">// ← ninguna de las dos tiene el atributo integrity="sha384-..."</span></div>
+        <label class="check"><input type="checkbox" class="doneBox">Marcar como ensayado</label>
+      </article>
+
+      <article class="card sev-bajo" id="HAL-021" data-id="HAL-021" data-text="cookie httponly samesite phpsessid">
+        <div class="card-top">
+          <div><div class="card-id">HAL-021</div><h3>Cookie de Sesión sin HttpOnly ni SameSite</h3></div>
+          <div class="badges"><span class="badge b-bajo">Bajo</span><span class="badge b-tool">OWASP ZAP</span></div>
+        </div>
+        <p class="que">La cookie de sesión no tiene dos protecciones estándar: que JavaScript no pueda leerla, y que no se envíe a otros sitios.</p>
+        <div class="impact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><div><b>Impacto:</b> sin <code>HttpOnly</code>, si llegara a existir un XSS en el sistema, un atacante podría robar la cookie de sesión con JavaScript; sin <code>SameSite</code>, la cookie también se envía en peticiones hacia otros sitios, agravando directamente el ataque CSRF de HAL-008.</div></div>
+        <ol class="steps">
+          <li><code>F12</code> → <b>Application</b> → <b>Cookies</b> → fila <code>PHPSESSID</code>.</li>
+          <li>Señala que las columnas <code>HttpOnly</code> y <code>SameSite</code> aparecen vacías.</li>
+        </ol>
+        <div class="code-cap">Cabecera real enviada por el servidor</div>
+        <div class="code"><span class="d">Set-Cookie: PHPSESSID=k3il9s5itfj1t8s7di3mgnriq8; path=/</span>
+<span class="c">// ← sin HttpOnly, sin SameSite, sin Secure</span></div>
+        <label class="check"><input type="checkbox" class="doneBox">Marcar como ensayado</label>
+      </article>
+
+      <article class="card sev-bajo" id="HAL-022" data-id="HAL-022" data-text="fuga versiones cabeceras server x-powered-by">
+        <div class="card-top">
+          <div><div class="card-id">HAL-022</div><h3>Fuga de Versiones en Cabeceras HTTP</h3></div>
+          <div class="badges"><span class="badge b-bajo">Bajo</span><span class="badge b-tool">OWASP ZAP</span></div>
+        </div>
+        <p class="que">El servidor anuncia, en cada respuesta, la versión exacta de Apache y de PHP que usa.</p>
+        <div class="impact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><div><b>Impacto:</b> un atacante sabe exactamente qué versión de Apache y PHP buscar en bases de datos de vulnerabilidades conocidas, ahorrándose el trabajo de adivinar y pudiendo apuntar directo a fallas ya documentadas de esa versión específica.</div></div>
+        <ol class="steps">
+          <li><code>F12</code> → <b>Network</b> → cualquier petición → <b>Response Headers</b>.</li>
+          <li>Señala <code>Server: Apache/2.4.58 ... PHP/8.2.12</code> y <code>X-Powered-By: PHP/8.2.12</code>.</li>
+        </ol>
+        <div class="code-cap">Cabeceras reales de respuesta</div>
+        <div class="code"><span class="d">Server: Apache/2.4.58 (Win64) OpenSSL/3.1.3 PHP/8.2.12
+X-Powered-By: PHP/8.2.12</span></div>
+        <label class="check"><input type="checkbox" class="doneBox">Marcar como ensayado</label>
+      </article>
+
+      <article class="card sev-bajo" id="HAL-023" data-id="HAL-023" data-text="redirecciones cuerpo respuesta destroyer hipotesis zap historial">
+        <div class="card-top">
+          <div><div class="card-id">HAL-023</div><h3>Redirecciones con Cuerpo de Respuesta (Hipótesis)</h3></div>
+          <div class="badges"><span class="badge b-bajo">Bajo</span><span class="badge b-tool">OWASP ZAP</span></div>
+        </div>
+        <p class="que">Cuando el sistema redirige al login, de todos modos envía algo de contenido — un indicio, no confirmado, de que falta cortar la ejecución justo después de redirigir.</p>
+        <div class="impact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><div><b>Impacto:</b> es una hipótesis, no confirmada todavía. Si en efecto falta un <code>exit()</code> tras <code>header('Location: ...')</code>, el código que sigue podría seguir ejecutándose aunque el usuario ya fue redirigido — algo del mismo tipo que el problema ya confirmado en HAL-002.</div></div>
+        <ol class="steps">
+          <li>Abre ZAP → pestaña <b>Historial</b>.</li>
+          <li>Busca una petición con código <code>302</code> hacia <code>destroyer.php</code> y ábrela.</li>
+          <li>En la <b>Respuesta</b>, señala que el cuerpo no está vacío (636 bytes).</li>
+        </ol>
+        <div class="code-cap">Ejemplo real registrado por ZAP (dashboard.php)</div>
+        <div class="code">HTTP/1.1 302 Found
+<span class="d">Location: destroyer.php</span>
+<span class="c">// tamaño del cuerpo de la respuesta: 636 bytes (no debería tener cuerpo)</span></div>
+        <div class="note">Requiere tener ZAP abierto con ese historial ya capturado de una sesión anterior.</div>
+        <label class="check"><input type="checkbox" class="doneBox">Marcar como ensayado</label>
+      </article>
+
+      <article class="card sev-bajo" id="HAL-024" data-id="HAL-024" data-text="404 recursos css2 script.js lighthouse">
+        <div class="card-top">
+          <div><div class="card-id">HAL-024</div><h3>Recursos que Devuelven Error 404</h3></div>
+          <div class="badges"><span class="badge b-bajo">Bajo</span><span class="badge b-tool">Lighthouse</span></div>
+        </div>
+        <p class="que">Algunas referencias a archivos del sistema apuntan a una dirección que no existe.</p>
+        <div class="impact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><div><b>Impacto:</b> efecto visible menor (una fuente o imagen que no carga), pero también genera ruido en los registros del servidor y proyecta una imagen poco cuidada del sistema frente a quien lo revise.</div></div>
+        <ol class="steps">
+          <li><code>F12</code> → <b>Network</b>, recarga el dashboard.</li>
+          <li>Filtra por "404" y señala <code>css2?family=Nunito</code> y <code>JS/script.js</code> en rojo.</li>
+        </ol>
+        <div class="code-cap">Peticiones reales que fallan</div>
+        <div class="code"><span class="d">GET /buildsafe_system1/css2?family=Nunito:wght@400;500;600;700;800&display=swap → 404
+GET /buildsafe_system1/JS/script.js → 404
+GET /buildsafe_system1/script.js → 404</span></div>
+        <label class="check"><input type="checkbox" class="doneBox">Marcar como ensayado</label>
+      </article>
+
+      <article class="card sev-bajo" id="HAL-025" data-id="HAL-025" data-text="error javascript notifications is not defined consola">
+        <div class="card-top">
+          <div><div class="card-id">HAL-025</div><h3>Error de JavaScript "notifications is not defined"</h3></div>
+          <div class="badges"><span class="badge b-bajo">Bajo</span><span class="badge b-tool">Lighthouse</span></div>
+        </div>
+        <p class="que">Una funcionalidad de notificaciones de la interfaz no está bien implementada y genera errores cada vez que se carga la página.</p>
+        <div class="impact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><div><b>Impacto:</b> es un problema de calidad más que de seguridad directa, pero un error repetido en cada carga de página hace más difícil detectar otros errores reales entre tanto ruido en la consola.</div></div>
+        <ol class="steps">
+          <li><code>F12</code> → pestaña <b>Console</b>, recarga cualquier página interna.</li>
+          <li>Señala el error en rojo: <code>ReferenceError: notifications is not defined</code>.</li>
+        </ol>
+        <div class="code-cap">Consola del navegador</div>
+        <div class="code"><span class="d">Uncaught ReferenceError: notifications is not defined
+    at eval (eval at &lt;anonymous&gt; (http://localhost/buildsafe_system1/...))</span></div>
+        <label class="check"><input type="checkbox" class="doneBox">Marcar como ensayado</label>
+      </article>
+
+      <article class="card sev-bajo" id="HAL-026" data-id="HAL-026" data-text="accesibilidad lighthouse link-name select-name contraste">
+        <div class="card-top">
+          <div><div class="card-id">HAL-026</div><h3>Problemas de Accesibilidad</h3></div>
+          <div class="badges"><span class="badge b-bajo">Bajo</span><span class="badge b-tool">Lighthouse</span></div>
+        </div>
+        <p class="que">El sistema es difícil de usar con lector de pantalla: faltan etiquetas y textos descriptivos en varios elementos.</p>
+        <div class="impact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><div><b>Impacto:</b> una persona que use lector de pantalla no puede saber qué hace un enlace sin texto ni qué representa un <code>&lt;select&gt;</code> sin etiqueta. Es un problema de inclusión real para el personal de CONFALVI que dependa de estas ayudas.</div></div>
+        <ol class="steps">
+          <li><code>F12</code> → pestaña <b>Lighthouse</b> → categoría <b>Accesibilidad</b> → analizar <code>dashboard.php</code>.</li>
+          <li>Muestra el puntaje (84-90/100) y la lista de problemas: enlaces sin nombre, <code>&lt;select&gt;</code> sin etiqueta, falta de <code>&lt;main&gt;</code>.</li>
+        </ol>
+        <div class="code-cap">Auditorías de Lighthouse que no pasan</div>
+        <div class="code"><span class="d">link-name        → enlaces sin texto accesible
+select-name      → &lt;select&gt; sin etiqueta
+landmark-one-main→ falta &lt;main&gt; en la página
+color-contrast   → solo en list_user.php</span></div>
+        <label class="check"><input type="checkbox" class="doneBox">Marcar como ensayado</label>
+      </article>
+
+      <article class="card sev-bajo" id="HAL-027" data-id="HAL-027" data-text="rendimiento lighthouse movil peso pagina lcp">
+        <div class="card-top">
+          <div><div class="card-id">HAL-027</div><h3>Peso de Página y Rendimiento en Móvil</h3></div>
+          <div class="badges"><span class="badge b-bajo">Bajo</span><span class="badge b-tool">Lighthouse</span></div>
+        </div>
+        <p class="que">Las páginas cargan demasiadas librerías completas desde internet, lo que las hace lentas en una conexión móvil simulada.</p>
+        <div class="impact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><div><b>Impacto:</b> en una conexión limitada, un operario en bodega o en campo podría esperar más de 10 segundos para ver el dashboard, afectando directamente la productividad del uso diario del sistema de inventario.</div></div>
+        <ol class="steps">
+          <li>Mismo panel <b>Lighthouse</b> → categoría <b>Rendimiento</b>, elige dispositivo <b>Móvil</b>.</li>
+          <li>Muestra el puntaje bajo (41-63/100) y el tiempo de renderizado principal (LCP) de 13 a 17 segundos.</li>
+        </ol>
+        <div class="code-cap">Métricas reales (Lighthouse, dashboard.php)</div>
+        <div class="code"><span class="d">Rendimiento escritorio: 90/100   LCP: 2.0s
+Rendimiento móvil:     58/100   LCP: 13.4s
+Peso total transferido: 2,253 KiB en 30 peticiones</span></div>
+        <label class="check"><input type="checkbox" class="doneBox">Marcar como ensayado</label>
+      </article>
+
+      <div style="height:20px"></div>
+    </div>
+  </main>
+</div>
+
+<button class="back-top" id="backTop" aria-label="Volver arriba">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><polyline points="18 15 12 9 6 15"/></svg>
+</button>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<script>
+(function(){
+  'use strict';
+  var STORAGE_KEY = 'buildsafe-demo-progress-v1';
+  var cards = Array.prototype.slice.call(document.querySelectorAll('.card[data-id]'));
+  var navLinksContainer = document.querySelectorAll('.navgroup');
+  var side = document.getElementById('side');
+  var menuBtn = document.getElementById('menuBtn');
+  var scrim = document.getElementById('scrim');
+
+  // ---- construir la navegación lateral a partir de las tarjetas reales ----
+  var groupTitles = [
+    '1 · Autenticación','2 · Recuperación de Contraseña','3 · Gestión de Usuarios',
+    '4 · Materiales y Movimientos','5 · Inspección del Código','6 · Herramientas Automatizadas'
+  ];
+  var groupRanges = [['HAL-001','HAL-002'],['HAL-003','HAL-005'],['HAL-006','HAL-008'],
+    ['HAL-009','HAL-009'],['HAL-010','HAL-017'],['HAL-018','HAL-027']];
+
+  function sevClass(card){
+    if(card.classList.contains('sev-crit')) return 'var(--crit)';
+    if(card.classList.contains('sev-alto')) return 'var(--alto)';
+    if(card.classList.contains('sev-medio')) return 'var(--medio)';
+    return 'var(--bajo)';
+  }
+
+  navLinksContainer.forEach(function(group, gi){
+    if(gi===0) return; // "Preparación" ya tiene su link propio
+    var idx = gi-1;
+    var range = groupRanges[idx];
+    var from = parseInt(range[0].split('-')[1],10), to = parseInt(range[1].split('-')[1],10);
+    for(var n=from; n<=to; n++){
+      var id = 'HAL-'+String(n).padStart(3,'0');
+      var card = document.getElementById(id);
+      if(!card) continue;
+      var title = card.querySelector('h3').textContent;
+      var a = document.createElement('a');
+      a.className = 'navlink';
+      a.dataset.target = id;
+      a.innerHTML = '<span class="dot" style="background:'+sevClass(card)+'"></span>'+
+                    '<span class="id">'+id+'</span><span>'+title+'</span>';
+      group.appendChild(a);
+    }
+  });
+
+  var allLinks = Array.prototype.slice.call(document.querySelectorAll('.navlink'));
+
+  // ---- progreso guardado en este navegador ----
+  function loadDone(){
+    try{
+      var raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : {};
+    }catch(e){ return {}; }
+  }
+  function saveDone(map){
+    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(map)); }catch(e){}
+  }
+  var done = loadDone();
+
+  function updateProgress(){
+    var total = cards.length;
+    var count = 0;
+    cards.forEach(function(c){ if(done[c.dataset.id]) count++; });
+    var bar = document.getElementById('progBar');
+    var txt = document.getElementById('progTxt');
+    if(bar) bar.style.width = (total? (count/total*100):0) + '%';
+    if(txt) txt.textContent = count + ' / ' + total;
+  }
+
+  cards.forEach(function(card){
+    var id = card.dataset.id;
+    var box = card.querySelector('.doneBox');
+    if(done[id]){ box.checked = true; card.classList.add('is-done'); }
+    box.addEventListener('change', function(){
+      if(box.checked){ done[id]=true; card.classList.add('is-done'); }
+      else { delete done[id]; card.classList.remove('is-done'); }
+      saveDone(done);
+      updateProgress();
+      var link = document.querySelector('.navlink[data-target="'+id+'"]');
+      if(link) link.classList.toggle('done', !!done[id]);
+    });
+  });
+  // marcar enlaces ya completados desde el inicio
+  allLinks.forEach(function(l){ if(done[l.dataset.target]) l.classList.add('done'); });
+  updateProgress();
+
+  // ---- navegación: click en la barra lateral desplaza suavemente ----
+  function closeSideOnMobile(){
+    side.classList.remove('open'); scrim.classList.remove('show');
+  }
+  allLinks.forEach(function(link){
+    link.addEventListener('click', function(){
+      var target = document.getElementById(link.dataset.target);
+      if(target) target.scrollIntoView({behavior:'smooth', block:'start'});
+      closeSideOnMobile();
+    });
+  });
+
+  // resaltar el enlace activo según la sección visible
+  var sections = cards.concat([document.getElementById('setup')]);
+  var byId = {};
+  allLinks.forEach(function(l){ byId[l.dataset.target]=l; });
+  if('IntersectionObserver' in window){
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){
+          allLinks.forEach(function(l){ l.classList.remove('active'); });
+          var id = en.target.id || 'setup';
+          if(byId[id]) byId[id].classList.add('active');
+        }
+      });
+    }, {rootMargin:'-10% 0px -70% 0px'});
+    sections.forEach(function(s){ if(s) obs.observe(s); });
+  }
+
+  // ---- menú móvil ----
+  menuBtn.addEventListener('click', function(){
+    side.classList.toggle('open'); scrim.classList.toggle('show');
+  });
+  scrim.addEventListener('click', closeSideOnMobile);
+
+  // ---- buscador ----
+  document.getElementById('searchBox').addEventListener('input', function(e){
+    var q = e.target.value.trim().toLowerCase();
+    cards.forEach(function(card){
+      var hay = (card.dataset.id + ' ' + card.querySelector('h3').textContent + ' ' + (card.dataset.text||'')).toLowerCase();
+      card.style.display = (!q || hay.indexOf(q) !== -1) ? '' : 'none';
+    });
+    allLinks.forEach(function(link){
+      var card = document.getElementById(link.dataset.target);
+      if(!card){ link.style.display=''; return; }
+      link.style.display = card.style.display === 'none' ? 'none' : '';
+    });
+  });
+
+  // ---- botón volver arriba ----
+  var backTop = document.getElementById('backTop');
+  window.addEventListener('scroll', function(){
+    backTop.classList.toggle('show', window.scrollY > 500);
+  }, {passive:true});
+  backTop.addEventListener('click', function(){
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+})();
+</script>

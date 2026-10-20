@@ -193,9 +193,21 @@ p.sec-intro{font-size:12.5px;color:#ccc;line-height:1.7;text-align:justify;margi
 <div class="toc-row"><span class="toc-t" style="padding-left:16px">6.7 Falta de verificación de rol en cambio de estado</span><span class="toc-dots"></span><span class="toc-p">23</span></div>
 <div class="toc-row"><span class="toc-t" style="padding-left:16px">6.8 Ausencia de documentación técnica</span><span class="toc-dots"></span><span class="toc-p">24</span></div>
 <div class="toc-row"><span class="toc-t s">7. Pruebas de Seguridad</span><span class="toc-dots"></span><span class="toc-p">25</span></div>
-<div class="toc-row"><span class="toc-t s">8. Observaciones y Recomendaciones</span><span class="toc-dots"></span><span class="toc-p">27</span></div>
-<div class="toc-row"><span class="toc-t s">9. Tabla Consolidada</span><span class="toc-dots"></span><span class="toc-p">29</span></div>
-<div class="toc-row"><span class="toc-t s">10. Conclusiones</span><span class="toc-dots"></span><span class="toc-p">30</span></div>
+<div class="toc-row"><span class="toc-t s">8. Hallazgos Detectados con Herramientas Automatizadas</span><span class="toc-dots"></span><span class="toc-p">27</span></div>
+<div class="toc-row"><span class="toc-t" style="padding-left:16px">8.1 Metodología y herramientas utilizadas</span><span class="toc-dots"></span><span class="toc-p">28</span></div>
+<div class="toc-row"><span class="toc-t" style="padding-left:16px">8.2 Listado de directorios habilitado</span><span class="toc-dots"></span><span class="toc-p">29</span></div>
+<div class="toc-row"><span class="toc-t" style="padding-left:16px">8.3 Divulgación de rutas internas por warnings de PHP</span><span class="toc-dots"></span><span class="toc-p">29</span></div>
+<div class="toc-row"><span class="toc-t" style="padding-left:16px">8.4 Scripts de terceros sin atributo de integridad (SRI)</span><span class="toc-dots"></span><span class="toc-p">29</span></div>
+<div class="toc-row"><span class="toc-t" style="padding-left:16px">8.5 Cookie de sesión sin HttpOnly ni SameSite</span><span class="toc-dots"></span><span class="toc-p">30</span></div>
+<div class="toc-row"><span class="toc-t" style="padding-left:16px">8.6 Fuga de versiones en cabeceras HTTP</span><span class="toc-dots"></span><span class="toc-p">30</span></div>
+<div class="toc-row"><span class="toc-t" style="padding-left:16px">8.7 Redirecciones con cuerpo de respuesta</span><span class="toc-dots"></span><span class="toc-p">30</span></div>
+<div class="toc-row"><span class="toc-t" style="padding-left:16px">8.8 Recursos que devuelven error 404</span><span class="toc-dots"></span><span class="toc-p">31</span></div>
+<div class="toc-row"><span class="toc-t" style="padding-left:16px">8.9 Error de JavaScript no definido</span><span class="toc-dots"></span><span class="toc-p">31</span></div>
+<div class="toc-row"><span class="toc-t" style="padding-left:16px">8.10 Problemas de accesibilidad</span><span class="toc-dots"></span><span class="toc-p">31</span></div>
+<div class="toc-row"><span class="toc-t" style="padding-left:16px">8.11 Peso de página y rendimiento en móvil</span><span class="toc-dots"></span><span class="toc-p">32</span></div>
+<div class="toc-row"><span class="toc-t s">9. Observaciones y Recomendaciones</span><span class="toc-dots"></span><span class="toc-p">33</span></div>
+<div class="toc-row"><span class="toc-t s">10. Tabla Consolidada</span><span class="toc-dots"></span><span class="toc-p">35</span></div>
+<div class="toc-row"><span class="toc-t s">11. Conclusiones</span><span class="toc-dots"></span><span class="toc-p">36</span></div>
 <div class="pf"><span>Informe Final de Auditoría — BuildSafe System</span><span>Confidencial</span></div>
 </div>
 
@@ -204,8 +216,8 @@ p.sec-intro{font-size:12.5px;color:#ccc;line-height:1.7;text-align:justify;margi
 <div class="stripe-l"></div><div class="stripe-l2"></div><div class="stripe-br"></div><div class="stripe-br2"></div><div class="dots-tr"></div>
 <div class="ph"><span class="ph-l">Resumen Ejecutivo</span><span class="ph-r">BuildSafe System — CONFALVI C.A.</span></div>
 <div class="pill rel">Resumen Ejecutivo</div>
-<p class="sec-intro">La presente auditoría de seguridad informática fue realizada sobre el sistema <strong style="color:#fff">BuildSafe System</strong>, aplicación web desarrollada en PHP 8.2 para la gestión de inventario de materiales de la empresa CONFALVI C.A. El análisis fue ejecutado mediante revisión estática del código fuente, aplicando como marco de referencia el estándar <strong style="color:#4fc3f7">OWASP Top 10 — 2025</strong> (publicado en enero de 2026, la revisión vigente al momento de esta auditoría). Se analizaron un total de <strong style="color:#fff">27 archivos PHP</strong> que conforman el núcleo funcional del sistema, identificando vulnerabilidades distribuidas en los módulos de autenticación, recuperación de contraseña, gestión de usuarios, gestión de materiales y configuración del servidor.</p>
-<p class="sec-intro">Como resultado del análisis, se encontraron <strong style="color:#fff">17 hallazgos de seguridad</strong>, de los cuales 2 son de severidad <strong style="color:#c0392b">Crítica</strong>, 5 de severidad <strong style="color:#d35400">Alta</strong>, 7 de severidad <strong style="color:#c9a800">Media</strong> y 3 de severidad <strong style="color:#1e8449">Baja</strong>. El nivel de riesgo global del sistema fue evaluado en <strong style="color:#c0392b">7.0 / 10 — ALTO</strong>, lo que indica que el sistema <strong style="color:#fff">no debe ser expuesto a producción pública</strong> en su estado actual sin corregir al menos los hallazgos críticos y altos.</p>
+<p class="sec-intro">La presente auditoría de seguridad informática fue realizada sobre el sistema <strong style="color:#fff">BuildSafe System</strong>, aplicación web desarrollada en PHP 8.2 para la gestión de inventario de materiales de la empresa CONFALVI C.A. El análisis fue ejecutado mediante revisión estática del código fuente, aplicando como marco de referencia el estándar <strong style="color:#4fc3f7">OWASP Top 10 — 2025</strong> (publicado en enero de 2026, la revisión vigente al momento de esta auditoría), complementada con pruebas dinámicas automatizadas mediante <strong style="color:#4fc3f7">OWASP ZAP 2.17.0</strong> y <strong style="color:#4fc3f7">Lighthouse 13.5.0</strong> (sección 8). Se analizaron un total de <strong style="color:#fff">27 archivos PHP</strong> que conforman el núcleo funcional del sistema, identificando vulnerabilidades distribuidas en los módulos de autenticación, recuperación de contraseña, gestión de usuarios, gestión de materiales, configuración del servidor y pruebas con herramientas automatizadas.</p>
+<p class="sec-intro">Como resultado del análisis, se encontraron <strong style="color:#fff">27 hallazgos de seguridad</strong>, de los cuales 2 son de severidad <strong style="color:#c0392b">Crítica</strong>, 5 de severidad <strong style="color:#d35400">Alta</strong>, 10 de severidad <strong style="color:#c9a800">Media</strong> y 10 de severidad <strong style="color:#1e8449">Baja</strong>. El nivel de riesgo global del sistema fue evaluado en <strong style="color:#c0392b">7.0 / 10 — ALTO</strong>, determinado por la gravedad de los hallazgos críticos y altos de la revisión de código; los 10 hallazgos adicionales detectados con herramientas automatizadas (sección 8) son de severidad Media y Baja y no modifican esa calificación. El resultado indica que el sistema <strong style="color:#fff">no debe ser expuesto a producción pública</strong> en su estado actual sin corregir al menos los hallazgos críticos y altos.</p>
 <div class="risk rel">
   <div class="risk-top">
     <div class="risk-hero">
@@ -214,18 +226,18 @@ p.sec-intro{font-size:12.5px;color:#ccc;line-height:1.7;text-align:justify;margi
       <div class="risk-lb">ALTO</div>
     </div>
     <div class="risk-comp">
-      <div class="risk-comp-lbl">Composición de los 17 hallazgos por severidad</div>
+      <div class="risk-comp-lbl">Composición de los 27 hallazgos por severidad</div>
       <div class="risk-comp-bar">
-        <span style="width:11.8%;background:#c0392b"></span>
-        <span style="width:29.4%;background:#d35400"></span>
-        <span style="width:41.2%;background:#c9a800"></span>
-        <span style="width:17.6%;background:#1e8449"></span>
+        <span style="width:7.4%;background:#c0392b"></span>
+        <span style="width:18.5%;background:#d35400"></span>
+        <span style="width:37.0%;background:#c9a800"></span>
+        <span style="width:37.1%;background:#1e8449"></span>
       </div>
       <div class="risk-comp-keys">
         <div><b style="color:#c0392b">2</b>Crítico</div>
         <div><b style="color:#d35400">5</b>Alto</div>
-        <div><b style="color:#c9a800">7</b>Medio</div>
-        <div><b style="color:#1e8449">3</b>Bajo</div>
+        <div><b style="color:#c9a800">10</b>Medio</div>
+        <div><b style="color:#1e8449">10</b>Bajo</div>
       </div>
     </div>
   </div>
@@ -270,15 +282,15 @@ p.sec-intro{font-size:12.5px;color:#ccc;line-height:1.7;text-align:justify;margi
   <thead><tr><th>ID</th><th>Categoría</th><th>Hallazgos en este sistema</th></tr></thead>
   <tbody>
   <tr><td><span class="badge bid">A01</span></td><td>Control de Acceso Roto</td><td>HAL-007, HAL-008, HAL-016 <span class="badge ba" style="font-size:9px">Alto</span></td></tr>
-  <tr><td><span class="badge bid">A02</span></td><td>Configuración de Seguridad Incorrecta</td><td>HAL-010 <span class="badge ba" style="font-size:9px">Alto</span> / HAL-014, HAL-015 <span class="badge bb" style="font-size:9px">Bajo</span></td></tr>
-  <tr><td><span class="badge bid">A03</span></td><td>Fallas en la Cadena de Suministro de Software</td><td>No aplicable en esta revisión</td></tr>
+  <tr><td><span class="badge bid">A02</span></td><td>Configuración de Seguridad Incorrecta</td><td>HAL-010 <span class="badge ba" style="font-size:9px">Alto</span> / HAL-018 <span class="badge bm" style="font-size:9px">Medio</span> / HAL-014, HAL-015, HAL-022, HAL-024 <span class="badge bb" style="font-size:9px">Bajo</span></td></tr>
+  <tr><td><span class="badge bid">A03</span></td><td>Fallas en la Cadena de Suministro de Software</td><td>HAL-020 <span class="badge bm" style="font-size:9px">Medio</span></td></tr>
   <tr><td><span class="badge bid">A04</span></td><td>Fallas Criptográficas</td><td>HAL-012 <span class="badge bm" style="font-size:9px">Medio</span></td></tr>
   <tr><td><span class="badge bid">A05</span></td><td>Inyección</td><td>HAL-006 <span class="badge bm" style="font-size:9px">Medio</span> / HAL-009 <span class="badge ba" style="font-size:9px">Alto</span></td></tr>
-  <tr><td><span class="badge bid">A06</span></td><td>Diseño Inseguro</td><td>HAL-005, HAL-013 <span class="badge bm" style="font-size:9px">Medio</span> / HAL-017 <span class="badge bb" style="font-size:9px">Bajo</span></td></tr>
-  <tr><td><span class="badge bid">A07</span></td><td>Fallas de Autenticación</td><td>HAL-001, HAL-002 <span class="badge bm" style="font-size:9px">Medio</span> / HAL-003 <span class="badge bc" style="font-size:9px">Crítico</span></td></tr>
+  <tr><td><span class="badge bid">A06</span></td><td>Diseño Inseguro</td><td>HAL-005, HAL-013 <span class="badge bm" style="font-size:9px">Medio</span> / HAL-017, HAL-025, HAL-026, HAL-027 <span class="badge bb" style="font-size:9px">Bajo</span></td></tr>
+  <tr><td><span class="badge bid">A07</span></td><td>Fallas de Autenticación</td><td>HAL-001, HAL-002 <span class="badge bm" style="font-size:9px">Medio</span> / HAL-003 <span class="badge bc" style="font-size:9px">Crítico</span> / HAL-021 <span class="badge bb" style="font-size:9px">Bajo</span></td></tr>
   <tr><td><span class="badge bid">A08</span></td><td>Fallas de Integridad de Software y Datos</td><td>No aplicable en esta revisión</td></tr>
   <tr><td><span class="badge bid">A09</span></td><td>Fallas en el Registro y Alertas de Seguridad</td><td>HAL-004 <span class="badge bc" style="font-size:9px">Crítico</span></td></tr>
-  <tr><td><span class="badge bid">A10</span></td><td>Manejo Inadecuado de Condiciones Excepcionales</td><td>HAL-011 <span class="badge bm" style="font-size:9px">Medio</span></td></tr>
+  <tr><td><span class="badge bid">A10</span></td><td>Manejo Inadecuado de Condiciones Excepcionales</td><td>HAL-011, HAL-019 <span class="badge bm" style="font-size:9px">Medio</span> / HAL-023 <span class="badge bb" style="font-size:9px">Bajo</span></td></tr>
   </tbody>
   </table>
 </div>
@@ -925,11 +937,152 @@ header(<span class="g">"Referrer-Policy: strict-origin-when-cross-origin"</span>
 <div class="pf"><span>Informe Final de Auditoría — BuildSafe System</span><span>Confidencial</span></div>
 </div>
 
+<!-- ═══════════ SECCIÓN 8: HERRAMIENTAS AUTOMATIZADAS ═══════════ -->
+<div class="page page-mod">
+<div class="stripe-l"></div><div class="stripe-l2"></div><div class="stripe-br"></div><div class="stripe-br2"></div><div class="dots-tr"></div>
+<div class="mod-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
+<div class="mod-title">Sección 8</div>
+<div class="mod-div"></div>
+<div style="font-size:22px;font-weight:700;color:#4fc3f7;position:relative;z-index:1;margin-bottom:14px">Hallazgos Detectados con Herramientas Automatizadas</div>
+<div class="mod-sub">OWASP ZAP 2.17.0 · Lighthouse 13.5.0 &nbsp;|&nbsp; Hallazgos: HAL-018 a HAL-027 &nbsp;|&nbsp; Severidad máxima: Medio</div>
+<div class="pf"><span>Informe Final de Auditoría — BuildSafe System</span><span>Confidencial</span></div>
+</div>
+
+<!-- Sección 8 — Metodología -->
+<div class="page">
+<div class="stripe-l"></div><div class="stripe-l2"></div><div class="stripe-br"></div><div class="stripe-br2"></div><div class="dots-tr"></div>
+<div class="ph"><span class="ph-l">Sección 8: Herramientas Automatizadas</span><span class="ph-r">BuildSafe System — CONFALVI C.A.</span></div>
+<div class="pill rel">Metodología y Herramientas Utilizadas</div>
+<p class="sec-intro">Como complemento a la revisión estática del código fuente (secciones 2-6) y las pruebas exploratorias manuales (sección 7), se ejecutaron pruebas dinámicas automatizadas sobre una copia local del sistema en XAMPP (Apache 2.4.58, PHP 8.2.12, MariaDB, base de datos <code style="color:#4fc3f7">test2</code>), con sesión de administrador autenticada.</p>
+<table class="t">
+<thead><tr><th>Herramienta</th><th>Tipo de prueba</th><th>Alcance</th><th>Resultado</th></tr></thead>
+<tbody>
+<tr><td>OWASP ZAP 2.17.0</td><td>DAST — escaneo pasivo + spider</td><td>Todo <code>buildsafe_system1/</code>, con sesión de administrador</td><td>0 críticas/altas, 7 medias, 8 bajas, 5 informativas</td></tr>
+<tr><td>Lighthouse 13.5.0 (CLI)</td><td>Rendimiento, accesibilidad, buenas prácticas, SEO</td><td>7 páginas, en escritorio y móvil simulado</td><td>Rendimiento 41-97/100 según página y dispositivo</td></tr>
+</tbody>
+</table>
+<p class="sec-intro" style="margin-top:16px">De estas pruebas resultaron <strong style="color:#fff">10 hallazgos nuevos (HAL-018 a HAL-027)</strong>, documentados en las páginas siguientes e incorporados al conteo total y a la Tabla Consolidada de este informe. HAL-018 a HAL-023 provienen de OWASP ZAP; HAL-024 a HAL-027 son los hallazgos más relevantes detectados por Lighthouse — se excluyó un quinto hallazgo de SEO (ausencia de meta description) por ser de relevancia menor para un sistema de uso interno. El detalle técnico completo de cada prueba — comandos exactos, capturas adicionales y limitaciones — se mantiene en los archivos de trabajo <code style="color:#4fc3f7">Nuevos_Hallazgos.md</code> e <code style="color:#4fc3f7">inyecciones.md</code>, en la raíz del proyecto; este último documenta además las pruebas de inyección SQL con sqlmap que confirmaron, con herramienta automatizada, la conclusión ya alcanzada manualmente en HAL-006.</p>
+<div class="pf"><span>Informe Final de Auditoría — BuildSafe System</span><span>Confidencial</span></div>
+</div>
+
+<!-- HAL-018, HAL-019, HAL-020 (OWASP ZAP) -->
+<div class="page">
+<div class="stripe-l"></div><div class="stripe-l2"></div><div class="stripe-br"></div><div class="stripe-br2"></div><div class="dots-tr"></div>
+<div class="ph"><span class="ph-l">Sección 8: OWASP ZAP</span><span class="ph-r">BuildSafe System — CONFALVI C.A.</span></div>
+<div class="pill rel">HAL-018 — Listado de Directorios Habilitado</div>
+<div class="f-badges">
+  <div class="f-bl">ID<br><span class="badge bid">HAL-018</span></div>
+  <div class="f-bl">Riesgo<br><span class="badge bm">Medio</span></div>
+  <div class="f-bl">Estatus<br><span class="badge bnv">Nuevo</span></div>
+</div>
+<p class="f-txt">El escaneo pasivo y el spider de OWASP ZAP 2.17.0 encontraron que Apache expone el listado de contenido de varios directorios: <code style="color:#4fc3f7">/CSS/</code>, <code style="color:#4fc3f7">/assets/</code>, <code style="color:#4fc3f7">/assets/css/</code>, <code style="color:#4fc3f7">/assets/js/</code> y <code style="color:#4fc3f7">/src/</code>, identificados por el título <code>Index of ...</code> y los enlaces de ordenamiento (<code>?C=N;O=A</code>) típicos de Apache. El directorio <code style="color:#f07178">/src/</code> es el más sensible: puede exponer código fuente. Complementa a <strong>HAL-010</strong> (archivos sensibles en webroot), con una causa distinta: configuración del servidor, no archivos olvidados. OWASP: <strong style="color:#4fc3f7">A02 — Configuración de Seguridad Incorrecta</strong>. <strong>Corrección:</strong> <code style="color:#4fc3f7">Options -Indexes</code> en la configuración de Apache o en un <code>.htaccess</code> por carpeta pública.</p>
+
+<div class="pill rel" style="margin-top:18px">HAL-019 — Divulgación de Rutas Internas por Warnings de PHP</div>
+<div class="f-badges">
+  <div class="f-bl">ID<br><span class="badge bid">HAL-019</span></div>
+  <div class="f-bl">Riesgo<br><span class="badge bm">Medio</span></div>
+  <div class="f-bl">Estatus<br><span class="badge bnv">Nuevo</span></div>
+</div>
+<p class="f-txt">ZAP registró 23 instancias de warnings de PHP visibles en el HTML servido, por ejemplo <code style="color:#f07178">Undefined array key "id" in C:\xampp\htdocs\buildsafe_system1\head.php on line 5</code> y <code style="color:#f07178">Cannot modify header information ... en list_user.php:79</code>. Confirma que <code>display_errors</code> está activo y revela rutas absolutas del servidor. Distinto de <strong>HAL-011</strong> (errores de base de datos en <code>add_user.php</code>). OWASP: <strong style="color:#4fc3f7">A10 — Manejo Inadecuado de Condiciones Excepcionales</strong>. <strong>Corrección:</strong> <code style="color:#4fc3f7">display_errors = Off</code> y <code style="color:#4fc3f7">log_errors = On</code> en <code>php.ini</code>; validar <code>$_SESSION['id']</code> con <code>isset()</code> en <code>head.php:5</code>.</p>
+
+<div class="pill rel" style="margin-top:18px">HAL-020 — Scripts de Terceros sin Atributo de Integridad (SRI)</div>
+<div class="f-badges">
+  <div class="f-bl">ID<br><span class="badge bid">HAL-020</span></div>
+  <div class="f-bl">Riesgo<br><span class="badge bm">Medio</span></div>
+  <div class="f-bl">Estatus<br><span class="badge bnv">Nuevo</span></div>
+</div>
+<p class="f-txt"><code style="color:#4fc3f7">index.php</code> y <code style="color:#4fc3f7">dashboard.php</code> cargan sweetalert2 y jQuery desde CDN externos (jsdelivr.net, code.jquery.com) sin el atributo <code>integrity</code>, que permite al navegador verificar que el archivo no fue alterado. Si el CDN se compromete, podría inyectarse código en el sistema. Este hallazgo confirma que <strong style="color:#4fc3f7">A03 — Fallas en la Cadena de Suministro de Software</strong> sí es aplicable a este sistema, a diferencia de lo indicado en la sección 1.2 del resumen ejecutivo: el sistema depende de recursos externos (CDN, reCAPTCHA) sin verificación de integridad. <strong>Corrección:</strong> agregar <code>integrity</code> + <code>crossorigin</code>, o alojar las librerías localmente con versión fija.</p>
+<div class="f-loc"><span>Ubicación HAL-018:</span>configuración de Apache &nbsp;&nbsp; <span>HAL-019:</span>head.php:5, list_user.php:79 &nbsp;&nbsp; <span>HAL-020:</span>index.php, dashboard.php</div>
+<div class="pf"><span>Informe Final de Auditoría — BuildSafe System</span><span>Confidencial</span></div>
+</div>
+
+<!-- HAL-021, HAL-022, HAL-023 (OWASP ZAP) -->
+<div class="page">
+<div class="stripe-l"></div><div class="stripe-l2"></div><div class="stripe-br"></div><div class="stripe-br2"></div><div class="dots-tr"></div>
+<div class="ph"><span class="ph-l">Sección 8: OWASP ZAP</span><span class="ph-r">BuildSafe System — CONFALVI C.A.</span></div>
+<div class="pill rel">HAL-021 — Cookie de Sesión sin HttpOnly ni SameSite</div>
+<div class="f-badges">
+  <div class="f-bl">ID<br><span class="badge bid">HAL-021</span></div>
+  <div class="f-bl">Riesgo<br><span class="badge bb">Bajo</span></div>
+  <div class="f-bl">Estatus<br><span class="badge bnv">Nuevo</span></div>
+</div>
+<p class="f-txt">La cookie <code style="color:#4fc3f7">PHPSESSID</code> se envía sin los atributos <code>HttpOnly</code> y <code>SameSite</code>. Sin <code>HttpOnly</code>, JavaScript puede leer la cookie, agravando un eventual XSS; sin <code>SameSite</code>, se envía en peticiones entre sitios, agravando CSRF. Complementa a <strong>HAL-001</strong> (sin regeneración de sesión) y <strong>HAL-008</strong> (sin CSRF). OWASP: <strong style="color:#4fc3f7">A07 — Fallas de Autenticación</strong>. <strong>Corrección:</strong> <code style="color:#4fc3f7">session.cookie_httponly=1</code> y <code style="color:#4fc3f7">session.cookie_samesite=Lax</code> en <code>php.ini</code>.</p>
+
+<div class="pill rel" style="margin-top:18px">HAL-022 — Fuga de Versiones en Cabeceras HTTP</div>
+<div class="f-badges">
+  <div class="f-bl">ID<br><span class="badge bid">HAL-022</span></div>
+  <div class="f-bl">Riesgo<br><span class="badge bb">Bajo</span></div>
+  <div class="f-bl">Estatus<br><span class="badge bnv">Nuevo</span></div>
+</div>
+<p class="f-txt">Las respuestas del servidor incluyen <code style="color:#f07178">Server: Apache/2.4.58 (Win64) OpenSSL/3.1.3 PHP/8.2.12</code> y <code style="color:#f07178">X-Powered-By: PHP/8.2.12</code>, lo que facilita a un atacante buscar vulnerabilidades conocidas de esas versiones exactas. Complementa a <strong>HAL-015</strong> (sin cabeceras de seguridad). OWASP: <strong style="color:#4fc3f7">A02 — Configuración de Seguridad Incorrecta</strong>. <strong>Corrección:</strong> <code style="color:#4fc3f7">ServerTokens Prod</code> y <code style="color:#4fc3f7">ServerSignature Off</code> en Apache; <code style="color:#4fc3f7">expose_php = Off</code> en <code>php.ini</code>.</p>
+
+<div class="pill rel" style="margin-top:18px">HAL-023 — Redirecciones con Cuerpo de Respuesta (Hipótesis)</div>
+<div class="f-badges">
+  <div class="f-bl">ID<br><span class="badge bid">HAL-023</span></div>
+  <div class="f-bl">Riesgo<br><span class="badge bb">Bajo</span></div>
+  <div class="f-bl">Estatus<br><span class="badge bnv">Nuevo</span></div>
+</div>
+<p class="f-txt">En 17 instancias, páginas internas (<code style="color:#4fc3f7">binnacle.php</code>, <code style="color:#4fc3f7">dashboard.php</code>, <code style="color:#4fc3f7">edit_user.php</code>, <code style="color:#4fc3f7">list_user.php</code>, entre otras) redirigen a <code>destroyer.php</code> pero devuelven igualmente un cuerpo de 636 bytes. Es un indicio, <strong style="color:#f07178">no confirmado</strong>, de que podría faltar un <code>exit()</code>/<code>die()</code> después de <code>header('Location: ...')</code>, en la misma línea que el problema ya descrito en <strong>HAL-002</strong>. OWASP: <strong style="color:#4fc3f7">A10 — Manejo Inadecuado de Condiciones Excepcionales</strong>. <strong>Pendiente:</strong> revisar el código de <code>head.php</code> y las páginas afectadas para confirmar o descartar.</p>
+<div class="f-loc"><span>Ubicación HAL-021/022:</span>configuración PHP/Apache &nbsp;&nbsp; <span>HAL-023:</span>head.php (hipótesis, pendiente de verificar)</div>
+<div class="pf"><span>Informe Final de Auditoría — BuildSafe System</span><span>Confidencial</span></div>
+</div>
+
+<!-- HAL-024, HAL-025, HAL-026 (Lighthouse) -->
+<div class="page">
+<div class="stripe-l"></div><div class="stripe-l2"></div><div class="stripe-br"></div><div class="stripe-br2"></div><div class="dots-tr"></div>
+<div class="ph"><span class="ph-l">Sección 8: Lighthouse</span><span class="ph-r">BuildSafe System — CONFALVI C.A.</span></div>
+<div class="pill rel">HAL-024 — Recursos que Devuelven Error 404</div>
+<div class="f-badges">
+  <div class="f-bl">ID<br><span class="badge bid">HAL-024</span></div>
+  <div class="f-bl">Riesgo<br><span class="badge bb">Bajo</span></div>
+  <div class="f-bl">Estatus<br><span class="badge bnv">Nuevo</span></div>
+</div>
+<p class="f-txt">Lighthouse 13.5.0 y ZAP coinciden en detectar peticiones a <code style="color:#4fc3f7">/css2?family=Nunito:...</code> (referenciada como ruta relativa en vez de apuntar a Google Fonts), <code style="color:#4fc3f7">/JS/script.js</code> y <code style="color:#4fc3f7">/script.js</code>, que responden 404. Explica las imágenes y fuentes rotas observadas en el sistema. OWASP: <strong style="color:#4fc3f7">A02 — Configuración de Seguridad Incorrecta</strong>. <strong>Corrección:</strong> corregir la URL de la fuente a <code>https://fonts.googleapis.com/css2?...</code> y eliminar o corregir las referencias rotas a <code>script.js</code>.</p>
+
+<div class="pill rel" style="margin-top:18px">HAL-025 — Error de JavaScript "notifications is not defined"</div>
+<div class="f-badges">
+  <div class="f-bl">ID<br><span class="badge bid">HAL-025</span></div>
+  <div class="f-bl">Riesgo<br><span class="badge bb">Bajo</span></div>
+  <div class="f-bl">Estatus<br><span class="badge bnv">Nuevo</span></div>
+</div>
+<p class="f-txt">La consola del navegador registra repetidamente <code style="color:#f07178">ReferenceError: notifications is not defined</code> en las páginas internas auditadas, indicando que una funcionalidad de notificaciones de la interfaz no está correctamente implementada. <strong>Pendiente:</strong> confirmar el archivo exacto de origen. OWASP: <strong style="color:#4fc3f7">A06 — Diseño Inseguro</strong> (calidad de desarrollo). <strong>Corrección:</strong> definir la variable <code>notifications</code> o eliminar el código que la referencia.</p>
+
+<div class="pill rel" style="margin-top:18px">HAL-026 — Problemas de Accesibilidad</div>
+<div class="f-badges">
+  <div class="f-bl">ID<br><span class="badge bid">HAL-026</span></div>
+  <div class="f-bl">Riesgo<br><span class="badge bb">Bajo</span></div>
+  <div class="f-bl">Estatus<br><span class="badge bnv">Nuevo</span></div>
+</div>
+<p class="f-txt">Lighthouse identificó, en las páginas internas (accesibilidad 84-90/100): enlaces sin texto accesible (<code>link-name</code>), elementos <code>&lt;select&gt;</code> sin etiqueta (<code>select-name</code>), ausencia de un elemento <code>&lt;main&gt;</code> por página (<code>landmark-one-main</code>) y, en <code style="color:#4fc3f7">list_user.php</code>, contraste de color insuficiente. OWASP: <strong style="color:#4fc3f7">A06 — Diseño Inseguro</strong>. <strong>Corrección:</strong> agregar <code>aria-label</code> a los enlaces de iconos, <code>&lt;label&gt;</code> a los <code>&lt;select&gt;</code>, un <code>&lt;main&gt;</code> por página y revisar los colores de bajo contraste.</p>
+<div class="f-loc"><span>Ubicación:</span>HAL-024: index.php, dashboard.php &nbsp;&nbsp; HAL-025/026: páginas internas con sesión de administrador</div>
+<div class="pf"><span>Informe Final de Auditoría — BuildSafe System</span><span>Confidencial</span></div>
+</div>
+
+<!-- HAL-027 (Lighthouse) -->
+<div class="page">
+<div class="stripe-l"></div><div class="stripe-l2"></div><div class="stripe-br"></div><div class="stripe-br2"></div><div class="dots-tr"></div>
+<div class="ph"><span class="ph-l">Sección 8: Lighthouse</span><span class="ph-r">BuildSafe System — CONFALVI C.A.</span></div>
+<div class="pill rel">HAL-027 — Peso Elevado de Página y Bajo Rendimiento en Móvil Simulado</div>
+<div class="f-badges">
+  <div class="f-bl">ID<br><span class="badge bid">HAL-027</span></div>
+  <div class="f-bl">Riesgo<br><span class="badge bb">Bajo</span></div>
+  <div class="f-bl">Estatus<br><span class="badge bnv">Nuevo</span></div>
+</div>
+<p class="f-txt">Las páginas internas transfieren entre 2.187 y 2.853 KiB en 28 a 39 peticiones por carga, dependiendo en gran medida de librerías cargadas por completo desde CDN externos (ver también HAL-020). En la simulación de red móvil de Lighthouse 13.5.0 (no representa usuarios reales, pero sí el peso real transferido), el tiempo de renderizado del contenido principal (LCP) llega a 13-17 s y el rendimiento baja a 41-63/100, frente a 80-97/100 en escritorio. OWASP: <strong style="color:#4fc3f7">A06 — Diseño Inseguro</strong> (sobrecarga de dependencias de terceros).</p>
+<div class="f-sec">Recomendación</div>
+<div class="f-fix">
+<div class="f-fix-l"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Reducir y optimizar las dependencias cargadas por página</div>
+<div class="f-fix-t">Cargar solo las librerías necesarias en cada página (no todo el conjunto en cada carga), minificar y comprimir recursos con gzip/brotli en Apache, y aplazar (<code>defer</code>/<code>async</code>) los scripts no críticos para el primer renderizado.</div>
+</div>
+<div class="f-loc"><span>Ubicación:</span>assets/js/ y assets/css/ (librerías de terceros), referencias a CDN en index.php y dashboard.php</div>
+<div class="pf"><span>Informe Final de Auditoría — BuildSafe System</span><span>Confidencial</span></div>
+</div>
+
 <!-- ═══════════ OBSERVACIONES ═══════════ -->
 <div class="page page-mod">
 <div class="stripe-l"></div><div class="stripe-l2"></div><div class="stripe-br"></div><div class="stripe-br2"></div><div class="dots-tr"></div>
 <div class="mod-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg></div>
-<div class="mod-title">Sección 8</div>
+<div class="mod-title">Sección 9</div>
 <div class="mod-div"></div>
 <div style="font-size:22px;font-weight:700;color:#4fc3f7;position:relative;z-index:1;margin-bottom:14px">Observaciones y Recomendaciones</div>
 <div class="mod-sub">Visión General · Seguridad · Código · Rendimiento · Legalidad</div>
@@ -983,6 +1136,16 @@ header(<span class="g">"Referrer-Policy: strict-origin-when-cross-origin"</span>
 <tr><td>HAL-015</td><td>Sin cabeceras de seguridad HTTP</td><td><span class="badge bb">Bajo</span></td><td>head.php</td><td>A02</td><td>Muy Bajo</td></tr>
 <tr><td>HAL-016</td><td>Falta de verificación de rol en cambio de estado</td><td><span class="badge ba">Alto</span></td><td>list_user.php:46-58</td><td>A01</td><td>Muy Bajo</td></tr>
 <tr><td>HAL-017</td><td>Ausencia de documentación técnica</td><td><span class="badge bb">Bajo</span></td><td>Proyecto completo</td><td>A06</td><td>Medio</td></tr>
+<tr><td>HAL-018</td><td>Listado de directorios habilitado (OWASP ZAP)</td><td><span class="badge bm">Medio</span></td><td>Configuración de Apache</td><td>A02</td><td>Muy Bajo</td></tr>
+<tr><td>HAL-019</td><td>Divulgación de rutas internas por warnings de PHP (OWASP ZAP)</td><td><span class="badge bm">Medio</span></td><td>head.php:5, list_user.php:79</td><td>A10</td><td>Bajo</td></tr>
+<tr><td>HAL-020</td><td>Scripts de terceros sin atributo integrity/SRI (OWASP ZAP)</td><td><span class="badge bm">Medio</span></td><td>index.php, dashboard.php</td><td>A03</td><td>Bajo</td></tr>
+<tr><td>HAL-021</td><td>Cookie de sesión sin HttpOnly ni SameSite (OWASP ZAP)</td><td><span class="badge bb">Bajo</span></td><td>php.ini (session.cookie_*)</td><td>A07</td><td>Muy Bajo</td></tr>
+<tr><td>HAL-022</td><td>Fuga de versiones en cabeceras HTTP (OWASP ZAP)</td><td><span class="badge bb">Bajo</span></td><td>httpd.conf, php.ini</td><td>A02</td><td>Muy Bajo</td></tr>
+<tr><td>HAL-023</td><td>Redirecciones con cuerpo de respuesta, hipótesis (OWASP ZAP)</td><td><span class="badge bb">Bajo</span></td><td>head.php</td><td>A10</td><td>Bajo</td></tr>
+<tr><td>HAL-024</td><td>Recursos que devuelven error 404 (Lighthouse)</td><td><span class="badge bb">Bajo</span></td><td>index.php, dashboard.php</td><td>A02</td><td>Muy Bajo</td></tr>
+<tr><td>HAL-025</td><td>Error de JavaScript "notifications is not defined" (Lighthouse)</td><td><span class="badge bb">Bajo</span></td><td>Por confirmar</td><td>A06</td><td>Bajo</td></tr>
+<tr><td>HAL-026</td><td>Problemas de accesibilidad (Lighthouse)</td><td><span class="badge bb">Bajo</span></td><td>Páginas internas</td><td>A06</td><td>Medio</td></tr>
+<tr><td>HAL-027</td><td>Peso de página y rendimiento en móvil (Lighthouse)</td><td><span class="badge bb">Bajo</span></td><td>assets/js/, assets/css/</td><td>A06</td><td>Medio</td></tr>
 </tbody>
 </table>
 <div class="pf"><span>Informe Final de Auditoría — BuildSafe System</span><span>Confidencial</span></div>
@@ -993,7 +1156,7 @@ header(<span class="g">"Referrer-Policy: strict-origin-when-cross-origin"</span>
 <div class="stripe-l"></div><div class="stripe-l2"></div><div class="stripe-br"></div><div class="stripe-br2"></div><div class="dots-tr"></div>
 <div class="ph"><span class="ph-l">Conclusiones</span><span class="ph-r">BuildSafe System — CONFALVI C.A.</span></div>
 <div class="pill rel">Conclusiones Finales</div>
-<p class="sec-intro">La auditoría de seguridad realizada al sistema BuildSafe System de CONFALVI C.A. evidencia que el sistema posee una <strong style="color:#fff">postura de seguridad deficiente</strong> que impide su despliegue responsable en un entorno de producción accesible públicamente en su estado actual. Los 17 hallazgos identificados abarcan las capas de autenticación, manejo de datos, configuración del servidor, gestión de credenciales y control de acceso.</p>
+<p class="sec-intro">La auditoría de seguridad realizada al sistema BuildSafe System de CONFALVI C.A. evidencia que el sistema posee una <strong style="color:#fff">postura de seguridad deficiente</strong> que impide su despliegue responsable en un entorno de producción accesible públicamente en su estado actual. Los 27 hallazgos identificados (17 de la revisión estática del código fuente y 10 adicionales confirmados con OWASP ZAP y Lighthouse, sección 8) abarcan las capas de autenticación, manejo de datos, configuración del servidor, gestión de credenciales, control de acceso y dependencias de terceros.</p>
 <div style="background:rgba(192,57,43,.1);border:1px solid rgba(192,57,43,.3);border-radius:10px;padding:18px;margin-bottom:20px;position:relative;z-index:1">
 <div style="font-size:12px;font-weight:700;color:#e74c3c;margin-bottom:10px;text-transform:uppercase;letter-spacing:1px;display:flex;align-items:center;gap:7px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Veredicto: No Apto para Producción</div>
 <p style="font-size:12px;color:#ccc;line-height:1.7">El sistema presenta 2 vulnerabilidades críticas activas que deben ser corregidas antes de cualquier despliegue. La exposición de credenciales SMTP y el dump de base de datos accesible vía HTTP representan riesgos inmediatos y explotables sin necesidad de conocimientos técnicos avanzados. Adicionalmente, se identificó un patrón de construcción de consultas SQL inseguro (HAL-006) que, si bien no resultó explotable en la versión de PHP actualmente instalada, debe corregirse por no constituir una defensa real.</p>
@@ -1058,7 +1221,7 @@ Chart.register({
     ctx.save();
     ctx.textAlign='center'; ctx.textBaseline='middle';
     ctx.fillStyle='#fff'; ctx.font="700 27px 'Segoe UI', Arial, sans-serif";
-    ctx.fillText('17', cx, cy-9);
+    ctx.fillText('27', cx, cy-9);
     ctx.fillStyle='rgba(255,255,255,.4)'; ctx.font="700 8.5px 'Segoe UI', Arial, sans-serif";
     ctx.fillText('HALLAZGOS', cx, cy+13);
     ctx.restore();
@@ -1091,14 +1254,14 @@ Chart.register({
 new Chart(document.getElementById('c1'),{
   type:'doughnut',
   data:{labels:['Crítico','Alto','Medio','Bajo'],datasets:[{
-    data:[2,5,7,3],
+    data:[2,5,10,10],
     backgroundColor:['#c0392b','#d35400','#c9a800','#1e8449'],
     borderColor:'#0d1b2e', borderWidth:2, spacing:2, hoverOffset:4
   }]},
   options:{responsive:true,maintainAspectRatio:false,cutout:'70%',
     plugins:{
       legend:{position:'bottom',labels:{boxWidth:9,boxHeight:9,padding:14,color:'rgba(255,255,255,.6)'}},
-      tooltip:{...tip,callbacks:{label:c=>' '+c.label+': '+c.raw+' ('+Math.round(c.raw/17*100)+'%)'}}
+      tooltip:{...tip,callbacks:{label:c=>' '+c.label+': '+c.raw+' ('+Math.round(c.raw/27*100)+'%)'}}
     }
   }
 });
@@ -1108,12 +1271,12 @@ new Chart(document.getElementById('c1'),{
 new Chart(document.getElementById('c2'),{
   type:'bar',
   data:{
-    labels:['A01 — Control de Acceso','A02 — Configuración','A06 — Diseño Inseguro','A07 — Autenticación','A05 — Inyección','A04 — Criptografía','A09 — Registro y Alertas','A10 — Cond. Excepcionales'],
-    datasets:[{data:[3,3,3,3,2,1,1,1],backgroundColor:'#2e86c1',borderRadius:4,borderSkipped:false,barPercentage:.6,categoryPercentage:.75}]
+    labels:['A02 — Configuración','A06 — Diseño Inseguro','A07 — Autenticación','A01 — Control de Acceso','A10 — Cond. Excepcionales','A05 — Inyección','A03 — Cadena Suministro','A04 — Criptografía','A09 — Registro y Alertas'],
+    datasets:[{data:[6,6,4,3,3,2,1,1,1],backgroundColor:'#2e86c1',borderRadius:4,borderSkipped:false,barPercentage:.6,categoryPercentage:.75}]
   },
   options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
     scales:{
-      x:{beginAtZero:true,max:4,ticks:{stepSize:1,color:'rgba(255,255,255,.3)'},grid:{color:'rgba(255,255,255,.06)'}},
+      x:{beginAtZero:true,max:6,ticks:{stepSize:1,color:'rgba(255,255,255,.3)'},grid:{color:'rgba(255,255,255,.06)'}},
       y:{ticks:{font:{size:9.5},color:'rgba(255,255,255,.65)'},grid:{display:false}}
     },
     plugins:{legend:{display:false},valueLabels:{enabled:true},tooltip:{...tip,callbacks:{label:c=>' '+c.raw+' hallazgo(s)'}}}
@@ -1160,10 +1323,10 @@ new Chart(document.getElementById('c4'),{
 new Chart(document.getElementById('c5'),{
   type:'bar',
   data:{labels:['Muy Bajo (<1h)','Bajo (1-4h)','Medio (1-2 días)'],
-    datasets:[{data:[9,5,3],backgroundColor:['#a8d8f0','#4fc3f7','#2e86c1'],borderRadius:4,borderSkipped:false,barPercentage:.55,categoryPercentage:.7}]},
+    datasets:[{data:[13,9,5],backgroundColor:['#a8d8f0','#4fc3f7','#2e86c1'],borderRadius:4,borderSkipped:false,barPercentage:.55,categoryPercentage:.7}]},
   options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
     scales:{
-      x:{beginAtZero:true,max:10,ticks:{stepSize:2,color:'rgba(255,255,255,.3)'},grid:{color:'rgba(255,255,255,.06)'}},
+      x:{beginAtZero:true,max:14,ticks:{stepSize:2,color:'rgba(255,255,255,.3)'},grid:{color:'rgba(255,255,255,.06)'}},
       y:{ticks:{font:{size:10},color:'rgba(255,255,255,.65)'},grid:{display:false}}
     },
     plugins:{legend:{display:false},valueLabels:{enabled:true},tooltip:{...tip,callbacks:{label:c=>' '+c.raw+' hallazgo(s)'}}}
